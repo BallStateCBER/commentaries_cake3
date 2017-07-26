@@ -32,6 +32,19 @@ class CommentariesController extends AppController
         ]);
     }
 
+    public function tags()
+    {
+        $tagCloud = $this->TagManager->getCloud('Commentary');
+        $occurrances = Set::extract('/occurrences', $tagCloud);
+        $this->set([
+            'tagCloud' => $tagCloud,
+            'title_for_layout' => 'Tags',
+            'min_font_size' => 10,
+            'max_font_size' => 60,
+            'max_occurrances' => max($occurrances)
+        ]);
+    }
+
     /**
      * View method
      *
