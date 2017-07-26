@@ -6,7 +6,11 @@ $this->Html->script('script', ['block' => 'scriptBottom']);
 ?>
 
 <?php $this->start('subsite_title'); ?>
-<?php // Deliberately blank?>
+    <h1 id="subsite_title" class="max_width">
+        <a href="/">
+            <img src="/img/Commentary.jpg" />
+        </a>
+    </h1>
 <?php $this->end(); ?>
 
 <?php $this->append('scriptBottom'); ?>

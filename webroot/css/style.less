@@ -1,9 +1,18 @@
 // out: style.css, compress: true
 
-@import "../../vendor/twbs/bootstrap/less/bootstrap.less";
 @import "../../vendor/ballstatecber/datacenter-plugin-cakephp3/webroot/css/datacenter.less";
 
 @charset "utf-8";
+
+// override cri less
+#two_col_wrapper {
+    margin-top: 0px;
+    #menu_column {
+        background-color: #FFFFFF !important;
+        color: #000000 !important;
+        padding: 15px !important;
+    }
+}
 
 /* GENERAL, HTML TAGS */
 blockquote {
@@ -36,6 +45,7 @@ div.paginator {
 		vertical-align: middle;
 	}
 }
+
 a.back_to_top {
 	clear: both;
 	display: block;
@@ -46,8 +56,6 @@ a.back_to_top {
 		list-style-type: none;
 	}
 }
-
-
 
 /* USER MENU */
 #user_menu {
@@ -73,8 +81,6 @@ a.back_to_top {
 		margin-top: 0;
 	}
 }
-
-
 
 /* PAGE STRUCTURE */
 h1.page_title {
@@ -142,8 +148,6 @@ h1.page_title {
 	}
 }
 
-
-
 /* FORMS */
 div.input {
 	margin-bottom: 20px;
@@ -161,6 +165,7 @@ div.input {
 		font-size: 8pt;
 	}
 }
+
 fieldset {
 	border: 1px solid black;
 	margin-bottom: 1em;
@@ -218,8 +223,6 @@ div.input {
 	}
 }
 
-
-
 /* AUTO-COMPLETE */
 ul.auto_complete {
 	background-color: #fff;
@@ -238,8 +241,6 @@ ul.auto_complete {
 		}
 	}
 }
-
-
 
 /* TAGS */
 #tag_list {
@@ -594,8 +595,6 @@ table.my_commentaries {
 		}
 	}
 }
-
-
 
 /* MANAGE USERS */
 #manage_users_index {
