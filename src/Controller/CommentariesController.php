@@ -21,7 +21,7 @@ class CommentariesController extends AppController
     {
         $commentary = $this->Commentaries->find()
             ->where(['is_published' => 1])
-            ->contain(['Tags'])
+            ->contain(['Tags', 'Users'])
             ->order(['published_date' => 'DESC'])
             ->first();
 

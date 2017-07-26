@@ -93,8 +93,8 @@ if (!isset($newest)) {
             </p>
         <?php endif; ?>
     </div>
-    <?php if (isset($commentary['User']) && ! empty($commentary['User']['name'])): ?>
+    <?php if (isset($commentary->user) && ! empty($commentary->user['name'])): ?>
         <hr />
-        <?= $this->element('users/profile', ['user' => $commentary['User']]) ?>
+        <?= $this->element('users/profile', ['user' => $commentary->user]) ?>
     <?php endif; ?>
 </div>
