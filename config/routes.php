@@ -45,16 +45,45 @@ Router::defaultRouteClass(DashedRoute::class);
 
 Router::scope('/', function (RouteBuilder $routes) {
     /**
-     * Here, we are connecting '/' (base path) to a controller called 'Pages',
-     * its action called 'display', and we pass a param to select the view file
-     * to use (in this case, src/Template/Pages/home.ctp)...
-     */
-    $routes->connect('/', ['controller' => 'Pages', 'action' => 'display', 'home']);
-
-    /**
      * ...and connect the rest of 'Pages' controller's URLs.
      */
     $routes->connect('/pages/*', ['controller' => 'Pages', 'action' => 'display']);
+
+    Router::defaultRouteClass(DashedRoute::class);
+
+    Router::connect('/', ['controller' => 'commentaries', 'action' => 'index']);
+    Router::connect('/login', ['controller' => 'users', 'action' => 'login']);
+    Router::connect('/logout', ['controller' => 'users', 'action' => 'logout']);
+    Router::connect('/tags', ['controller' => 'commentaries', 'action' => 'tags']);
+    Router::connect(
+        '/tag/:id',
+        ['controller' => 'commentaries', 'action' => 'tagged'],
+        ['id' => '[0-9]+', 'pass' => ['id']]
+    );
+    Router::connect(
+        '/:id/:slug',
+        ['controller' => 'commentaries', 'action' => 'view'],
+        ['id' => '[0-9]+', 'slug' => '[-_a-z0-9]+', 'pass' => ['id', 'slug']]
+    );
+    Router::connect(
+        "/:id/*",
+        ['controller' => 'commentaries', 'action' => 'view'],
+        ['id' => '[0-9]+', 'pass' => ['id']]
+    );
+    Router::connect(
+        "/commentary/:id/*",
+        ['controller' => 'commentaries', 'action' => 'view'],
+        ['id' => '[0-9]+', 'pass' => ['id']]
+    );
+
+    // So /index.rss leads to the RSS feed
+    Router::connect('/index', ['controller' => 'commentaries', 'action' => 'rss']);
+
+    Router::connect('/newsmedia', ['controller' => 'commentaries', 'action' => 'index', 'newsmedia' => true]);
+    Router::connect('/newsmedia/subscribe', ['controller' => 'users', 'action' => 'add_newsmedia']);
+    Router::connect('/newsmedia/my_account', ['controller' => 'users', 'action' => 'my_account', 'newsmedia' => true]);
+    Router::connect('/forgot_password', ['controller' => 'users', 'action' => 'forgot_password']);
+    Router::connect('/reset_password/*', ['controller' => 'users', 'action' => 'reset_password']);
 
     /**
      * Connect catchall routes for all controllers.

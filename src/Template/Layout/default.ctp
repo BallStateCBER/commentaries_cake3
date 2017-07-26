@@ -1,6 +1,6 @@
 <?php
 $this->extend('DataCenter.default');
-#$this->assign('sidebar', $this->element('sidebar'));
+$this->assign('sidebar', $this->element('sidebar'));
 
 $this->Html->script('script', ['block' => 'scriptBottom']);
 ?>

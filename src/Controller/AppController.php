@@ -27,6 +27,7 @@ use Cake\Event\Event;
  */
 class AppController extends Controller
 {
+    public $helpers = ['CakeJs.Js'];
 
     /**
      * Initialization hook method.
