@@ -1,4 +1,5 @@
 <?php
+<<<<<<< HEAD
 /**
  * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
@@ -14,3 +15,7 @@
  */
 ?>
 <?= $this->fetch('content') ?>
+=======
+$this->extend('DataCenter.ajax');
+echo $this->fetch('content');
+>>>>>>> 64f76c4d083f43dee6bab89cf683a4b4fc7758e4
