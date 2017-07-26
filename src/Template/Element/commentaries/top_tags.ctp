@@ -1,20 +1,20 @@
 <table>
-    <?php foreach ($top_tags as $key => $tag): ?>
+    <?php foreach ($topTags as $tag): ?>
         <tr>
             <th>
-                <?php echo $this->Html->link(
-                    $tag['tags']['name'],
-                    array(
+                <?= $this->Html->link(
+                    $tag['name'],
+                    [
                         'controller' => 'commentaries',
                         'action' => 'tagged',
-                        'id' => $tag['commentaries_tags']['tag_id'],
+                        'id' => $tag['tag_id'],
                         'admin' => false,
                         'plugin' => false
-                    )
+                    ]
                 ); ?>
             </th>
             <td>
-                <?php echo $tag[0]['occurrences']; ?>
+                <?= $tag['occurrences']; ?>
             </td>
         </tr>
     <?php endforeach; ?>

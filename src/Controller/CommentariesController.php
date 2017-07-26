@@ -12,7 +12,6 @@ use App\Controller\AppController;
  */
 class CommentariesController extends AppController
 {
-
     /**
      * Index method
      *

@@ -1,4 +1,4 @@
-<?php if (!empty($auth_user)): ?>
+<?php if (!empty($authUser)): ?>
     <div>
         <?= $this->element('users/user_menu'); ?>
     </div>
@@ -70,7 +70,7 @@
     </div>
 </div>
 
-<?php if (empty($auth_user)): ?>
+<?php if (empty($authUser)): ?>
     <div>
         <?= $this->Html->link(
             'Reporter / Admin Login',

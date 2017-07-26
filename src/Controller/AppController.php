@@ -16,6 +16,7 @@ namespace App\Controller;
 
 use Cake\Controller\Controller;
 use Cake\Event\Event;
+use Cake\ORM\TableRegistry;
 
 /**
  * Application Controller
@@ -27,7 +28,16 @@ use Cake\Event\Event;
  */
 class AppController extends Controller
 {
-    public $helpers = ['CakeJs.Js'];
+    public $helpers = [
+        'CakeJs.Js',
+        'Html'
+    ];
+
+
+    public $components = [
+        'DataCenter.Flash',
+        'DataCenter.TagManager'
+    ];
 
     /**
      * Initialization hook method.
@@ -41,9 +51,11 @@ class AppController extends Controller
     public function initialize()
     {
         parent::initialize();
-
-        $this->loadComponent('RequestHandler');
+        $this->loadComponent('Auth');
         $this->loadComponent('Flash');
+        $this->loadComponent('RequestHandler');
+
+        $this->Auth->allow();
 
         /*
          * Enable the following components for recommended CakePHP security settings.
@@ -66,5 +78,20 @@ class AppController extends Controller
         ) {
             $this->set('_serialize', true);
         }
+
+        $this->Commentaries = TableRegistry::get('Commentaries');
+        $recentCommentaries = $this->Commentaries->find()
+            ->select(['id', 'title', 'summary', 'slug'])
+            ->where(['is_published' => 1])
+            ->order(['published_date' => 'DESC'])
+            ->limit(4)
+            ->toArray();
+
+        $this->set([
+        #    'acl' => $this->Acl,
+            'authUser' => $this->request->session()->read(['Auth.User.id']) ?: null,
+            'recentCommentaries' => $recentCommentaries,
+            'topTags' => $this->TagManager->getTop('Commentaries', 10)
+        ]);
     }
 }
