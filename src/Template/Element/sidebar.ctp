@@ -12,15 +12,9 @@
         Commentaries are published weekly and distributed through the
         <em>Indianapolis Business Journal</em> and many other print
         and online publications.
-        <a href="#" id="disclaimer_toggler">
+        <a href="#" id="disclaimer_toggler" data-toggle="collapse" data-target="#commentary_disclaimer">
             Disclaimer
         </a>
-        <?php $this->Js->buffer("
-            $('#disclaimer_toggler').click(function(event) {
-                event.preventDefault();
-                $('#commentary_disclaimer').fadeToggle();
-            });
-        ");  ?>
     </p>
 </div>
 
@@ -41,7 +35,7 @@
     ); ?>
 </div>
 
-<div id="commentary_disclaimer" style="display: none;">
+<div id="commentary_disclaimer" class="collapse">
     <h3>
         Disclaimer
     </h3>

@@ -1,16 +1,17 @@
 // out: style.css, compress: true
 
+@import "../../vendor/twbs/bootstrap/less/bootstrap.less";
 @import "../../vendor/ballstatecber/datacenter-plugin-cakephp3/webroot/css/datacenter.less";
 
 @charset "utf-8";
 
-// override cri less
-#two_col_wrapper {
-    margin-top: 0px;
-    #menu_column {
-        background-color: #FFFFFF !important;
-        color: #000000 !important;
-        padding: 15px !important;
+/* for overriding default datacenter css */
+#menu_column {
+    div {
+        margin-bottom: 0px;
+    }
+    h3 {
+        margin-top: 5px;
     }
 }
 
