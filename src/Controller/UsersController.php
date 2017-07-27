@@ -12,6 +12,101 @@ use App\Controller\AppController;
  */
 class UsersController extends AppController
 {
+    public function forgotPassword()
+    {
+        if ($this->request->is('post')) {
+            $adminEmail = Configure::read('admin_email');
+            $email = $this->Users->cleanEmail($this->request->data['email']);
+            if (empty($email)) {
+                $this->Flash->error('Please enter the email address associated with your account to have your password reset. Email <a href="mailto:'.$adminEmail.'">'.$adminEmail.'</a> if you need any assistance.');
+            } else {
+                $userId = $this->Users->getUserIdWithEmail($email);
+                if ($userId) {
+                    if ($this->Users->sendPasswordResetEmail($userId, $email)) {
+                        $this->Flash->success('You should be receiving an email shortly with a link to reset your password.');
+                    } else {
+                        $this->Flash->error('There was an error sending your password-resetting email out. Please try again, and if it continues to not work, email <a href="mailto:'.$adminEmail.'">'.$adminEmail.'</a> if you need any assistance.');
+                    }
+                } else {
+                    $this->Flash->error('We couldn\'t find an account registered with the email address <strong>'.$email.'</strong>. Make sure you spelled it correctly. Email <a href="mailto:'.$adminEmail.'">'.$adminEmail.'</a> if you need any assistance.');
+                }
+            }
+        }
+        $this->set([
+            'titleForLayout' => 'Forgot Password'
+        ]);
+    }
+
+    public function login()
+    {
+        $this->set('titleForLayout', 'Log In');
+        if ($this->request->is('post')) {
+            $user = $this->Auth->identify();
+            if ($user) {
+                $this->Auth->setUser($user);
+
+                // do they have an old sha1 password?
+                if ($this->Auth->authenticationProvider()->needsPasswordRehash()) {
+                    $user = $this->Users->get($this->Auth->user('id'));
+                    $Users->password = $this->request->getData('password');
+                    $this->Users->save($user);
+                }
+
+                // Remember login information
+                if ($this->request->data('remember_me')) {
+                    $this->Cookie->configKey('User', [
+                        'expires' => '+1 year',
+                        'httpOnly' => true
+                    ]);
+                    $this->Cookie->write('User', [
+                        'email' => $this->request->data('email'),
+                        'password' => $this->request->data('password')
+                    ]);
+                }
+                return $this->redirect($this->Auth->redirectUrl());
+            }
+            if (!$user) {
+                $this->Flash->error(__('We could not log you in. Please check your email & password.'));
+            }
+        }
+    }
+
+    public function resetPassword($userId = null, $resetPasswordHash = null)
+    {
+        $user = $this->Users->get($userId);
+        $email = $user->email;
+
+        $expectedHash = $this->Users->getResetPasswordHash($userId, $email);
+
+        if ($resetPasswordHash != $expectedHash || $resetPasswordHash == null || $userId == null) {
+            $this->Flash->error('Invalid password-resetting code. Make sure that you entered the correct address and that the link emailed to you hasn\'t expired.');
+            $this->redirect('/');
+        }
+
+        if ($this->request->is('post')) {
+            $user = $this->Users->patchEntity($user, [
+                'password' => $this->request->data['new_password'],
+                'confirm_password' => $this->request->data['confirm_password']
+            ]);
+
+            if ($this->Users->save($user)) {
+                $data = $user->toArray();
+                $this->Auth->setUser($data);
+                $this->Flash->success('Password changed. You are now logged in.');
+                return $this->redirect('/');
+            }
+
+            $this->Flash->error('There was an error changing your password. Please check to make sure they\'ve been entered correctly.');
+            return $this->redirect('/');
+        }
+
+        $this->set([
+            'titleForLayout' => 'Reset Password',
+            'userId' => $userId,
+            'email' => $email,
+            'resetPasswordHash' => $resetPasswordHash
+        ]);
+    }
 
     /**
      * Index method

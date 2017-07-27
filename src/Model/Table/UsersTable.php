@@ -1,9 +1,12 @@
 <?php
 namespace App\Model\Table;
 
+use Cake\Core\Configure;
+use Cake\Mailer\Email;
 use Cake\ORM\Query;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
+use Cake\Routing\Router;
 use Cake\Validation\Validator;
 
 /**
@@ -45,9 +48,6 @@ class UsersTable extends Table
         $this->belongsTo('Groups', [
             'foreignKey' => 'group_id'
         ]);
-        $this->belongsTo('LastAlertArticles', [
-            'foreignKey' => 'last_alert_article_id'
-        ]);
         $this->hasMany('Commentaries', [
             'foreignKey' => 'user_id'
         ]);
@@ -83,7 +83,13 @@ class UsersTable extends Table
 
         $validator
             ->requirePresence('password', 'create')
-            ->notEmpty('password');
+            ->notEmpty(['password', 'confirm_password'])
+            ->add('confirm_password', [
+                'compare' => [
+                    'rule' => ['compareWith', 'password'],
+                    'message' => 'Your passwords do not match.'
+                ]
+            ]);
 
         $validator
             ->boolean('active')
@@ -118,8 +124,56 @@ class UsersTable extends Table
     {
         $rules->add($rules->isUnique(['email']));
         $rules->add($rules->existsIn(['group_id'], 'Groups'));
-        $rules->add($rules->existsIn(['last_alert_article_id'], 'LastAlertArticles'));
 
         return $rules;
+    }
+
+    public function cleanEmail($email)
+    {
+        $email = trim($email);
+        $email = strtolower($email);
+        return $email;
+    }
+
+    public function getResetPasswordHash($userId, $email)
+    {
+        $salt = Configure::read('security_salt');
+        $month = date('my');
+        return md5($userId.$email.$salt.$month);
+    }
+
+    public function getUserIdWithEmail($email)
+    {
+        $result = $this->find()
+            ->select(['id'])
+            ->where(['email' => $email])
+            ->first();
+        if ($result) {
+            return $result->id;
+        }
+        return false;
+    }
+
+    public function sendPasswordResetEmail($userId, $email)
+    {
+        $resetPasswordHash = $this->getResetPasswordHash($userId, $email);
+        $resetEmail = new Email('default');
+        $resetUrl = Router::url([
+                'controller' => 'users',
+                'action' => 'resetPassword',
+                $userId,
+                $resetPasswordHash
+            ], true);
+        $resetEmail
+                ->setTo($email)
+                ->setSubject('Muncie Events: Reset Password')
+                ->template('forgot_password')
+                ->emailFormat('both')
+                ->helpers(['Html', 'Text'])
+                ->viewVars(compact(
+                    'email',
+                    'resetUrl'
+                ));
+        return $resetEmail->send();
     }
 }

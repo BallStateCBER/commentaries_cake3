@@ -54,6 +54,34 @@ class AppController extends Controller
         $this->loadComponent('Auth');
         $this->loadComponent('Flash');
         $this->loadComponent('RequestHandler');
+        $this->loadComponent('Auth', [
+            'loginAction' => [
+                'prefix' => false,
+                'controller' => 'Users',
+                'action' => 'login'
+            ],
+            'logoutRedirect' => [
+                'prefix' => false,
+                'controller' => 'Commentaries',
+                'action' => 'index'
+            ],
+            'authenticate' => [
+                'Form' => [
+                    'fields' => [
+                        'username' => 'email',
+                        'password' => 'password'
+                    ],
+                    'passwordHasher' => [
+                        'className' => 'Fallback',
+                        'hashers' => [
+                            'Default',
+                            'Weak' => ['hashType' => 'sha1']
+                            ]
+                        ]
+                    ]
+                ]
+            ]
+        );
 
         $this->Auth->allow();
 

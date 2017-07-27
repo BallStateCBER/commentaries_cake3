@@ -1,4 +1,4 @@
-<?php if (!empty($authUser)): ?>
+<?php if ($this->request->session()->read('Auth.User')): ?>
     <div>
         <?= $this->element('users/user_menu'); ?>
     </div>
@@ -64,7 +64,7 @@
     </div>
 </div>
 
-<?php if (empty($authUser)): ?>
+<?php if (!$this->request->session()->read('Auth.User.id')): ?>
     <div>
         <?= $this->Html->link(
             'Reporter / Admin Login',

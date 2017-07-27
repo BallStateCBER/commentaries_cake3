@@ -1,186 +1,187 @@
 <?php
-	$user_group = $auth_user['Group']['name'];
+    $session = $this->request->session();
+    $userGroup = $session->read('Auth.User.group_id');
 ?>
 
 <div id="user_menu">
-	<h3>
-		<?php echo $auth_user['name']; ?>
-	</h3>	
-	<ul class="root">
-		<li>
-			<ul>
-				<?php if ($user_group == 'Newsmedia'): ?>
-					<li>
-						<?php echo $this->Html->link(
-							'Next Article to Publish', 
-							array(
-								'controller' => 'commentaries', 
-								'action' => 'index', 
-								'admin' => false, 
-								'newsmedia' => true, 
-								'plugin' => false
-							)
-						); ?>
-					</li>
-					<li>
-						<?php echo $this->Html->link(
-							'My Account', 
-							array(
-								'controller' => 'users', 
-								'action' => 'my_account', 
-								'admin' => false,
-								'newsmedia' => true, 
-								'plugin' => false
-							)
-						); ?>
-					</li>
-					<li>
-						<?php echo $this->Html->link(
-							'Subscribe Another User to Newsmedia Alerts',
-							array(
-								'controller' => 'users', 
-								'action' => 'add_newsmedia', 
-								'admin' => false, 
-								'plugin' => false
-							)
-						); ?>
-					</li>
-				<?php else: ?>
-					<li>
-						<?php echo $this->Html->link(
-							'My Account', 
-							array(
-								'controller' => 'users', 
-								'action' => 'my_account', 
-								'admin' => false, 
-								'plugin' => false
-							)
-						); ?>
-					</li>
-				<?php endif; ?>
-				<li>
-					<?php echo $this->Html->link(
-						'Log out', 
-						array(
-							'controller' => 'users', 
-							'action' => 'logout', 
-							'admin' => false, 
-							'plugin' => false
-						)
-					); ?>
-				</li>
-			</ul>
-		</li>
-		
-		<?php if ($user_group == 'Administrators' || $user_group == 'Commentary authors'): ?>
-			<li>
-				Weekly Commentaries
-				<ul>
-					<li>
-						<?php echo $this->Html->link(
-							'Add', 
-							array(
-								'controller' => 'commentaries', 
-								'action' => 'add', 
-								'admin' => false, 
-								'plugin' => false
-							)
-						); ?>
-					</li>
-					<li>
-						<?php echo $this->Html->link(
-							'Drafts', 
-							array(
-								'controller' => 'commentaries', 
-								'action' => 'drafts', 
-								'admin' => false, 
-								'plugin' => false
-							)
-						); ?>
-					</li>
-					<li>
-						<?php 
-							// Development server
-							if (stripos($_SERVER['SERVER_NAME'], 'localhost') !== false) {
-								$export_url = 'http://icemiller.localhost/articles/import_commentaries';
-							// Production server
-							} else {
-								$export_url = 'http://icemiller.cberdata.org/articles/import_commentaries';	
-							}
-						
-							echo $this->Html->link('Export to Ice Miller', 
-								$export_url,
-								array(
-									'confirm' => 'This will copy any commentaries over to the Ice Miller website that haven\'t been automatically copied upon publishing. You shouldn\'t need to ever do this manually, but you can anyway.\nIf you proceed, the next page will be blank, except for a 1 (indicating success) or a 0 (meaning some catastrophic error just occurred).'
-								)
-							); 
-						?>
-					</li>
-				</ul>
-			</li>
-		<?php endif; ?>
-		
-		<?php if ($user_group == 'Administrators'): ?>
-			<li>
-				Admin
-				<ul>
-					<li>
-						<?php echo $this->Html->link(
-							'Add a User', 
-							array(
-								'controller' => 'users', 
-								'action' => 'add', 
-								'admin' => false, 
-								'plugin' => false
-							)
-						); ?>
-					</li>
-					<li>
-						<?php echo $this->Html->link(
-							'Edit Users', 
-							array(
-								'controller' => 'users', 
-								'action' => 'index', 
-								'admin' => true, 
-								'plugin' => false
-							)
-						); ?>
-					</li>
-					<li>
-						<?php echo $this->Html->link(
-							'Add a Newsmedia Member', 
-							array(
-								'controller' => 'users', 
-								'action' => 'add_newsmedia', 
-								'admin' => false, 
-								'plugin' => false
-							)
-						); ?>
-					</li>
-					<li>
-						<?php echo $this->Html->link(
-							'Next Article to Publish', 
-							array(
-								'controller' => 'commentaries', 
-								'action' => 'index', 
-								'admin' => false, 
-								'newsmedia' => true, 
-								'plugin' => false
-							)
-						); ?>
-					</li>
-					<li>
-						<a href="/acl_manager/acl">
-							Manage Permissions
-						</a>
-					</li>
-					<li>
-						<a href="/tags/manage/">
-							Manage Tags
-						</a>
-					</li>
-				</ul>
-			</li>
-		<?php endif; ?>
-	</ul>
+    <h3>
+        <?= $session->read('Auth.User.name'); ?>
+    </h3>
+    <ul class="root">
+        <li>
+            <ul>
+                <?php if ($userGroup == 'Newsmedia'): ?>
+                    <li>
+                        <?= $this->Html->link(
+                            'Next Article to Publish',
+                            [
+                                'controller' => 'commentaries',
+                                'action' => 'index',
+                                'admin' => false,
+                                'newsmedia' => true,
+                                'plugin' => false
+                            ]
+                        ); ?>
+                    </li>
+                    <li>
+                        <?= $this->Html->link(
+                            'My Account',
+                            [
+                                'controller' => 'users',
+                                'action' => 'my_account',
+                                'admin' => false,
+                                'newsmedia' => true,
+                                'plugin' => false
+                            ]
+                        ); ?>
+                    </li>
+                    <li>
+                        <?= $this->Html->link(
+                            'Subscribe Another User to Newsmedia Alerts',
+                            [
+                                'controller' => 'users',
+                                'action' => 'add_newsmedia',
+                                'admin' => false,
+                                'plugin' => false
+                            ]
+                        ); ?>
+                    </li>
+                <?php else: ?>
+                    <li>
+                        <?= $this->Html->link(
+                            'My Account',
+                            [
+                                'controller' => 'users',
+                                'action' => 'my_account',
+                                'admin' => false,
+                                'plugin' => false
+                            ]
+                        ); ?>
+                    </li>
+                <?php endif; ?>
+                <li>
+                    <?= $this->Html->link(
+                        'Log out',
+                        [
+                            'controller' => 'users',
+                            'action' => 'logout',
+                            'admin' => false,
+                            'plugin' => false
+                        ]
+                    ); ?>
+                </li>
+            </ul>
+        </li>
+
+        <?php if ($userGroup == 1 || $userGroup == 2): ?>
+            <li>
+                Weekly Commentaries
+                <ul>
+                    <li>
+                        <?= $this->Html->link(
+                            'Add',
+                            [
+                                'controller' => 'commentaries',
+                                'action' => 'add',
+                                'admin' => false,
+                                'plugin' => false
+                            ]
+                        ); ?>
+                    </li>
+                    <li>
+                        <?= $this->Html->link(
+                            'Drafts',
+                            [
+                                'controller' => 'commentaries',
+                                'action' => 'drafts',
+                                'admin' => false,
+                                'plugin' => false
+                            ]
+                        ); ?>
+                    </li>
+                    <li>
+                        <?php
+                            // Development server
+                            if (stripos($_SERVER['SERVER_NAME'], 'localhost') !== false) {
+                                $export_url = 'http://icemiller.localhost/articles/import_commentaries';
+                            // Production server
+                            } else {
+                                $export_url = 'http://icemiller.cberdata.org/articles/import_commentaries';
+                            }
+
+                            echo $this->Html->link('Export to Ice Miller',
+                                $export_url,
+                                [
+                                    'confirm' => 'This will copy any commentaries over to the Ice Miller website that haven\'t been automatically copied upon publishing. You shouldn\'t need to ever do this manually, but you can anyway.\nIf you proceed, the next page will be blank, except for a 1 (indicating success) or a 0 (meaning some catastrophic error just occurred).'
+                                ]
+                            );
+                        ?>
+                    </li>
+                </ul>
+            </li>
+        <?php endif; ?>
+
+        <?php if ($userGroup == 1): ?>
+            <li>
+                Admin
+                <ul>
+                    <li>
+                        <?= $this->Html->link(
+                            'Add a User',
+                            [
+                                'controller' => 'users',
+                                'action' => 'add',
+                                'admin' => false,
+                                'plugin' => false
+                            ]
+                        ); ?>
+                    </li>
+                    <li>
+                        <?= $this->Html->link(
+                            'Edit Users',
+                            [
+                                'controller' => 'users',
+                                'action' => 'index',
+                                'admin' => true,
+                                'plugin' => false
+                            ]
+                        ); ?>
+                    </li>
+                    <li>
+                        <?= $this->Html->link(
+                            'Add a Newsmedia Member',
+                            [
+                                'controller' => 'users',
+                                'action' => 'add_newsmedia',
+                                'admin' => false,
+                                'plugin' => false
+                            ]
+                        ); ?>
+                    </li>
+                    <li>
+                        <?= $this->Html->link(
+                            'Next Article to Publish',
+                            [
+                                'controller' => 'commentaries',
+                                'action' => 'index',
+                                'admin' => false,
+                                'newsmedia' => true,
+                                'plugin' => false
+                            ]
+                        ); ?>
+                    </li>
+                    <li>
+                        <a href="/acl_manager/acl">
+                            Manage Permissions
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/tags/manage/">
+                            Manage Tags
+                        </a>
+                    </li>
+                </ul>
+            </li>
+        <?php endif; ?>
+    </ul>
 </div>

@@ -14,6 +14,10 @@ use Cake\Utility\Hash;
  */
 class CommentariesController extends AppController
 {
+    public $helpers = [
+        'Rss'
+    ];
+
     public function initialize()
     {
         parent::initialize();
@@ -85,6 +89,23 @@ class CommentariesController extends AppController
             'newest' => true,
             'titleForLayout' => ''
         ]);
+    }
+
+    public function rss()
+    {
+        $commentaries = $this->Commentaries->find()
+            ->select(['id', 'title', 'summary', 'body', 'slug', 'published_date'])
+            ->where(['is_published' => 1])
+            ->order(['published_date' => 'DESC'])
+            ->limit(10)
+            ->toArray();
+
+        $this->set([
+            'commentaries' => $commentaries,
+            'titleForLayout' => 'Weekly Commentary with Michael Hicks'
+        ]);
+
+        $this->viewbuilder()->setLayout('rss');
     }
 
     public function tagged($tagId = null)
