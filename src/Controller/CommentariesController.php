@@ -48,7 +48,7 @@ class CommentariesController extends AppController
                 'Commentaries' => [
                     'strategy' => 'select',
                     'queryBuilder' => function ($q) {
-                        return $q->order(['Commentaries.published_date' =>'DESC']);
+                        return $q->distinct('Commentaries.id')->order(['Commentaries.published_date' =>'DESC']);
                     }
                 ]
             ])
