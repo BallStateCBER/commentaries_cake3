@@ -328,16 +328,6 @@ if (Configure::read('debug')) {
     Plugin::load('DebugKit', ['bootstrap' => true]);
 }
 
-
-Plugin::load('CakeJs');
-Plugin::load('DataCenter', ['bootstrap' => false, 'routes' => true]);
-
-// Only try to load DebugKit in development mode
-// Debug Kit should not be installed on a production system
-if (Configure::read('debug')) {
-    Plugin::load('DebugKit', ['bootstrap' => true]);
-}
-
 /**
  * Connect middleware/dispatcher filters.
  */

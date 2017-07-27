@@ -19,6 +19,7 @@ $this->Html->script('script', ['block' => 'scriptBottom']);
 <?php $this->end(); ?>
 
 <div id="content">
+    <?= $this->Flash->render('flash'); ?>
     <div id="commentaries_main">
         <?= $this->fetch('content') ?>
     </div>

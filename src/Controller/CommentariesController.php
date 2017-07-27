@@ -2,6 +2,8 @@
 namespace App\Controller;
 
 use App\Controller\AppController;
+use Cake\ORM\TableRegistry;
+use Cake\Utility\Hash;
 
 /**
  * Commentaries Controller
@@ -12,6 +14,13 @@ use App\Controller\AppController;
  */
 class CommentariesController extends AppController
 {
+    public function initialize()
+    {
+        parent::initialize();
+        $this->Commentaries = TableRegistry::get('Commentaries');
+        $this->CommentariesTags = TableRegistry::get('CommentariesTags');
+        $this->Tags = TableRegistry::get('Tags');
+    }
     /**
      * Index method
      *
@@ -32,16 +41,49 @@ class CommentariesController extends AppController
         ]);
     }
 
+    public function tagged($tagId = null)
+    {
+        $tag = $this->Tags->find()
+            ->contain([
+                'Commentaries' => [
+                    'strategy' => 'select',
+                    'queryBuilder' => function ($q) {
+                        return $q->order(['Commentaries.published_date' =>'DESC']);
+                    }
+                ]
+            ])
+            ->where(['id' => $tagId])
+            ->toArray();
+
+        if (!is_numeric($tagId) || !isset($tag) || !$tag || !$tag[0]->name) {
+            $this->Flash->error('Tag not found.');
+            return $this->redirect([
+                'controller' => 'commentaries',
+                'action' => 'tags'
+            ]);
+        }
+
+        $this->set([
+            'tagName' => $tag[0]->name,
+            'commentaries' => $tag[0]->commentaries,
+            'titleForLayout' => ucwords($tag[0]->name)
+        ]);
+    }
+
     public function tags()
     {
-        $tagCloud = $this->TagManager->getCloud('Commentary');
-        $occurrances = Set::extract('/occurrences', $tagCloud);
+        $tagCloud = $this->TagManager->getCloud('Commentaries');
+        $occurrences = [];
+        foreach ($tagCloud as $tag) {
+            $occurrences[] = $tag['occurrences'];
+        }
+        $maxOccurrences = max($occurrences);
         $this->set([
             'tagCloud' => $tagCloud,
-            'title_for_layout' => 'Tags',
-            'min_font_size' => 10,
-            'max_font_size' => 60,
-            'max_occurrances' => max($occurrances)
+            'titleForLayout' => 'Tags',
+            'minFontSize' => 10,
+            'maxFontSize' => 60,
+            'maxOccurrences' => $maxOccurrences
         ]);
     }
 
