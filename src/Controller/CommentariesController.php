@@ -21,6 +21,52 @@ class CommentariesController extends AppController
         $this->CommentariesTags = TableRegistry::get('CommentariesTags');
         $this->Tags = TableRegistry::get('Tags');
     }
+
+    public function browse($year = null)
+    {
+        $publishedDates = $this->Commentaries->find()
+            ->select(['published_date'])
+            ->where(['published_date !=' => 'NULL'])
+            ->order(['published_date' => 'ASC'])
+            ->toArray();
+
+        $years = [];
+
+        foreach ($publishedDates as $publishedDate) {
+            $years[] = date('Y-m-d', strtotime($publishedDate->published_date));
+        }
+
+        $earliestYear = substr($years[0], 0, 4);
+        $last = array_pop($years);
+        $latestYear = substr($last, 0, 4);
+        if (is_numeric($year) && $year >= $earliestYear && $year <= $latestYear) {
+            $titleForLayout = "CBER Weekly Commentaries - $year";
+        } else {
+            $year = $latestYear;
+            $titleForLayout = 'CBER Weekly Commentaries';
+        }
+
+        $commentaries = $this->Commentaries->find()
+            ->select(['id', 'title', 'summary', 'created', 'published_date', 'slug'])
+            ->where(['published_date LIKE' => "$year%"])
+            ->andWhere(['is_published' => 1])
+            ->order(['published_date' => 'ASC'])
+            ->toArray();
+
+        // If an array is being requested by an element
+        if (isset($this->params['requested'])) {
+            return $commentaries;
+        }
+
+        $this->set(compact(
+            'commentaries',
+            'earliestYear',
+            'latestYear',
+            'titleForLayout',
+            'year'
+        ));
+    }
+
     /**
      * Index method
      *
