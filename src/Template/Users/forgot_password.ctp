@@ -1,3 +1,7 @@
+<?php
+use Cake\Core\Configure;
+
+?>
 <h1 class="page_title">
 	<?= $titleForLayout; ?>
 </h1>
@@ -9,20 +13,11 @@
 	<a href="mailto:<?= Configure::read('admin_email'); ?>"><?= Configure::read('admin_email'); ?></a>.
 </p>
 
-<?php
-    echo $this->Form->create(
-        'User',
-        [
-            'controller' => 'users',
-            'action' => 'forgotPassword'
-        ]
-    );
-    echo $this->Form->input(
-        'email',
-        [
-            'label' => false
-        ]
-    );
-    echo $this->Form->submit('Send password-resetting email');
-    echo $this->Form->end();
-?>
+<?= $this->Form->create('User', ['url' => ['controller' => 'Users', 'action' => 'forgotPassword']]); ?>
+<div class="col-lg-6">
+    <?php
+        echo $this->Form->input('email', ['class' => 'form-control', 'label' => false]);
+        echo $this->Form->button('Send password-resetting email', ['class' => 'form-control']);
+        echo $this->Form->end();
+    ?>
+</div>

@@ -2,6 +2,7 @@
 namespace App\Controller;
 
 use App\Controller\AppController;
+use Cake\Core\Configure;
 
 /**
  * Users Controller
@@ -20,10 +21,10 @@ class UsersController extends AppController
             if (empty($email)) {
                 $this->Flash->error('Please enter the email address associated with your account to have your password reset. Email <a href="mailto:'.$adminEmail.'">'.$adminEmail.'</a> if you need any assistance.');
             } else {
-                $userId = $this->Users->getUserIdWithEmail($email);
+                $userId = $this->Users->getIdFromEmail($email);
                 if ($userId) {
                     if ($this->Users->sendPasswordResetEmail($userId, $email)) {
-                        $this->Flash->success('You should be receiving an email shortly with a link to reset your password.');
+                        $this->Flash->success('Message sent. You should be receiving an email shortly with a link to reset your password.');
                     } else {
                         $this->Flash->error('There was an error sending your password-resetting email out. Please try again, and if it continues to not work, email <a href="mailto:'.$adminEmail.'">'.$adminEmail.'</a> if you need any assistance.');
                     }
@@ -48,7 +49,7 @@ class UsersController extends AppController
                 // do they have an old sha1 password?
                 if ($this->Auth->authenticationProvider()->needsPasswordRehash()) {
                     $user = $this->Users->get($this->Auth->user('id'));
-                    $Users->password = $this->request->getData('password');
+                    $user->password = $this->request->getData('password');
                     $this->Users->save($user);
                 }
 
@@ -71,34 +72,15 @@ class UsersController extends AppController
         }
     }
 
+    public function logout()
+    {
+        return $this->redirect($this->Auth->logout());
+    }
+
     public function resetPassword($userId = null, $resetPasswordHash = null)
     {
         $user = $this->Users->get($userId);
         $email = $user->email;
-
-        $expectedHash = $this->Users->getResetPasswordHash($userId, $email);
-
-        if ($resetPasswordHash != $expectedHash || $resetPasswordHash == null || $userId == null) {
-            $this->Flash->error('Invalid password-resetting code. Make sure that you entered the correct address and that the link emailed to you hasn\'t expired.');
-            $this->redirect('/');
-        }
-
-        if ($this->request->is('post')) {
-            $user = $this->Users->patchEntity($user, [
-                'password' => $this->request->data['new_password'],
-                'confirm_password' => $this->request->data['confirm_password']
-            ]);
-
-            if ($this->Users->save($user)) {
-                $data = $user->toArray();
-                $this->Auth->setUser($data);
-                $this->Flash->success('Password changed. You are now logged in.');
-                return $this->redirect('/');
-            }
-
-            $this->Flash->error('There was an error changing your password. Please check to make sure they\'ve been entered correctly.');
-            return $this->redirect('/');
-        }
 
         $this->set([
             'titleForLayout' => 'Reset Password',
@@ -106,6 +88,29 @@ class UsersController extends AppController
             'email' => $email,
             'resetPasswordHash' => $resetPasswordHash
         ]);
+
+        $expectedHash = $this->Users->getResetPasswordHash($userId, $email);
+
+        if ($resetPasswordHash != $expectedHash) {
+            $this->Flash->error('Invalid password-resetting code. Make sure that you entered the correct address and that the link emailed to you hasn\'t expired.');
+            $this->redirect('/');
+        }
+
+        if ($this->request->is('post')) {
+            $user = $this->Users->patchEntity($user, [
+                'password' => $this->request->data['new_password'],
+                'confirm_password' => $this->request->data['new_confirm_password']
+            ]);
+
+            if ($this->Users->save($user)) {
+                $data = $user->toArray();
+                $this->Auth->setUser($data);
+                return $this->Flash->success('Password changed. You are now logged in.');
+            }
+
+            $this->Flash->error('There was an error changing your password. Please check to make sure they\'ve been entered correctly.');
+            return $this->redirect('/');
+        }
     }
 
     /**
@@ -116,7 +121,7 @@ class UsersController extends AppController
     public function index()
     {
         $this->paginate = [
-            'contain' => ['Groups', 'LastAlertArticles']
+            'contain' => ['Groups']
         ];
         $users = $this->paginate($this->Users);
 
@@ -134,7 +139,7 @@ class UsersController extends AppController
     public function view($id = null)
     {
         $user = $this->Users->get($id, [
-            'contain' => ['Groups', 'LastAlertArticles', 'Commentaries']
+            'contain' => ['Groups', 'Commentaries']
         ]);
 
         $this->set('user', $user);
@@ -159,8 +164,7 @@ class UsersController extends AppController
             $this->Flash->error(__('The user could not be saved. Please, try again.'));
         }
         $groups = $this->Users->Groups->find('list', ['limit' => 200]);
-        $lastAlertArticles = $this->Users->LastAlertArticles->find('list', ['limit' => 200]);
-        $this->set(compact('user', 'groups', 'lastAlertArticles'));
+        $this->set(compact('user', 'groups'));
         $this->set('_serialize', ['user']);
     }
 
@@ -186,8 +190,7 @@ class UsersController extends AppController
             $this->Flash->error(__('The user could not be saved. Please, try again.'));
         }
         $groups = $this->Users->Groups->find('list', ['limit' => 200]);
-        $lastAlertArticles = $this->Users->LastAlertArticles->find('list', ['limit' => 200]);
-        $this->set(compact('user', 'groups', 'lastAlertArticles'));
+        $this->set(compact('user', 'groups'));
         $this->set('_serialize', ['user']);
     }
 

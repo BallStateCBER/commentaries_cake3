@@ -51,9 +51,6 @@ class AppController extends Controller
     public function initialize()
     {
         parent::initialize();
-        $this->loadComponent('Auth');
-        $this->loadComponent('Flash');
-        $this->loadComponent('RequestHandler');
         $this->loadComponent('Auth', [
             'loginAction' => [
                 'prefix' => false,
@@ -82,6 +79,9 @@ class AppController extends Controller
                 ]
             ]
         );
+        $this->loadComponent('Cookie');
+        $this->loadComponent('Flash');
+        $this->loadComponent('RequestHandler');
 
         $this->Auth->allow();
 
@@ -117,7 +117,7 @@ class AppController extends Controller
 
         $this->set([
         #    'acl' => $this->Acl,
-            'authUser' => $this->request->session()->read(['Auth.User.id']) ?: null,
+            'authUser' => $this->request->session()->read('Auth.User.id') ?: null,
             'recentCommentaries' => $recentCommentaries,
             'topTags' => $this->TagManager->getTop('Commentaries', 10)
         ]);

@@ -142,7 +142,7 @@ class UsersTable extends Table
         return md5($userId.$email.$salt.$month);
     }
 
-    public function getUserIdWithEmail($email)
+    public function getIdFromEmail($email)
     {
         $result = $this->find()
             ->select(['id'])
