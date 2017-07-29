@@ -3,13 +3,15 @@ use Cake\Core\Configure;
 
 ?>
 <?= $this->CKEditor->loadJs(); ?>
-<?= $this->Form->create($user, ['url' => ['controller' => 'Users', 'action' => 'myAccount']]); ?>
+<?= $this->Form->create('User', ['url' => ['controller' => 'Users', 'action' => 'myAccount']]); ?>
 <div class="col-lg-6">
     <?= $this->Form->control('name', [
-        'class' => 'form-control'
+        'class' => 'form-control',
+        'value' => $authUser->name
     ]); ?>
     <?= $this->Form->control('email', [
-        'class' => 'form-control'
+        'class' => 'form-control',
+        'value' => $authUser->email
     ]); ?>
     <?= $this->Form->radio('sex', [
         'm' => 'Male',

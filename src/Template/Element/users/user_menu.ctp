@@ -123,8 +123,7 @@
                             'Edit Users',
                             [
                                 'controller' => 'users',
-                                'action' => 'index',
-                                'admin' => true,
+                                'action' => 'adminIndex',
                                 'plugin' => false
                             ]
                         ); ?>

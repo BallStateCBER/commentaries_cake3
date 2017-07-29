@@ -122,7 +122,73 @@ class UsersControllerTest extends IntegrationTestCase
         $this->post('/login', $data);
 
         $id = $this->Users->getIdFromEmail('edfox@bsu.edu');
-        #$this->assertSession($id, 'Auth.User.id');
+        $this->assertSession($id, 'Auth.User.id');
+    }
+
+    /**
+     * Test editing account info
+     *
+     * @return void
+     */
+    public function testAccountInfoForUsers()
+    {
+        $id = $this->Users->getIdFromEmail('edfox@bsu.edu');
+        $this->session(['Auth.User.id' => $id]);
+
+        $this->get('/users/my-account');
+        $userInfo = [
+            'name' => 'Placeholder Extra',
+            'email' => 'placeholder@ymail.com',
+            'bio' => "I'm the placeholder!",
+            'sex' => 'm'
+        ];
+
+        $this->post('/users/my-account', $userInfo);
+        $this->assertResponseOk();
+        $this->assertResponseContains('Your account has been updated.');
+
+        $user = $this->Users->get($id);
+        if ($user->name == 'Placeholder Extra') {
+            $this->assertResponseOk();
+        }
+
+        $this->get('/users/my-account');
+
+        $userInfo = [
+            'name' => 'Erica Dee Fox',
+            'email' => 'edfox@bsu.edu',
+            'bio' => "",
+            'sex' => 'f'
+        ];
+
+        $this->post('/users/my-account', $userInfo);
+        $this->assertResponseOk();
+        $this->assertResponseContains('Your account has been updated.');
+    }
+
+    /**
+     * Test adding a new user
+     *
+     * @return void
+     */
+    public function testAddingANewUser()
+    {
+        $id = $this->Users->getIdFromEmail('edfox@bsu.edu');
+        $this->session(['Auth.User.id' => $id]);
+
+        $this->get('/users/add');
+        $newUser = [
+            'name' => 'Buddy Utter',
+            'email' => 'butter@bsu.edu',
+            'sex' => 'm',
+            'bio' => 'I am ALL BUTTER.',
+            'password' => 'butterbuddy',
+            'group' => 2
+        ];
+
+        $this->post('/users/add', $newUser);
+        $this->assertResponseOk();
+        $this->assertResponseContains('The user has been saved.');
     }
 
     /**
@@ -137,28 +203,6 @@ class UsersControllerTest extends IntegrationTestCase
 
         $this->get('/logout');
         $this->assertSession(null, 'Auth.User.id');
-    }
-
-    /**
-     * Test editing account info
-     *
-     * @return void
-     */
-    /*public function testAccountInfoForUsers()
-    {
-        $this->session(['Auth.User.id' => $id]);
-
-        $this->get('/account');
-        $userInfo = [
-            'name' => 'Placeholder Extra',
-            'email' => 'placeholder@ymail.com',
-            'bio' => "I'm the placeholder!"
-        ];
-        $user = $this->Users->get($id);
-        $user = $this->Users->patchEntity($user, $userInfo);
-        if ($this->Users->save($user)) {
-            $this->assertResponseOk();
-        }
     }
 
     /**

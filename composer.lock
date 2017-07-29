@@ -4,9 +4,39 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "56bf99c83986d12adea50d65db0845a9",
-    "content-hash": "eb7d51815d1cd36d61ee8ba3139508e8",
+    "hash": "e73b54f8f271d7314fb6ac816dfdcebd",
+    "content-hash": "632d1625189c7403b8856e6be561c0a3",
     "packages": [
+        {
+            "name": "akkaweb/cakephp-ckeditor",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/akkaweb/AKKA-CakePHP-CKEditor-Plugin.git",
+                "reference": "d495479dd31714afb6a6c6baafe552f5425de4fa"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/akkaweb/AKKA-CakePHP-CKEditor-Plugin/zipball/d495479dd31714afb6a6c6baafe552f5425de4fa",
+                "reference": "d495479dd31714afb6a6c6baafe552f5425de4fa",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.4"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "*"
+            },
+            "type": "cakephp-plugin",
+            "autoload": {
+                "psr-4": {
+                    "AkkaCKEditor\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "description": "AkkaCKEditor plugin for CakePHP",
+            "time": "2016-01-05 23:28:20"
+        },
         {
             "name": "aura/intl",
             "version": "3.0.0",
@@ -1832,16 +1862,16 @@
         },
         {
             "name": "nikic/php-parser",
-            "version": "v3.0.6",
+            "version": "v3.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/nikic/PHP-Parser.git",
-                "reference": "0808939f81c1347a3c8a82a5925385a08074b0f1"
+                "reference": "4d4896e553f2094e657fe493506dc37c509d4e2b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nikic/PHP-Parser/zipball/0808939f81c1347a3c8a82a5925385a08074b0f1",
-                "reference": "0808939f81c1347a3c8a82a5925385a08074b0f1",
+                "url": "https://api.github.com/repos/nikic/PHP-Parser/zipball/4d4896e553f2094e657fe493506dc37c509d4e2b",
+                "reference": "4d4896e553f2094e657fe493506dc37c509d4e2b",
                 "shasum": ""
             },
             "require": {
@@ -1879,7 +1909,7 @@
                 "parser",
                 "php"
             ],
-            "time": "2017-06-28 20:53:48"
+            "time": "2017-07-28 14:45:09"
         },
         {
             "name": "phar-io/manifest",
@@ -3621,6 +3651,7 @@
         "oldskool/cakephp-js": 20,
         "josegonzalez/dotenv": 20,
         "twbs/bootstrap": 15,
+        "akkaweb/cakephp-ckeditor": 20,
         "psy/psysh": 0
     },
     "prefer-stable": true,

@@ -1,73 +1,66 @@
-<?php
-/**
-  * @var \App\View\AppView $this
-  * @var \App\Model\Entity\User[]|\Cake\Collection\CollectionInterface $users
-  */
-?>
-<nav class="large-3 medium-4 columns" id="actions-sidebar">
-    <ul class="side-nav">
-        <li class="heading"><?= __('Actions') ?></li>
-        <li><?= $this->Html->link(__('New User'), ['action' => 'add']) ?></li>
-        <li><?= $this->Html->link(__('List Groups'), ['controller' => 'Groups', 'action' => 'index']) ?></li>
-        <li><?= $this->Html->link(__('New Group'), ['controller' => 'Groups', 'action' => 'add']) ?></li>
-        <li><?= $this->Html->link(__('List Commentaries'), ['controller' => 'Commentaries', 'action' => 'index']) ?></li>
-        <li><?= $this->Html->link(__('New Commentary'), ['controller' => 'Commentaries', 'action' => 'add']) ?></li>
-    </ul>
-</nav>
-<div class="users index large-9 medium-8 columns content">
-    <h3><?= __('Users') ?></h3>
-    <table cellpadding="0" cellspacing="0">
-        <thead>
-            <tr>
-                <th scope="col"><?= $this->Paginator->sort('id') ?></th>
-                <th scope="col"><?= $this->Paginator->sort('name') ?></th>
-                <th scope="col"><?= $this->Paginator->sort('email') ?></th>
-                <th scope="col"><?= $this->Paginator->sort('sex') ?></th>
-                <th scope="col"><?= $this->Paginator->sort('password') ?></th>
-                <th scope="col"><?= $this->Paginator->sort('active') ?></th>
-                <th scope="col"><?= $this->Paginator->sort('group_id') ?></th>
-                <th scope="col"><?= $this->Paginator->sort('author') ?></th>
-                <th scope="col"><?= $this->Paginator->sort('picture') ?></th>
-                <th scope="col"><?= $this->Paginator->sort('nm_email_alerts') ?></th>
-                <th scope="col"><?= $this->Paginator->sort('last_alert_article_id') ?></th>
-                <th scope="col"><?= $this->Paginator->sort('created') ?></th>
-                <th scope="col"><?= $this->Paginator->sort('modified') ?></th>
-                <th scope="col" class="actions"><?= __('Actions') ?></th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php foreach ($users as $user): ?>
-            <tr>
-                <td><?= $this->Number->format($user->id) ?></td>
-                <td><?= h($user->name) ?></td>
-                <td><?= h($user->email) ?></td>
-                <td><?= h($user->sex) ?></td>
-                <td><?= h($user->password) ?></td>
-                <td><?= h($user->active) ?></td>
-                <td><?= $user->has('group') ? $this->Html->link($user->group->name, ['controller' => 'Groups', 'action' => 'view', $user->group->id]) : '' ?></td>
-                <td><?= h($user->author) ?></td>
-                <td><?= h($user->picture) ?></td>
-                <td><?= h($user->nm_email_alerts) ?></td>
-                <td><?= $this->Number->format($user->last_alert_article_id) ?></td>
-                <td><?= h($user->created) ?></td>
-                <td><?= h($user->modified) ?></td>
-                <td class="actions">
-                    <?= $this->Html->link(__('View'), ['action' => 'view', $user->id]) ?>
-                    <?= $this->Html->link(__('Edit'), ['action' => 'edit', $user->id]) ?>
-                    <?= $this->Form->postLink(__('Delete'), ['action' => 'delete', $user->id], ['confirm' => __('Are you sure you want to delete # {0}?', $user->id)]) ?>
-                </td>
-            </tr>
-            <?php endforeach; ?>
-        </tbody>
-    </table>
-    <div class="paginator">
-        <ul class="pagination">
-            <?= $this->Paginator->first('<< ' . __('first')) ?>
-            <?= $this->Paginator->prev('< ' . __('previous')) ?>
-            <?= $this->Paginator->numbers() ?>
-            <?= $this->Paginator->next(__('next') . ' >') ?>
-            <?= $this->Paginator->last(__('last') . ' >>') ?>
-        </ul>
-        <p><?= $this->Paginator->counter(['format' => __('Page {{page}} of {{pages}}, showing {{current}} record(s) out of {{count}} total')]) ?></p>
-    </div>
+<div class="users index">
+	<h2><?php echo __('Users');?></h2>
+	<table cellpadding="0" cellspacing="0">
+	<tr>
+			<th><?php echo $this->Paginator->sort('id');?></th>
+			<th><?php echo $this->Paginator->sort('name');?></th>
+			<th><?php echo $this->Paginator->sort('email');?></th>
+			<th><?php echo $this->Paginator->sort('bio');?></th>
+			<th><?php echo $this->Paginator->sort('sex');?></th>
+			<th><?php echo $this->Paginator->sort('password');?></th>
+			<th><?php echo $this->Paginator->sort('active');?></th>
+			<th><?php echo $this->Paginator->sort('picture');?></th>
+			<th><?php echo $this->Paginator->sort('group_id');?></th>
+			<th><?php echo $this->Paginator->sort('created');?></th>
+			<th><?php echo $this->Paginator->sort('modified');?></th>
+			<th class="actions"><?php echo __('Actions');?></th>
+	</tr>
+	<?php
+	foreach ($users as $user): ?>
+	<tr>
+		<td><?php echo h($user['User']['id']); ?>&nbsp;</td>
+		<td><?php echo h($user['User']['name']); ?>&nbsp;</td>
+		<td><?php echo h($user['User']['email']); ?>&nbsp;</td>
+		<td><?php echo h($user['User']['bio']); ?>&nbsp;</td>
+		<td><?php echo h($user['User']['sex']); ?>&nbsp;</td>
+		<td><?php echo h($user['User']['password']); ?>&nbsp;</td>
+		<td><?php echo h($user['User']['active']); ?>&nbsp;</td>
+		<td><?php echo h($user['User']['picture']); ?>&nbsp;</td>
+		<td>
+			<?php echo $this->Html->link($user['Group']['name'], array('controller' => 'groups', 'action' => 'view', $user['Group']['id'])); ?>
+		</td>
+		<td><?php echo h($user['User']['created']); ?>&nbsp;</td>
+		<td><?php echo h($user['User']['modified']); ?>&nbsp;</td>
+		<td class="actions">
+			<?php echo $this->Html->link(__('View'), array('action' => 'view', $user['User']['id'])); ?>
+			<?php echo $this->Html->link(__('Edit'), array('action' => 'edit', $user['User']['id'])); ?>
+			<?php echo $this->Form->postLink(__('Delete'), array('action' => 'delete', $user['User']['id']), null, __('Are you sure you want to delete # %s?', $user['User']['id'])); ?>
+		</td>
+	</tr>
+<?php endforeach; ?>
+	</table>
+	<p>
+	<?php
+	echo $this->Paginator->counter(array(
+	'format' => __('Page {:page} of {:pages}, showing {:current} records out of {:count} total, starting on record {:start}, ending on {:end}')
+	));
+	?>	</p>
+
+	<div class="paging">
+	<?php
+		echo $this->Paginator->prev('< ' . __('previous'), array(), null, array('class' => 'prev disabled'));
+		echo $this->Paginator->numbers(array('separator' => ''));
+		echo $this->Paginator->next(__('next') . ' >', array(), null, array('class' => 'next disabled'));
+	?>
+	</div>
+</div>
+<div class="actions">
+	<h3><?php echo __('Actions'); ?></h3>
+	<ul>
+		<li><?php echo $this->Html->link(__('New User'), array('action' => 'add')); ?></li>
+		<li><?php echo $this->Html->link(__('List Groups'), array('controller' => 'groups', 'action' => 'index')); ?> </li>
+		<li><?php echo $this->Html->link(__('New Group'), array('controller' => 'groups', 'action' => 'add')); ?> </li>
+		<li><?php echo $this->Html->link(__('List Commentaries'), array('controller' => 'commentaries', 'action' => 'index')); ?> </li>
+		<li><?php echo $this->Html->link(__('New Commentary'), array('controller' => 'commentaries', 'action' => 'add')); ?> </li>
+	</ul>
 </div>

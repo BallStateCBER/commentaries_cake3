@@ -13,6 +13,42 @@ use Cake\Core\Configure;
  */
 class UsersController extends AppController
 {
+    public function initialize()
+    {
+        parent::initialize();
+        $this->loadComponent('Paginator');
+    }
+
+    /**
+     * Add method
+     *
+     * @return \Cake\Http\Response|null Redirects on successful add, renders view otherwise.
+     */
+    public function add()
+    {
+        $user = $this->Users->newEntity();
+        if ($this->request->is('post')) {
+            $user = $this->Users->patchEntity($user, $this->request->getData());
+            if ($this->Users->save($user)) {
+                return $this->Flash->success(__('The user has been saved.'));
+            }
+            return $this->Flash->error(__('The user could not be saved. Please, try again.'));
+        }
+        $groups = $this->Users->Groups->find('list', ['limit' => 200]);
+        $this->set(compact('user', 'groups'));
+        $this->set('_serialize', ['user']);
+    }
+
+    public function adminIndex()
+    {
+        $users = $this->Users->find('all')
+            ->contain('Groups');
+        $this->set([
+            'titleForLayout' => 'Manage Users',
+            'users' => $this->paginate($users)
+        ]);
+    }
+
     public function forgotPassword()
     {
         if ($this->request->is('post')) {
@@ -75,6 +111,26 @@ class UsersController extends AppController
     public function logout()
     {
         return $this->redirect($this->Auth->logout());
+    }
+
+    public function myAccount()
+    {
+        $this->set('titleForLayout', 'My Profile');
+
+        $id = $this->Auth->user('id');
+        $email = $this->Auth->user('email');
+        $user = $this->Users->get($id);
+
+        if ($this->request->is(['patch', 'post', 'put'])) {
+            $user = $this->Users->patchEntity($user, $this->request->getData());
+            if ($this->Users->save($user)) {
+                $data = $user->toArray();
+                $this->Auth->setUser($data);
+                return $this->Flash->success(__('Your account has been updated.'));
+            }
+            return $this->Flash->error(__('Sorry, we could not update your information. Please try again.'));
+        }
+        $this->set(compact('user'));
     }
 
     public function resetPassword($userId = null, $resetPasswordHash = null)
@@ -147,28 +203,6 @@ class UsersController extends AppController
     }
 
     /**
-     * Add method
-     *
-     * @return \Cake\Http\Response|null Redirects on successful add, renders view otherwise.
-     */
-    public function add()
-    {
-        $user = $this->Users->newEntity();
-        if ($this->request->is('post')) {
-            $user = $this->Users->patchEntity($user, $this->request->getData());
-            if ($this->Users->save($user)) {
-                $this->Flash->success(__('The user has been saved.'));
-
-                return $this->redirect(['action' => 'index']);
-            }
-            $this->Flash->error(__('The user could not be saved. Please, try again.'));
-        }
-        $groups = $this->Users->Groups->find('list', ['limit' => 200]);
-        $this->set(compact('user', 'groups'));
-        $this->set('_serialize', ['user']);
-    }
-
-    /**
      * Edit method
      *
      * @param string|null $id User id.
@@ -206,11 +240,8 @@ class UsersController extends AppController
         $this->request->allowMethod(['post', 'delete']);
         $user = $this->Users->get($id);
         if ($this->Users->delete($user)) {
-            $this->Flash->success(__('The user has been deleted.'));
-        } else {
-            $this->Flash->error(__('The user could not be deleted. Please, try again.'));
+            return $this->Flash->success(__('The user has been deleted.'));
         }
-
-        return $this->redirect(['action' => 'index']);
+        return $this->Flash->error(__('The user could not be deleted. Please, try again.'));
     }
 }

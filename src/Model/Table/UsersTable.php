@@ -75,40 +75,10 @@ class UsersTable extends Table
             ->notEmpty('email');
 
         $validator
-            ->requirePresence('bio', 'create')
-            ->notEmpty('bio');
+            ->allowEmpty('bio');
 
         $validator
             ->allowEmpty('sex');
-
-        $validator
-            ->requirePresence('password', 'create')
-            ->notEmpty(['password', 'confirm_password'])
-            ->add('confirm_password', [
-                'compare' => [
-                    'rule' => ['compareWith', 'password'],
-                    'message' => 'Your passwords do not match.'
-                ]
-            ]);
-
-        $validator
-            ->boolean('active')
-            ->requirePresence('active', 'create')
-            ->notEmpty('active');
-
-        $validator
-            ->boolean('author')
-            ->requirePresence('author', 'create')
-            ->notEmpty('author');
-
-        $validator
-            ->requirePresence('picture', 'create')
-            ->notEmpty('picture');
-
-        $validator
-            ->boolean('nm_email_alerts')
-            ->requirePresence('nm_email_alerts', 'create')
-            ->notEmpty('nm_email_alerts');
 
         return $validator;
     }

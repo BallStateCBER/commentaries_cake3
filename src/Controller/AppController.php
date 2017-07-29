@@ -29,6 +29,16 @@ use Cake\ORM\TableRegistry;
 class AppController extends Controller
 {
     public $helpers = [
+        'AkkaCKEditor.CKEditor' =>
+            ['distribution' => 'basic',
+            'local_plugin' => [
+                'emojione' => [
+                    'location' => WWW_ROOT . 'js',
+                    'file' => 'emojione.js'
+                    ]
+                ],
+            'version' => '4.5.0'
+            ],
         'CakeJs.Js',
         'Html'
     ];
@@ -101,6 +111,7 @@ class AppController extends Controller
      */
     public function beforeRender(Event $event)
     {
+        $this->Users = TableRegistry::get('Users');
         if (!array_key_exists('_serialize', $this->viewVars) &&
             in_array($this->response->type(), ['application/json', 'application/xml'])
         ) {
@@ -117,7 +128,7 @@ class AppController extends Controller
 
         $this->set([
         #    'acl' => $this->Acl,
-            'authUser' => $this->request->session()->read('Auth.User.id') ?: null,
+            'authUser' => $this->request->session()->read('Auth.User.id') ? $this->Users->get($this->request->session()->read('Auth.User.id')): null,
             'recentCommentaries' => $recentCommentaries,
             'topTags' => $this->TagManager->getTop('Commentaries', 10)
         ]);
