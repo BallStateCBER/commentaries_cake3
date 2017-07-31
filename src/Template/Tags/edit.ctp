@@ -1,35 +1,34 @@
-<?php
-/**
-  * @var \App\View\AppView $this
-  */
-?>
-<nav class="large-3 medium-4 columns" id="actions-sidebar">
-    <ul class="side-nav">
-        <li class="heading"><?= __('Actions') ?></li>
-        <li><?= $this->Form->postLink(
-                __('Delete'),
-                ['action' => 'delete', $tag->id],
-                ['confirm' => __('Are you sure you want to delete # {0}?', $tag->id)]
-            )
-        ?></li>
-        <li><?= $this->Html->link(__('List Tags'), ['action' => 'index']) ?></li>
-        <li><?= $this->Html->link(__('List Parent Tags'), ['controller' => 'Tags', 'action' => 'index']) ?></li>
-        <li><?= $this->Html->link(__('New Parent Tag'), ['controller' => 'Tags', 'action' => 'add']) ?></li>
-        <li><?= $this->Html->link(__('List Commentaries'), ['controller' => 'Commentaries', 'action' => 'index']) ?></li>
-        <li><?= $this->Html->link(__('New Commentary'), ['controller' => 'Commentaries', 'action' => 'add']) ?></li>
-    </ul>
-</nav>
-<div class="tags form large-9 medium-8 columns content">
-    <?= $this->Form->create($tag) ?>
-    <fieldset>
-        <legend><?= __('Edit Tag') ?></legend>
-        <?php
-            echo $this->Form->control('name');
-            echo $this->Form->control('parent_id', ['options' => $parentTags, 'empty' => true]);
-            echo $this->Form->control('selectable');
-            echo $this->Form->control('commentaries._ids', ['options' => $commentaries]);
-        ?>
-    </fieldset>
-    <?= $this->Form->button(__('Submit')) ?>
-    <?= $this->Form->end() ?>
+<?= $this->Form->create('Tag');?>
+<?= $this->Form->control('id', [
+    'default' => $this->request->data['id'],
+    'type' => 'hidden'
+]); ?>
+<?= $this->Form->control('name', [
+    'default' => $this->request->data['name']
+]); ?>
+<?= $this->Form->control('listed', [
+    'default' => $this->request->data['listed'],
+    'type' => 'checkbox',
+    'label' => 'Listed?'
+]); ?>
+<div class="footnote">
+    Unlisted tags are excluded from listed/suggested tags in event adding/editing forms.
 </div>
+<?= $this->Form->control('selectable', [
+    'default' => $this->request->data['selectable'],
+    'type' => 'checkbox',
+    'label' => 'Selectable?'
+]); ?>
+<div class="footnote">
+    Unselectable tags (generally group names, like "music genres") are excluded from auto-complete suggestions and are not selectable in event forms.
+</div>
+<?= $this->Form->control('parent_id', [
+    'default' => $this->request->data['parent_id'],
+    'type' => 'text',
+    'label' => 'Parent ID'
+]); ?>
+<div class="footnote">
+    Leave blank to place at the root level.
+</div>
+<?= $this->Form->submit('Update tag #'.$this->request->data['id']); ?>
+<?= $this->Form->end(); ?>

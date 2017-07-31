@@ -146,24 +146,6 @@ class UsersControllerTest extends IntegrationTestCase
         $this->post('/users/my-account', $userInfo);
         $this->assertResponseOk();
         $this->assertResponseContains('Your account has been updated.');
-
-        $user = $this->Users->get($id);
-        if ($user->name == 'Placeholder Extra') {
-            $this->assertResponseOk();
-        }
-
-        $this->get('/users/my-account');
-
-        $userInfo = [
-            'name' => 'Erica Dee Fox',
-            'email' => 'edfox@bsu.edu',
-            'bio' => "",
-            'sex' => 'f'
-        ];
-
-        $this->post('/users/my-account', $userInfo);
-        $this->assertResponseOk();
-        $this->assertResponseContains('Your account has been updated.');
     }
 
     /**
@@ -183,10 +165,34 @@ class UsersControllerTest extends IntegrationTestCase
             'sex' => 'm',
             'bio' => 'I am ALL BUTTER.',
             'password' => 'butterbuddy',
-            'group' => 2
+            'group' => 1
         ];
 
         $this->post('/users/add', $newUser);
+        $this->assertResponseOk();
+        $this->assertResponseContains('The user has been saved.');
+    }
+
+    public function testEditingUsersAccounts()
+    {
+        $id = $this->Users->getIdFromEmail('butter@bsu.edu');
+        $this->session(['Auth.User.id' => $id]);
+
+        $erica = $this->Users->getIdFromEmail('placeholder@ymail.com');
+        $user = $this->Users->get($erica);
+        $this->get("users/edit/$erica");
+        if ($user->name == 'Placeholder Extra') {
+            $this->assertResponseOk();
+        }
+
+        $userInfo = [
+            'name' => 'Erica Dee Fox',
+            'email' => 'edfox@bsu.edu',
+            'bio' => "",
+            'sex' => 'f'
+        ];
+
+        $this->post("/users/edit/$erica", $userInfo);
         $this->assertResponseOk();
         $this->assertResponseContains('The user has been saved.');
     }
@@ -206,58 +212,19 @@ class UsersControllerTest extends IntegrationTestCase
     }
 
     /**
-     * Test editing account info
-     * plus file uploading
-     *
-     * @return void
-     */
-    /*public function testPhotoUploadingForUsers()
-    {
-        $this->session(['Auth.User.id' => $id]);
-
-        $salt = Configure::read('profile_salt');
-        $newFilename = md5('placeholder.jpg'.$salt);
-
-        $this->get('/account');
-        $userInfo = [
-            'name' => 'Placeholder',
-            'email' => 'placeholder@gmail.com',
-            'bio' => "I'm the BEST placeholder!",
-            'photo' => [
-                'name' => 'placeholder.jpg',
-                'type' => 'image/jpeg',
-                'tmp_name' => WWW_ROOT . DS . 'img' . DS . 'users' . $newFilename,
-                'error' => 4,
-                'size' => 845941,
-            ]
-        ];
-        $user = $this->Users->get($id);
-        $user = $this->Users->patchEntity($user, $userInfo);
-        if ($this->Users->save($user)) {
-            $this->assertResponseOk();
-            if ($user->photo == $newFilename) {
-                return $this->assertResponseOk();
-            }
-
-            // file upload unit testing not done yet!
-            $this->markTestIncomplete();
-        }
-    }
-
-
-    /**
      * Test delete action for users
      *
      * @return void
      */
-    /*public function testDeletingUsers()
+    public function testDeletingUsers()
     {
-        $this->session(['Auth.User.id' => 1]);
+        $id = $this->Users->getIdFromEmail('edfox@bsu.edu');
+        $this->session(['Auth.User.id' => $id]);
 
         // delete the new user
-        $id = $this->Users->getIdFromEmail('mal@blum.com');
+        $id = $this->Users->getIdFromEmail('butter@bsu.edu');
 
-        $this->get("users/delete/$id");
+        $this->post("/users/delete/$id");
         $this->assertResponseSuccess();
-    } */
+    }
 }
