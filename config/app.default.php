@@ -1,4 +1,27 @@
 <?php
+
+use Cake\Core\Configure;
+
+// Load variables from .env file
+try {
+    josegonzalez\Dotenv\Loader::load([
+        'filepath' => __DIR__ . DS . '.env.dev',
+        'toServer' => false,
+        'skipExisting' => ['toServer'],
+        'raiseExceptions' => true
+   ]);
+} catch (InvalidArgumentException $e) {
+    // If there's a problem loading the .env file - load .env.default
+    // That means the code can assume appropriate env config always exists
+    // Don't trap this incase there's some other fundamental error
+    josegonzalez\Dotenv\Loader::load([
+        'filepath' => __DIR__ . DS . '.env.production',
+        'toServer' => false,
+        'skipExisting' => ['toServer'],
+        'raiseExceptions' => false
+    ]);
+}
+
 return [
     /**
      * Debug Level:
@@ -64,7 +87,7 @@ return [
      *   You should treat it as extremely sensitive data.
      */
     'Security' => [
-        'salt' => env('SECURITY_SALT', '__SALT__'),
+        'salt' => env('SECURITY_SALT'),
     ],
 
     /**
@@ -176,20 +199,26 @@ return [
      * appropriate file to src/Mailer/Transport. Transports should be named
      * 'YourTransport.php', where 'Your' is the name of the transport.
      */
-    'EmailTransport' => [
-        'default' => [
-            'className' => 'Mail',
-            // The following keys are used in SMTP transports
-            'host' => 'localhost',
-            'port' => 25,
-            'timeout' => 30,
-            'username' => 'user',
-            'password' => 'secret',
-            'client' => null,
-            'tls' => null,
-            'url' => env('EMAIL_TRANSPORT_DEFAULT_URL', null),
-        ],
-    ],
+     'EmailTransport' => [
+         'Smtp' => [
+             'host' => env('EMAIL_HOST'),
+             'port' => env('EMAIL_PORT'),
+             'username' => env('EMAIL_USERNAME'),
+             'password' => env('EMAIL_PASSWORD'),
+             'className' => 'Smtp'
+         ],
+
+         'Debug' => [
+             'className' => 'Debug',
+             'host' => 'localhost',
+             'port' => 25,
+             'timeout' => 30,
+             'username' => null,
+             'password' => null,
+             'client' => null,
+             'tls' => false
+         ],
+     ],
 
     /**
      * Email delivery profiles
@@ -200,14 +229,15 @@ return [
      * easier. Each profile accepts a number of keys. See `Cake\Mailer\Email`
      * for more information.
      */
-    'Email' => [
-        'default' => [
-            'transport' => 'default',
-            'from' => 'you@localhost',
-            //'charset' => 'utf-8',
-            //'headerCharset' => 'utf-8',
-        ],
-    ],
+     'Email' => [
+         'default' => [
+             'transport' => 'Debug',
+             'from' => ['commentaries@cberdata.org' => 'Ball State CBER'],
+             'sender' => ['commentaries@cberdata.org' => 'Ball State CBER'],
+             'returnPath' => 'commentaries@cberdata.org',
+             'emailFormat' => 'both'
+         ]
+     ],
 
     /**
      * Connection information used by the ORM to connect
@@ -229,11 +259,11 @@ return [
              * the following line and set the port accordingly
              */
             //'port' => 'non_standard_port_number',
-            'username' => 'my_app',
-            'password' => 'secret',
-            'database' => 'my_app',
-            'encoding' => 'utf8',
-            'timezone' => 'UTC',
+            'username' => env('DB_USERNAME') ?: 'root',
+            'password' => env('DB_PASSWORD') ?: null,
+            'database' => env('DB_DATABASE') ?: 'okbvtfr_commenttesting',
+            'encoding' => 'utf8mb4',
+            'timezone' => 'America/Indiana/Indianapolis',
             'flags' => [],
             'cacheMetadata' => true,
             'log' => false,
@@ -269,11 +299,11 @@ return [
             'persistent' => false,
             'host' => 'localhost',
             //'port' => 'non_standard_port_number',
-            'username' => 'my_app',
-            'password' => 'secret',
-            'database' => 'test_myapp',
-            'encoding' => 'utf8',
-            'timezone' => 'UTC',
+            'username' => 'root',
+            'password' => env('DB_PASSWORD') ?: null,
+            'database' => 'okbvtfr_commenttesting',
+            'encoding' => 'utf8mb4',
+            'timezone' => 'America/Indiana/Indianapolis',
             'cacheMetadata' => true,
             'quoteIdentifiers' => false,
             'log' => false,
@@ -343,4 +373,8 @@ return [
     'Session' => [
         'defaults' => 'php',
     ],
+
+        'data_center_subsite_url' => 'http://commentaries.cberdata.org',
+        'data_center_subsite_title' => 'Weekly Commentary with Michael Hicks',
+        'google_analytics_id' => 'UA-32998887-2'
 ];
