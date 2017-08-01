@@ -55,7 +55,8 @@ class TagsControllerTest extends IntegrationTestCase
         $this->assertResponseContains('Manage Tags');
 
         $newTag = [
-            'name' => "Lourdes\n-Soothsayer Lies"
+            'name' => "Lourdes\n-Soothsayer Lies",
+            'parent_name' => 'Walmart'
         ];
 
         $this->post('/tags/add', $newTag);
@@ -64,7 +65,7 @@ class TagsControllerTest extends IntegrationTestCase
 
         $newTag = $this->Tags->find()
             ->where(['name' => 'lourdes'])
-            ->andWhere(['parent_id' => 697])
+            ->andWhere(['parent_id' => 16])
             ->firstOrFail();
 
         $newChild = $this->Tags->find()
@@ -94,7 +95,8 @@ class TagsControllerTest extends IntegrationTestCase
         $this->assertResponseContains('Manage Tags');
 
         $newTag = [
-            'name' => "Lourdes\n-Soothsayer Lies"
+            'name' => "Lourdes\n-Soothsayer Lies",
+            'parent_name' => 'Walmart'
         ];
 
         $this->post('/tags/add', $newTag);
@@ -131,9 +133,8 @@ class TagsControllerTest extends IntegrationTestCase
 
         $edits = [
             'name' => 'We the Heathens',
-            'listed' => 1,
             'selectable' => 1,
-            'parent_id' => 697,
+            'parent_id' => 160,
             'id' => $oldTag->id
         ];
 
@@ -160,21 +161,19 @@ class TagsControllerTest extends IntegrationTestCase
             ->first();
 
         $decoyJoin = $this->CommentariesTags->newEntity();
-        $decoyJoin->commentary_id = 6;
+        $decoyJoin->commentary_id = 12;
         $decoyJoin->tag_id = $oldTag->id;
         if ($this->CommentariesTags->save($decoyJoin)) {
             $this->post("/tags/merge/$oldTag->name/$newTag->name");
         };
 
         $newJoin = $this->CommentariesTags->find()
-            ->where(['commentary_id' => 6])
+            ->where(['commentary_id' => 12])
             ->andWhere(['tag_id' => $newTag->id])
             ->firstOrFail();
 
         if (isset($newJoin)) {
             $this->assertResponseSuccess();
-            // because right now it's redirecting to /tags/manage which it's not the best
-            $this->markTestIncomplete();
             $this->CommentariesTags->delete($newJoin);
         }
     }
@@ -192,9 +191,7 @@ class TagsControllerTest extends IntegrationTestCase
         for ($x = 0; $x <= 10; $x++) {
             $orphanTag = $this->Tags->newEntity([
                 'name' => 'nobody loves me',
-                'listed' => 0,
-                'selectable' => 0,
-                'user_id' => 1
+                'selectable' => 0
             ]);
             $this->Tags->save($orphanTag);
         }
@@ -204,7 +201,7 @@ class TagsControllerTest extends IntegrationTestCase
 
         $adoptedTag = $this->Tags->find()
             ->where(['name' => 'nobody loves me'])
-            ->andWhere(['parent_id' => 1012])
+            ->andWhere(['parent_id' => 213])
             ->toArray();
 
         if ($adoptedTag) {
@@ -269,9 +266,7 @@ class TagsControllerTest extends IntegrationTestCase
         for ($x = 0; $x <= 10; $x++) {
             $duplicate = $this->Tags->newEntity([
                 'name' => 'nobody loves me',
-                'listed' => 0,
-                'selectable' => 0,
-                'user_id' => 1
+                'selectable' => 0
             ]);
             $this->Tags->save($duplicate);
         }
@@ -305,7 +300,6 @@ class TagsControllerTest extends IntegrationTestCase
 
         $this->get('/tags/remove-broken-associations');
         $this->assertResponseOk();
-        $this->assertResponseContains('Removed associations');
 
         $broken = $this->CommentariesTags->find()
             ->where(['commentary_id' => 99999])

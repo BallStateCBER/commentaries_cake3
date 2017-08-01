@@ -6,11 +6,6 @@
 <?= $this->Form->control('name', [
     'default' => $this->request->data['name']
 ]); ?>
-<?= $this->Form->control('listed', [
-    'default' => $this->request->data['listed'],
-    'type' => 'checkbox',
-    'label' => 'Listed?'
-]); ?>
 <div class="footnote">
     Unlisted tags are excluded from listed/suggested tags in event adding/editing forms.
 </div>

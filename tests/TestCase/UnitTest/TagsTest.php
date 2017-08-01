@@ -22,6 +22,7 @@ class TagsViewTest extends IntegrationTestCase
         parent::setUp();
         $config = TableRegistry::exists('Tags') ? [] : ['className' => 'App\Model\Table\TagsTable'];
         $this->Tags = TableRegistry::get('Tags', $config);
+        $this->Users = TableRegistry::get('Users');
     }
 
     /**
@@ -42,10 +43,11 @@ class TagsViewTest extends IntegrationTestCase
      */
     public function testTagAdminPrivileges()
     {
-        $this->session(['Auth.User.id' => 1]);
+        $id = $this->Users->getIdFromEmail('edfox@bsu.edu');
+        $this->session(['Auth.User.id' => $id]);
 
         $this->get('/tags/getnodes');
         $this->assertResponseOk();
-        $this->assertResponseContains('Unlisted (1012)');
+        $this->assertResponseContains('Unlisted (213)');
     }
 }

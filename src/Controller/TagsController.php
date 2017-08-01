@@ -362,7 +362,9 @@ class TagsController extends AppController
             ->toArray();
         $skippedTags = $deletedTags = [];
         foreach ($tags as $tag) {
-            if ($this->Tags->childCount($tag)) {
+            $children = $this->Tags->find('children', ['for' => $tag->id])
+                ->toArray();
+            if ($children) {
                 $skippedTags[] = $tag->name;
                 continue;
             }
@@ -433,9 +435,9 @@ class TagsController extends AppController
                     ->where(['tag_id' => $tagId])
                     ->toArray();
 
-                foreach ($commentaries as $event) {
-                    $event->tag_id = $firstTag;
-                    $this->Tags->CommentariesTags->save($event);
+                foreach ($commentaries as $commentary) {
+                    $commentary->tag_id = $firstTag;
+                    $this->Tags->CommentariesTags->save($commentary);
                 }
             }
 
@@ -568,13 +570,13 @@ class TagsController extends AppController
             if (!isset($tags[$tag])) {
                 $missingTags[$tag] = true;
             }
-            $eve = $ass->event_id;
-            if (!isset($commentaries[$eve])) {
-                $missingCommentaries[$eve] = true;
+            $com = $ass->commentary_id;
+            if (!isset($commentaries[$com])) {
+                $missingCommentaries[$com] = true;
             }
 
             // Remove broken association
-            if (!isset($tags[$tag]) || !isset($commentaries[$eve])) {
+            if (!isset($tags[$tag]) || !isset($commentaries[$com])) {
                 $this->CommentariesTags->delete($ass);
             }
         }

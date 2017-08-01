@@ -83,11 +83,6 @@ class TagsTable extends Table
             ->allowEmpty('name');
 
         $validator
-            ->boolean('listed')
-            ->requirePresence('listed', 'create')
-            ->notEmpty('listed');
-
-        $validator
             ->boolean('selectable')
             ->requirePresence('selectable', 'create')
             ->notEmpty('selectable');
@@ -236,7 +231,7 @@ class TagsTable extends Table
         $this->CommentariesTags = TableRegistry::get('CommentariesTags');
         $findOptions = [];
 
-        $results = $this->CommentariesTags->find('all', $findOptions)
+        $results = $this->CommentariesTags->find('all')
                     ->select(['tag_id'])
                     ->distinct(['tag_id'])
                     ->order(['tag_id' => 'ASC'])
