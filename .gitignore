@@ -1,4 +1,3 @@
-/vendor/*
 /config/app.php
 /config/.env.production
 /config/.env.dev
@@ -7,6 +6,7 @@
 
 # CakePHP
 /vendor/*
+!/vendor/ballstatecber/*
 /tmp/*
 /logs/*
 
