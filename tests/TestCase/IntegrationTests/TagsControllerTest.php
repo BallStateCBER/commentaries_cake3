@@ -51,8 +51,8 @@ class TagsControllerTest extends IntegrationTestCase
         $this->session(['Auth.User.id' => $id]);
 
         $this->get('/tags/manage');
-        $this->assertResponseOk();
         $this->assertResponseContains('Manage Tags');
+        $this->assertResponseOk();
 
         $newTag = [
             'name' => "Lourdes\n-Soothsayer Lies",
