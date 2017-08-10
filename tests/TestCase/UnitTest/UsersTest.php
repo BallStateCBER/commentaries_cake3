@@ -38,17 +38,83 @@ class UsersTest extends IntegrationTestCase
     }
 
     /**
-     * Test viewing the users index as an admin
+     * test email cleaner method
      *
      * @return void
      */
-    public function testSendingPasswordReset()
+    public function testCleanEmailMethod()
     {
-        $id = $this->Users->getIdFromEmail('edfox@bsu.edu');
-        $this->session(['Auth.User.id' => $id]);
+        $email = '     PLACEHOLDEREMAIL@GMAIL.COM   ';
+        $email = $this->Users->cleanEmail($email);
+        $expected = 'placeholderemail@gmail.com';
 
-        $this->get('/users/admin');
-        $this->assertResponseOk();
-        $this->assertResponseContains("Are you sure you want to delete Erica Dee");
+        $this->assertEquals($expected, $email);
+    }
+
+    /**
+     * Test getEmailFromId method
+     *
+     * @return void
+     */
+    public function testGetEmailFromId()
+    {
+        $user = $this->Users->find()
+            ->where(['name' => 'Erica Dee Fox'])
+            ->first();
+
+        $email = $this->Users->getEmailFromId($user->id);
+
+        $this->assertEquals($user->email, $email);
+    }
+
+    /**
+     * Test getIdFromEmail method
+     *
+     * @return void
+     */
+    public function testGetIdFromEmail()
+    {
+        $user = $this->Users->find()
+            ->where(['name' => 'Erica Dee Fox'])
+            ->first();
+
+        $id = $this->Users->getIdFromEmail($user->email);
+
+        $this->assertEquals($user->id, $id);
+    }
+
+    /**
+     * Test getResetPasswordHash method
+     *
+     * @return void
+     */
+    public function testGetResetPasswordHash()
+    {
+        $user = $this->Users->find()
+            ->where(['name' => 'Erica Dee Fox'])
+            ->first();
+
+        $hash = $this->Users->getResetPasswordHash($user->id, $user->email);
+
+        $this->assertEquals(md5($user->id.$user->email.Configure::read('security_salt').date('my')), $hash);
+    }
+
+    /**
+     * Test sendPasswordResetEmail
+     *
+     * @return void
+     */
+    public function testSendPasswordResetEmail()
+    {
+        $user = $this->Users->find()
+            ->where(['name' => 'Erica Dee Fox'])
+            ->first();
+
+        $email = $this->Users->sendPasswordResetEmail($user->id, $user->email);
+        $email = implode($email);
+
+        $resetPasswordHash = $this->Users->getResetPasswordHash($user->id, $user->email);
+
+        $this->assertTextContains($resetPasswordHash, $email);
     }
 }

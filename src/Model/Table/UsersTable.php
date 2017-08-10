@@ -105,11 +105,19 @@ class UsersTable extends Table
         return $email;
     }
 
-    public function getResetPasswordHash($userId, $email)
+    public function getEmailFromId($userId)
     {
-        $salt = Configure::read('security_salt');
-        $month = date('my');
-        return md5($userId.$email.$salt.$month);
+        $query = $this->find()
+            ->select(['email'])
+            ->where(['id' => $userId]);
+        $result = $query->all();
+        $email = $result->toArray();
+        $email = implode($email);
+        $email = trim($email, '{}');
+        $email = str_replace('"email": ', '', $email);
+        $email = filter_var($email, FILTER_SANITIZE_EMAIL);
+
+        return $email;
     }
 
     public function getIdFromEmail($email)
@@ -124,6 +132,13 @@ class UsersTable extends Table
         return false;
     }
 
+    public function getResetPasswordHash($userId, $email)
+    {
+        $salt = Configure::read('security_salt');
+        $month = date('my');
+        return md5($userId.$email.$salt.$month);
+    }
+
     public function sendPasswordResetEmail($userId, $email)
     {
         $resetPasswordHash = $this->getResetPasswordHash($userId, $email);
@@ -136,7 +151,7 @@ class UsersTable extends Table
             ], true);
         $resetEmail
                 ->setTo($email)
-                ->setSubject('Muncie Events: Reset Password')
+                ->setSubject('CBER Commentaries: Reset Password')
                 ->template('forgot_password')
                 ->emailFormat('both')
                 ->helpers(['Html', 'Text'])

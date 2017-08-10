@@ -56,7 +56,7 @@ class TagsControllerTest extends IntegrationTestCase
 
         $newTag = [
             'name' => "Lourdes\n-Soothsayer Lies",
-            'parent_name' => 'Walmart'
+            'parent_name' => 'donald trump administration'
         ];
 
         $this->post('/tags/add', $newTag);
@@ -65,7 +65,7 @@ class TagsControllerTest extends IntegrationTestCase
 
         $newTag = $this->Tags->find()
             ->where(['name' => 'lourdes'])
-            ->andWhere(['parent_id' => 16])
+            ->andWhere(['parent_id' => 212])
             ->firstOrFail();
 
         $newChild = $this->Tags->find()
@@ -96,7 +96,7 @@ class TagsControllerTest extends IntegrationTestCase
 
         $newTag = [
             'name' => "Lourdes\n-Soothsayer Lies",
-            'parent_name' => 'Walmart'
+            'parent_name' => 'taxes'
         ];
 
         $this->post('/tags/add', $newTag);
@@ -134,7 +134,7 @@ class TagsControllerTest extends IntegrationTestCase
         $edits = [
             'name' => 'We the Heathens',
             'selectable' => 1,
-            'parent_id' => 160,
+            'parent_id' => 173,
             'id' => $oldTag->id
         ];
 
@@ -161,14 +161,14 @@ class TagsControllerTest extends IntegrationTestCase
             ->first();
 
         $decoyJoin = $this->CommentariesTags->newEntity();
-        $decoyJoin->commentary_id = 12;
+        $decoyJoin->commentary_id = 890;
         $decoyJoin->tag_id = $oldTag->id;
         if ($this->CommentariesTags->save($decoyJoin)) {
             $this->post("/tags/merge/$oldTag->name/$newTag->name");
         };
 
         $newJoin = $this->CommentariesTags->find()
-            ->where(['commentary_id' => 12])
+            ->where(['commentary_id' => 890])
             ->andWhere(['tag_id' => $newTag->id])
             ->firstOrFail();
 

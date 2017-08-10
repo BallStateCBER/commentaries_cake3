@@ -168,4 +168,7 @@ Vegetables
 <?= $this->Html->script('/ext-2.0.1/ext-custom.js', ['inline' => false]); ?>
 <?= $this->Html->script('jquery.form.js', ['inline' => false]); ?>
 <?= $this->Html->script('admin.js', ['inline' => false]); ?>
-<?php $this->Js->buffer("setupTagManager();"); ?>
+<?= $this->element('DataCenter.jquery_ui'); ?>
+<script>
+    setupTagManager();
+</script>

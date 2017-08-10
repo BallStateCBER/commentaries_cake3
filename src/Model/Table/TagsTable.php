@@ -60,7 +60,7 @@ class TagsTable extends Table
         ]);
         $this->belongsToMany('Commentaries', [
             'foreignKey' => 'tag_id',
-            'targetForeignKey' => 'event_id',
+            'targetForeignKey' => 'commentary_id',
             'joinTable' => 'commentaries_tags'
         ]);
 
@@ -130,33 +130,6 @@ class TagsTable extends Table
         ksort($tags);
 
         return $tags;
-    }
-
-    public function getCategoriesWithTags($direction = 'future')
-    {
-        if ($direction == 'future') {
-            $eventIds = $this->Commentaries->getFutureEventIds();
-        } elseif ($direction == 'past') {
-            $eventIds = $this->Commentaries->getPastEventIds();
-        }
-        $taggedEventIds = $this->CommentariesTags->find();
-        $taggedEventIds
-            ->select(['event_id'])
-            ->join([
-                'table' => 'commentaries',
-                'type' => 'LEFT',
-                'conditions' => 'commentaries.id = event_id'
-            ])
-            ->where(['event_id in' => $eventIds]);
-        $results = $this->Commentaries->find();
-        $results
-            ->select(['category_id'])
-            ->where(['Commentaries.id in' => $taggedEventIds]);
-        $retval = [];
-        foreach ($results as $result) {
-            $retval[] = $result['category_id'];
-        }
-        return $retval;
     }
 
     /**
@@ -246,14 +219,11 @@ class TagsTable extends Table
     public function getWithCounts($filter = [], $sort = 'alpha')
     {
         // Apply filters and find tags
-        $conditions = ['Commentaries.published' => 1];
+        $conditions = ['Commentaries.is_published' => 1];
         if ($filter['direction'] == 'future') {
-            $conditions['Commentaries.date >='] = date('Y-m-d');
+            $conditions['Commentaries.published_date >='] = date('Y-m-d');
         } elseif ($filter['direction'] == 'past') {
-            $conditions['Commentaries.date <'] = date('Y-m-d');
-        }
-        if (isset($filter['categories'])) {
-            $conditions['Commentaries.category_id'] = $filter['categories'];
+            $conditions['Commentaries.published_date <'] = date('Y-m-d');
         }
 
         $tags = $this->getAllWithCounts($conditions);

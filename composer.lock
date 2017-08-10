@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "e73b54f8f271d7314fb6ac816dfdcebd",
-    "content-hash": "632d1625189c7403b8856e6be561c0a3",
+    "hash": "0a2c1a9235160287e6d3fd263f6f6146",
+    "content-hash": "49f83555973c0a442d762b34a0134268",
     "packages": [
         {
             "name": "akkaweb/cakephp-ckeditor",
@@ -3648,10 +3648,10 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "oldskool/cakephp-js": 20,
         "josegonzalez/dotenv": 20,
         "twbs/bootstrap": 15,
         "akkaweb/cakephp-ckeditor": 20,
+        "oldskool/cakephp-js": 20,
         "psy/psysh": 0
     },
     "prefer-stable": true,
