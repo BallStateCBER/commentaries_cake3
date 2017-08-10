@@ -6,7 +6,6 @@
 
 # CakePHP
 /vendor/*
-!/vendor/ballstatecber/
 /tmp/*
 /logs/*
 
