@@ -303,7 +303,6 @@ return [
             'password' => env('DB_PASSWORD') ?: null,
             'database' => 'okbvtfr_commenttesting',
             'encoding' => 'utf8mb4',
-            'timezone' => 'America/Indiana/Indianapolis',
             'cacheMetadata' => true,
             'quoteIdentifiers' => false,
             'log' => false,
