@@ -188,10 +188,12 @@ class CommentariesController extends AppController
             }
             $this->Flash->error(__('The commentary could not be saved. Please, try again.'));
         }
-        $users = $this->Commentaries->Users->find('list', ['limit' => 200]);
+        $authors = $this->Commentaries->Users->find('list', ['limit' => 200]);
         $tags = $this->Commentaries->Tags->find('list', ['limit' => 200]);
-        $this->set(compact('commentary', 'users', 'tags'));
+        $this->TagManager->prepareEditor($this);
+        $this->set(compact('commentary', 'authors', 'tags'));
         $this->set('_serialize', ['commentary']);
+        $this->set(['titleForLayout' => 'Add a Commentary']);
     }
 
     /**
@@ -215,10 +217,12 @@ class CommentariesController extends AppController
             }
             $this->Flash->error(__('The commentary could not be saved. Please, try again.'));
         }
-        $users = $this->Commentaries->Users->find('list', ['limit' => 200]);
+        $authors = $this->Commentaries->Users->find('list', ['limit' => 200]);
         $tags = $this->Commentaries->Tags->find('list', ['limit' => 200]);
-        $this->set(compact('commentary', 'users', 'tags'));
+        $this->TagManager->prepareEditor($this);
+        $this->set(compact('commentary', 'authors', 'tags'));
         $this->set('_serialize', ['commentary']);
+        $this->set(['titleForLayout' => "Edit commentary: $commentary->title"]);
     }
 
     /**
@@ -239,5 +243,23 @@ class CommentariesController extends AppController
         }
 
         return $this->redirect(['action' => 'index']);
+    }
+
+    public function drafts()
+    {
+        // Get commentaries
+        $commentaries = $this->Commentaries->find()
+            ->where(['is_published' => 0])
+            ->order(['modified' => 'DESC'])
+            ->toArray();
+
+        // Either return them as an array or set them as view variables
+        if (isset($this->params['requested'])) {
+            return $commentaries;
+        }
+        $this->set([
+            'commentaries' => $commentaries,
+            'titleForLayout' => 'Commentary Drafts'
+        ]);
     }
 }

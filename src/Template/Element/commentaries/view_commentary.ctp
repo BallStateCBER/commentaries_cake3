@@ -9,35 +9,31 @@ if (!isset($newest)) {
 
 <div class="commentary">
     <div class="header">
-        <?php if ($this->request->session()->read(['Auth.User.id'])): ?>
+        <?php if ($authUser['group_id'] == 1 || $authUser['author']): ?>
             <div class="controls">
-                <?php if ($acl->check(['User' => $auth_user], 'controllers/commentaries/edit')): ?>
-                    <?= $this->Html->link(
-                        $this->Html->image('/data_center/img/icons/pencil.png').'Edit',
-                        [
-                            'controller' => 'commentaries',
-                            'action' => 'edit',
-                            $commentary->id,
-                            'admin' => false,
-                            'newsmedia' => false
-                        ],
-                        ['escape' => false]
-                    ); ?>
-                <?php endif; ?>
-                <?php if ($acl->check(['User' => $auth_user], 'controllers/commentaries/delete')): ?>
-                    &nbsp; <?= $this->Html->link(
-                        $this->Html->image('/data_center/img/icons/cross.png').'Delete',
-                        [
-                            'controller' => 'commentaries',
-                            'action' => 'delete',
-                            $commentary->id,
-                            'admin' => false,
-                            'newsmedia' => false
-                        ],
-                        ['escape' => false],
-                        'Are you sure that you want to delete this commentary?'
-                    ); ?>
-                <?php endif; ?>
+                <?= $this->Html->link(
+                    $this->Html->image('/data_center/img/icons/pencil.png').'Edit',
+                    [
+                        'controller' => 'commentaries',
+                        'action' => 'edit',
+                        $commentary->id,
+                        'admin' => false,
+                        'newsmedia' => false
+                    ],
+                    ['escape' => false]
+                ); ?>
+                &nbsp; <?= $this->Form->postLink(
+                    $this->Html->image('/data_center/img/icons/cross.png').'Delete',
+                    [
+                        'controller' => 'commentaries',
+                        'action' => 'delete',
+                        $commentary->id,
+                        'admin' => false,
+                        'newsmedia' => false
+                    ],
+                    ['escape' => false],
+                    'Are you sure that you want to delete this commentary?'
+                ); ?>
             </div>
         <?php endif; ?>
         <p class="time_posted">
