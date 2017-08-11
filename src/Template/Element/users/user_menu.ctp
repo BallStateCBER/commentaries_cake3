@@ -138,16 +138,6 @@
                             Next Article to Publish
                         </a>
                     </li>
-                    <li>
-                        <a href="/acl_manager/acl">
-                            Manage Permissions
-                        </a>
-                    </li>
-                    <li>
-                        <a href="/tags/manage/">
-                            Manage Tags
-                        </a>
-                    </li>
                 </ul>
             </li>
         <?php endif; ?>
