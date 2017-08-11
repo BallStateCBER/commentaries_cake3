@@ -80,7 +80,7 @@ Router::scope('/', function (RouteBuilder $routes) {
     // So /index.rss leads to the RSS feed
     Router::connect('/index', ['controller' => 'commentaries', 'action' => 'rss']);
 
-    Router::connect('/newsmedia', ['controller' => 'commentaries', 'action' => 'index', 'newsmedia' => true]);
+    Router::connect('/newsmedia', ['controller' => 'commentaries', 'action' => 'newsmedia_index']);
     Router::connect('/newsmedia/subscribe', ['controller' => 'users', 'action' => 'add_newsmedia']);
     Router::connect('/newsmedia/my_account', ['controller' => 'users', 'action' => 'my_account', 'newsmedia' => true]);
     Router::connect('/forgot_password', ['controller' => 'users', 'action' => 'forgot_password']);

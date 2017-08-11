@@ -105,6 +105,12 @@ class UsersTable extends Table
         return $email;
     }
 
+    public function generatePassword()
+    {
+        $characters = str_shuffle('abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ23456789');
+        return substr($characters, 0, 6);
+    }
+
     public function getEmailFromId($userId)
     {
         $query = $this->find()
@@ -137,6 +143,31 @@ class UsersTable extends Table
         $salt = Configure::read('security_salt');
         $month = date('my');
         return md5($userId.$email.$salt.$month);
+    }
+
+    public function sendNewsmediaIntroEmail($user)
+    {
+        $email = new Email('default');
+        $email->to($user->email);
+        $newsmediaIndexUrl = Router::url([
+            'controller' => 'commentaries',
+            'action' => 'index',
+            'newsmedia' => true
+            ],
+            true
+        );
+        $loginUrl = Router::url([
+            'controller' => 'users',
+            'action' => 'login'
+            ],
+            true
+        );
+        $email->viewVars(compact(
+            'user',
+            'newsmediaIndexUrl',
+            'loginUrl'
+        ));
+        return $email->send();
     }
 
     public function sendPasswordResetEmail($userId, $email)

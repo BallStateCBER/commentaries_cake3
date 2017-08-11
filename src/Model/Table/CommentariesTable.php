@@ -110,4 +110,32 @@ class CommentariesTable extends Table
 
         return $rules;
     }
+
+    public function getUnpublishedList()
+    {
+        return $this->find('list')
+            ->where(['is_published' => 0])
+            -> order(['modified' => 'DESC']);
+    }
+
+    public function getNextForNewsmedia()
+    {
+        return $this->find()
+            ->where(['is_published' => 0])
+            ->andWhere(['delay_publishing' => 1])
+            ->andWhere(['published_date >' => date('Y-m-d')])
+            -> order(['published_date' => 'ASC'])
+            ->first();
+    }
+
+    public function isMostRecentAlert($commentaryId)
+    {
+        if (empty($commentaryId)) {
+            return false;
+        }
+        $result = $this->Users->find()
+            ->where(['last_alert_article_id' => $commentaryId])
+            ->count();
+        return $result > 0;
+    }
 }

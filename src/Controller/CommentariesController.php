@@ -91,6 +91,14 @@ class CommentariesController extends AppController
         ]);
     }
 
+    public function newsmediaIndex()
+    {
+        $this->set([
+            'commentary' => $this->Commentaries->getNextForNewsmedia(),
+            'titleForLayout' => 'Next Article to Publish'
+        ]);
+    }
+
     public function rss()
     {
         $commentaries = $this->Commentaries->find()
@@ -188,7 +196,9 @@ class CommentariesController extends AppController
             }
             $this->Flash->error(__('The commentary could not be saved. Please, try again.'));
         }
-        $authors = $this->Commentaries->Users->find('list', ['limit' => 200]);
+        $authors = $this->Commentaries->Users->find('list', [
+            'limit' => 200
+        ])->where(['author' => 1]);
         $tags = $this->Commentaries->Tags->find('list', ['limit' => 200]);
         $this->TagManager->prepareEditor($this);
         $this->set(compact('commentary', 'authors', 'tags'));
@@ -217,7 +227,9 @@ class CommentariesController extends AppController
             }
             $this->Flash->error(__('The commentary could not be saved. Please, try again.'));
         }
-        $authors = $this->Commentaries->Users->find('list', ['limit' => 200]);
+        $authors = $this->Commentaries->Users->find('list', [
+            'limit' => 200
+        ])->where(['author' => 1]);
         $tags = $this->Commentaries->Tags->find('list', ['limit' => 200]);
         $this->TagManager->prepareEditor($this);
         $this->set(compact('commentary', 'authors', 'tags'));

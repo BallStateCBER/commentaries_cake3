@@ -188,6 +188,128 @@ class UsersController extends AppController
         $this->set(compact('user'));
     }
 
+    public function newsmediaMyAccount()
+    {
+        $this->User->id = $this->Auth->user('id');
+        if ($this->request->is('post') || $this->request->is('put')) {
+            $data = $this->request->data['User'];
+            $this->User->set($data);
+
+            if ($data['new_password'] == '') {
+                // Remove validation for both fields
+                unset($this->Users->validate['new_password']);
+                unset($this->Users->validate['confirm_password']);
+            }
+
+            // Invalidate email only if it changes to another user's email
+            unset($this->User->validate['email']['emailUnclaimed']);
+            $data['email'] = $this->Users->cleanEmail($data['email']);
+            $email_lookup = $this->Users->getUserIdWithEmail($data['email']);
+            if ($email_lookup && $email_lookup !== $this->User->id) {
+                $this->User->invalidate('email', 'Sorry, another account is already using that email address.');
+            }
+
+            if ($this->User->validates()) {
+                if ($data['new_password'] != '') {
+                    $this->User->set('password', $data['new_password']);
+                }
+                $saved = $this->User->save(null, true, array(
+                    'name',
+                    'email',
+                    'password',
+                    'nm_email_alerts'
+                ));
+                if ($saved) {
+                    $message = 'Your information has been updated';
+                    if ($data['new_password'] != '') {
+                        $message .= ' and password changed';
+                    }
+                    $this->Flash->success($message.'.');
+                } else {
+                    $this->Flash->error('There was an error updating your information.');
+                }
+            }
+
+            // Unset passwords so those fields aren't auto-populated
+            unset($this->request->data['User']['new_password']);
+            unset($this->request->data['User']['confirm_password']);
+        } else {
+            $this->request->data = $this->User->read();
+        }
+        $this->set([
+            'titleForlayout' => 'My Account'
+        ]);
+    }
+
+    public function addNewsmedia()
+    {
+        /* Set information about the next commentary to be published
+         * if alerts have already been sent out for it and this user
+         * needs to be caught up. */
+        $this->loadModel('Commentaries');
+
+        $nextCommentary = $this->Commentaries->getNextForNewsmedia();
+        if (!empty($nextCommentary)) {
+            $commentaryId = $nextCommentary->id;
+            $alertsSent = $this->Commentaries->isMostRecentAlert($commentaryId);
+            if ($alertsSent) {
+                $this->set(compact('nextCommentary'));
+            }
+        }
+
+        $user = $this->Users->newEntity();
+
+        // Show a randomly-generated password instead of a blank field
+        if (! isset($user->password) || empty($user->password)) {
+            $password = $this->Users->generatePassword();
+        }
+
+        if ($this->request->session()->read(['Auth.User.group_id']) == 3) {
+            $title = 'Add a Reporter to Newsmedia Alerts';
+        } else {
+            $title = 'Add Newsmedia Member';
+        }
+        $this->set([
+            'titleForLayout' => $title
+        ]);
+
+        $this->set(compact('password', 'user'));
+
+        if ($this->request->is('post')) {
+            // Make sure password isn't blank
+            if ($user->password === '') {
+                $user->password = $this->Users->generatePassword();
+            }
+
+            $user->group_id = 3;
+            $user->nm_email_alerts = 1;
+            $user->password = $password;
+            $user->email = $this->Users->cleanEmail($this->request->data['email']);
+
+            if ($this->Users->save($user)) {
+                $this->Flash->success('Newsmedia member added.');
+
+                if (!$this->Users->sendNewsmediaIntroEmail($user)) {
+                    $this->Flash->error('There was an error sending the introductory email.');
+                }
+
+                if ($user->send_alert && ! empty($nextCommentary) && $alertsSent) {
+                    if (!$this->Users->sendNewsmediaAlertEmail($user, $nextCommentary)) {
+                        $this->Flash->error('There was an error sending an alert message for the article "'.$nextCommentary->title.'".');
+                    }
+                }
+
+                // Clear form
+                $this->request->data = [];
+                $this->request->data['send_alert'] = true;
+                return;
+            }
+            $this->Flash->error('There was an error adding the user.');
+        } else {
+            $this->request->data['send_alert'] = true;
+        }
+    }
+
     public function resetPassword($userId = null, $resetPasswordHash = null)
     {
         $user = $this->Users->get($userId);

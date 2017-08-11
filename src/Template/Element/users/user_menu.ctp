@@ -40,7 +40,7 @@
                             'Subscribe Another User to Newsmedia Alerts',
                             [
                                 'controller' => 'users',
-                                'action' => 'add_newsmedia',
+                                'action' => 'addNewsmedia',
                                 'admin' => false,
                                 'plugin' => false
                             ]
@@ -129,27 +129,14 @@
                         ); ?>
                     </li>
                     <li>
-                        <?= $this->Html->link(
-                            'Add a Newsmedia Member',
-                            [
-                                'controller' => 'users',
-                                'action' => 'add_newsmedia',
-                                'admin' => false,
-                                'plugin' => false
-                            ]
-                        ); ?>
+                        <a href="/newsmedia/subscribe">
+                            Add a Newsmedia Member
+                        </a>
                     </li>
                     <li>
-                        <?= $this->Html->link(
-                            'Next Article to Publish',
-                            [
-                                'controller' => 'commentaries',
-                                'action' => 'index',
-                                'admin' => false,
-                                'newsmedia' => true,
-                                'plugin' => false
-                            ]
-                        ); ?>
+                        <a href="/newsmedia">
+                            Next Article to Publish
+                        </a>
                     </li>
                     <li>
                         <a href="/acl_manager/acl">
