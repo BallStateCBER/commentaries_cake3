@@ -45,6 +45,7 @@ class AppController extends Controller
 
 
     public $components = [
+        'Auth',
         'DataCenter.Flash',
         'DataCenter.TagManager'
     ];
