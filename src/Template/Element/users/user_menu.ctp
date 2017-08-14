@@ -10,7 +10,7 @@
     <ul class="root">
         <li>
             <ul>
-                <?php if ($userGroup == 'Newsmedia'): ?>
+                <?php if ($userGroup == 3): ?>
                     <li>
                         <?= $this->Html->link(
                             'Next Article to Publish',
@@ -28,7 +28,7 @@
                             'My Account',
                             [
                                 'controller' => 'users',
-                                'action' => 'my_account',
+                                'action' => 'newsmediaMyAccount',
                                 'admin' => false,
                                 'newsmedia' => true,
                                 'plugin' => false

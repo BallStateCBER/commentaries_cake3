@@ -1,8 +1,3 @@
-<?php
-
-use Cake\Routing\Router;
-
-?>
 <div id="add_newsmedia">
     <h1 class="page_title">
         <?= $titleForLayout; ?>
@@ -28,35 +23,34 @@ use Cake\Routing\Router;
         </p>
     <?php endif; ?>
 
-    <?php
-        echo $this->Form->create($user);
-        echo $this->Form->input('name');
-        echo $this->Form->input('email');
-        echo $this->Form->input('password', [
+    <?= $this->Form->create($user); ?>
+    <div class="col-lg-6">
+        <?= $this->Form->input('name', [
+            'class' => 'form-control'
+        ]); ?>
+    </div>
+    <div class="col-lg-6">
+        <?= $this->Form->input('email', [
+            'class' => 'form-control'
+        ]); ?>
+    </div>
+    <div class="col-lg-6">
+        <?= $this->Form->input('password', [
+            'class' => 'form-control',
             'type' => 'text',
             'required' => true,
             'value' => $password
-        ]);
-        if (isset($nextCommentary) && ! empty($nextCommentary)) {
-            $articleTitle = $nextCommentary['title'];
-            $date = date('l, F jS', strtotime($nextCommentary['published_date']));
-            $url = Router::url([
-                'controller' => 'commentaries',
-                'action' => 'view',
-                'id' => $nextCommentary['id'],
-                'slug' => $nextCommentary['slug']
-            ]); ?>
-        <label>
+        ]); ?>
+    </div>
+    <?php if (isset($nextCommentary)): ?>
+        <label style="display:inline-block;">
             <?= $this->Form->input('send_alert', [
                 'type' => 'checkbox',
                 'label' => false
             ]); ?>
             Immediately send this reporter an alert for the article <a href="<?= $url ?>"><?= $articleTitle ?></a>, due to be published on <?= $date ?>?
         </label>
-        <?php
-
-        }
-        echo $this->Form->submit('Add');
-        echo $this->Form->end();
-    ?>
+    <?php endif; ?>
+    <?= $this->Form->submit('Add', ['class' => 'btn btn-sm']); ?>
+    <?= $this->Form->end(); ?>
 </div>

@@ -149,13 +149,29 @@ class UsersControllerTest extends IntegrationTestCase
     }
 
     /**
+     * Test seeing the admin index
+     *
+     * @return void
+     */
+    public function testAdminIndexView()
+    {
+        $id = $this->Users->getIdFromEmail('placeholder@ymail.com');
+        $this->session(['Auth.User.id' => $id]);
+
+        $this->get('/users/admin');
+
+        $this->assertResponseOk();
+        $this->assertResponseContains('sort=group_id');
+    }
+
+    /**
      * Test adding a new user
      *
      * @return void
      */
     public function testAddingANewUser()
     {
-        $id = $this->Users->getIdFromEmail('edfox@bsu.edu');
+        $id = $this->Users->getIdFromEmail('placeholder@ymail.com');
         $this->session(['Auth.User.id' => $id]);
 
         $this->get('/users/add');
@@ -171,6 +187,82 @@ class UsersControllerTest extends IntegrationTestCase
         $this->post('/users/add', $newUser);
         $this->assertResponseOk();
         $this->assertResponseContains('The user has been saved.');
+    }
+
+    /**
+     * Test adding a newsmedia member
+     *
+     * @return void
+     */
+    public function testAddingNewsmediaMember()
+    {
+        $id = $this->Users->getIdFromEmail('butter@bsu.edu');
+        $this->session(['Auth.User.id' => $id]);
+
+        $this->get('/newsmedia/subscribe');
+        $newUser = [
+            'name' => 'Brandy Utter-Up',
+            'email' => 'butter-up@bsu.edu',
+            'password' => $this->Users->generatePassword(),
+            'send_alert' => 0
+        ];
+
+        $this->post('/newsmedia/subscribe', $newUser);
+        $this->assertResponseOk();
+        $this->assertResponseContains('Newsmedia member added.');
+    }
+
+    /**
+     * Test the newsmedia index
+     *
+     * @return void
+     */
+    public function testNewsmediaIndex()
+    {
+        $id = $this->Users->getIdFromEmail('butter-up@bsu.edu');
+        $this->session(['Auth.User.id' => $id]);
+
+        $this->get('/newsmedia');
+        $this->assertResponseOk();
+    }
+
+    /**
+     * Test the newsmedia account info
+     *
+     * @return void
+     */
+    public function testNewsmediaAccountInfo()
+    {
+        $id = $this->Users->getIdFromEmail('butter-up@bsu.edu');
+        $this->session(['Auth.User.id' => $id]);
+
+        $this->get('/users/newsmedia-my-account');
+        $this->assertResponseOk();
+        $passy = $this->Users->generatePassword();
+        $newInfo = [
+            'name' => 'Brandy Utter-Up',
+            'email' => 'butter-up@times.com',
+            'nm-email-alerts' => 1,
+            'password' => $passy,
+            'confirm-password' => $passy
+        ];
+
+        $this->post('/users/newsmedia-my-account', $newInfo);
+        $this->assertResponseOk();
+    }
+
+    /**
+     * Test the newsmedia account info for non-newsmedia users
+     *
+     * @return void
+     */
+    public function testNewsmediaAccountInfoForNonPress()
+    {
+        $id = $this->Users->getIdFromEmail('placeholder@ymail.com');
+        $this->session(['Auth.User.id' => $id]);
+
+        $this->get('/users/newsmedia-my-account');
+        $this->assertResponseContains('You are not a member of the press.');
     }
 
     public function testEditingUsersAccounts()
@@ -223,6 +315,12 @@ class UsersControllerTest extends IntegrationTestCase
 
         // delete the new user
         $id = $this->Users->getIdFromEmail('butter@bsu.edu');
+
+        $this->post("/users/delete/$id");
+        $this->assertResponseSuccess();
+
+        // one more for good luck
+        $id = $this->Users->getIdFromEmail('butter-up@times.com');
 
         $this->post("/users/delete/$id");
         $this->assertResponseSuccess();

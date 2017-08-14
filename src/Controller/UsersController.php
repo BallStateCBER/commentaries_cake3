@@ -3,6 +3,7 @@ namespace App\Controller;
 
 use App\Controller\AppController;
 use Cake\Core\Configure;
+use Cake\Routing\Router;
 
 /**
  * Users Controller
@@ -190,55 +191,35 @@ class UsersController extends AppController
 
     public function newsmediaMyAccount()
     {
-        $this->User->id = $this->Auth->user('id');
-        if ($this->request->is('post') || $this->request->is('put')) {
-            $data = $this->request->data['User'];
-            $this->User->set($data);
+        $id = $this->Auth->user('id');
+        $user = $this->Users->get($id);
 
-            if ($data['new_password'] == '') {
-                // Remove validation for both fields
-                unset($this->Users->validate['new_password']);
-                unset($this->Users->validate['confirm_password']);
-            }
-
-            // Invalidate email only if it changes to another user's email
-            unset($this->User->validate['email']['emailUnclaimed']);
-            $data['email'] = $this->Users->cleanEmail($data['email']);
-            $email_lookup = $this->Users->getUserIdWithEmail($data['email']);
-            if ($email_lookup && $email_lookup !== $this->User->id) {
-                $this->User->invalidate('email', 'Sorry, another account is already using that email address.');
-            }
-
-            if ($this->User->validates()) {
-                if ($data['new_password'] != '') {
-                    $this->User->set('password', $data['new_password']);
-                }
-                $saved = $this->User->save(null, true, array(
-                    'name',
-                    'email',
-                    'password',
-                    'nm_email_alerts'
-                ));
-                if ($saved) {
-                    $message = 'Your information has been updated';
-                    if ($data['new_password'] != '') {
-                        $message .= ' and password changed';
-                    }
-                    $this->Flash->success($message.'.');
-                } else {
-                    $this->Flash->error('There was an error updating your information.');
-                }
-            }
-
-            // Unset passwords so those fields aren't auto-populated
-            unset($this->request->data['User']['new_password']);
-            unset($this->request->data['User']['confirm_password']);
-        } else {
-            $this->request->data = $this->User->read();
-        }
         $this->set([
-            'titleForlayout' => 'My Account'
+            'titleForLayout' => 'My Account'
         ]);
+        $this->set(compact('user'));
+
+        if ($user->group_id != 3) {
+            return $this->Flash->error(__('You are not a member of the press.'));
+        }
+
+        if ($this->request->is('post') || $this->request->is('put')) {
+            $user = $this->Users->patchEntity($user, $this->request->getData());
+            $data = $this->request->getData();
+
+            $user->email = $this->Users->cleanEmail($data['email']);
+            $emailLookup = $this->Users->getIdFromEmail($data['email']);
+            if ($emailLookup && $emailLookup !== $id) {
+                return $this->Flash->error(__('Sorry, that email is already in use.'));
+            }
+
+            if ($this->Users->save($user)) {
+                $data = $user->toArray();
+                $this->Auth->setUser($data);
+                return $this->Flash->success(__('Your account has been updated.'));
+            }
+            return $this->Flash->error(__('Sorry, we could not update your information. Please try again.'));
+        }
     }
 
     public function addNewsmedia()
@@ -255,6 +236,18 @@ class UsersController extends AppController
             if ($alertsSent) {
                 $this->set(compact('nextCommentary'));
             }
+        }
+
+        if (isset($nextCommentary) && ! empty($nextCommentary)) {
+            $articleTitle = $nextCommentary['title'];
+            $date = date('l, F jS', strtotime($nextCommentary['published_date']));
+            $url = Router::url([
+                'controller' => 'commentaries',
+                'action' => 'view',
+                'id' => $nextCommentary['id'],
+                'slug' => $nextCommentary['slug']
+            ]);
+            $this->set(compact('articleTitle', 'date', 'url'));
         }
 
         $user = $this->Users->newEntity();

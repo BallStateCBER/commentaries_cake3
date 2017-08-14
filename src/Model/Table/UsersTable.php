@@ -145,14 +145,45 @@ class UsersTable extends Table
         return md5($userId.$email.$salt.$month);
     }
 
+    public function sendNewsmediaAlertEmail($user, $commentary)
+    {
+        $email = new Email('default');
+        $timestamp = strtotime($commentary->published_date);
+        $email
+                ->setTo($user->email)
+                ->setSubject('CBER Commentaries: Alert')
+                ->template('newsmedia_alert')
+                ->emailFormat('both')
+                ->helpers(['Html', 'Text'])
+                ->viewVars([
+                    'commentary' => $commentary,
+                    'recipientName' => $user->name,
+                    'url' => Router::url(
+                        [
+                            'controller' => 'commentaries',
+                            'action' => 'view',
+                            'id' => $commentary['id'],
+                            'slug' =>  $commentary['slug']
+                        ],
+                        true
+                    ),
+                    'newsmediaIndexUrl' => Router::url([
+                        'controller' => 'commentaries',
+                        'action' => 'newsmediaIndex',
+                        ],
+                        true
+                    ),
+                    'date' => date('l, F jS', $timestamp)
+                ]);
+        return $email->send();
+    }
+
     public function sendNewsmediaIntroEmail($user)
     {
         $email = new Email('default');
-        $email->to($user->email);
         $newsmediaIndexUrl = Router::url([
             'controller' => 'commentaries',
-            'action' => 'index',
-            'newsmedia' => true
+            'action' => 'newsmediaIndex',
             ],
             true
         );
@@ -162,11 +193,17 @@ class UsersTable extends Table
             ],
             true
         );
-        $email->viewVars(compact(
-            'user',
-            'newsmediaIndexUrl',
-            'loginUrl'
-        ));
+        $email
+                ->setTo($user->email)
+                ->setSubject('CBER Commentaries: Intro')
+                ->template('newsmedia_intro')
+                ->emailFormat('both')
+                ->helpers(['Html', 'Text'])
+                ->viewVars(compact(
+                    'user',
+                    'newsmediaIndexUrl',
+                    'loginUrl'
+                ));
         return $email->send();
     }
 
