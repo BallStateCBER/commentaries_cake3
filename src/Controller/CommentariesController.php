@@ -182,6 +182,11 @@ class CommentariesController extends AppController
         $this->set('_serialize', ['commentary']);
     }
 
+    private function __dateFormat($date)
+    {
+        return date('Y-m-d', strtotime($date['year'].'-'.$date['month'].'-'.$date['day']));
+    }
+
     /**
      * Add method
      *
@@ -195,6 +200,7 @@ class CommentariesController extends AppController
         $commentary = $this->Commentaries->newEntity();
         if ($this->request->is('post')) {
             $commentary = $this->Commentaries->patchEntity($commentary, $this->request->getData());
+            $commentary->published_date = $this->__dateFormat($this->request->data['published_date']);
             if ($this->Commentaries->save($commentary)) {
                 $this->Flash->success(__('The commentary has been saved.'));
 
@@ -229,6 +235,7 @@ class CommentariesController extends AppController
         ]);
         if ($this->request->is(['patch', 'post', 'put'])) {
             $commentary = $this->Commentaries->patchEntity($commentary, $this->request->getData());
+            $commentary->published_date = $this->__dateFormat($this->request->data['published_date']);
             if ($this->Commentaries->save($commentary)) {
                 $this->Flash->success(__('The commentary has been saved.'));
 

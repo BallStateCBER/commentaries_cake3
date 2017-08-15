@@ -40,7 +40,7 @@ use Cake\Core\Configure;
                         'class' => 'form-control'
                     ]
                 ); ?>
-            <?= $this->Form->input(
+            <?= $this->Form->control(
                     'published_date',
                     [
                         'type' => 'date',
