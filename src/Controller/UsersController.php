@@ -30,6 +30,9 @@ class UsersController extends AppController
      */
     public function add()
     {
+        if ($this->Auth->user('group_id') != 1) {
+            return $this->Flash->error(__('You are not an admin.'));
+        }
         $user = $this->Users->newEntity();
         if ($this->request->is('post')) {
             $user = $this->Users->patchEntity($user, $this->request->getData());
@@ -45,6 +48,9 @@ class UsersController extends AppController
 
     public function adminIndex()
     {
+        if ($this->Auth->user('group_id') != 1) {
+            return $this->Flash->error(__('You are not an admin.'));
+        }
         $users = $this->Users->find('all')
             ->contain('Groups');
         $this->set([
@@ -62,6 +68,9 @@ class UsersController extends AppController
      */
     public function delete($id = null)
     {
+        if ($this->Auth->user('group_id') != 1) {
+            return $this->Flash->error(__('You are not an admin.'));
+        }
         $this->viewBuilder()->autoLayout(false);
         $this->request->allowMethod(['post', 'delete']);
         $user = $this->Users->get($id);
@@ -88,6 +97,10 @@ class UsersController extends AppController
      */
     public function edit($id = null)
     {
+        if ($this->Auth->user('group_id') != 1) {
+            return $this->Flash->error(__('You are not an admin.'));
+        }
+
         $user = $this->Users->get($id, [
             'contain' => []
         ]);

@@ -24,6 +24,9 @@ class CommentariesController extends AppController
         $this->Commentaries = TableRegistry::get('Commentaries');
         $this->CommentariesTags = TableRegistry::get('CommentariesTags');
         $this->Tags = TableRegistry::get('Tags');
+
+        // deny methods for non-users
+        $this->Auth->deny(['add', 'delete', 'drafts', 'edit', 'newsmediaIndex']);
     }
 
     public function browse($year = null)
@@ -186,6 +189,9 @@ class CommentariesController extends AppController
      */
     public function add()
     {
+        if ($this->Auth->user('group_id') == 3) {
+            return $this->Flash->error(__('You are not authorized for this.'));
+        }
         $commentary = $this->Commentaries->newEntity();
         if ($this->request->is('post')) {
             $commentary = $this->Commentaries->patchEntity($commentary, $this->request->getData());
@@ -215,6 +221,9 @@ class CommentariesController extends AppController
      */
     public function edit($id = null)
     {
+        if ($this->Auth->user('group_id') == 3) {
+            return $this->Flash->error(__('You are not authorized for this.'));
+        }
         $commentary = $this->Commentaries->get($id, [
             'contain' => ['Tags']
         ]);
@@ -246,6 +255,9 @@ class CommentariesController extends AppController
      */
     public function delete($id = null)
     {
+        if ($this->Auth->user('group_id') == 3) {
+            return $this->Flash->error(__('You are not authorized for this.'));
+        }
         $this->request->allowMethod(['post', 'delete']);
         $commentary = $this->Commentaries->get($id);
         if ($this->Commentaries->delete($commentary)) {
