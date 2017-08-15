@@ -22,7 +22,7 @@ function setupTagArranger() {
 			draggable:false,
 			id:'root'
 		});
-		tree.setRootNode(root);		
+		tree.setRootNode(root);
 		var oldPosition = null;
 		var oldNextSibling = null;
 		tree.on('startdrag', function(tree, node, event){
@@ -77,10 +77,10 @@ function setupTagManager() {
 	$(function() {
 		// Tabs
 		$('#tag_management_tabs').tabs();
-		
+
 		// Aranger
 		setupTagArranger();
-		
+
 		// Fix functions
 		$('#tab-fix a').click(function (event) {
 			event.preventDefault();
@@ -94,7 +94,7 @@ function setupTagManager() {
 				}
 			});
 		});
-		
+
 		// Empty trash function
 		$('#tab-remove a').click(function (event) {
 			event.preventDefault();
@@ -108,13 +108,13 @@ function setupTagManager() {
 				}
 			});
 		});
-		
+
 		// Autocomplete fields
 		$('.search_field').autocomplete({
 			// '/0/0' includes unlisted and unselectable tags
 			source: '/tags/auto_complete/0/0'
 		});
-		
+
 		// Find
 		$('#tag_search_form').submit(function(event) {
 			event.preventDefault();
@@ -128,7 +128,7 @@ function setupTagManager() {
 				}
 			});
 		});
-		
+
 		// Edit
 		$('#tag_edit_search_form').submit(function(event) {
 			event.preventDefault();
@@ -136,15 +136,15 @@ function setupTagManager() {
 				url: '/tags/edit/'+$(this).find('.search_field').val(),
 				success: function(data) {
 					$('#edit_results').html(data);
-					
-					// Set up resulting form (if any) to load results in same div 
+
+					// Set up resulting form (if any) to load results in same div
 					$('#edit_results form').ajaxForm({
 						target: '#edit_results'
 					});
 				}
 			});
 		});
-		
+
 		// Remove
 		$('#tag_remove_form').submit(function(event) {
 			event.preventDefault();
@@ -159,7 +159,7 @@ function setupTagManager() {
 				}
 			});
 		});
-		
+
 		// Merge
 		$('#tag_merge_form').submit(function(event) {
 			event.preventDefault();
@@ -175,7 +175,7 @@ function setupTagManager() {
 				}
 			});
 		});
-		
+
 		// Add
 		$('#tab-add form').ajaxForm({
 			target: '#add_results',
@@ -205,15 +205,15 @@ function toggleDelayPublishing() {
 		this_day = '0' + this_day;
 	}
 	var this_year =  current_time.getFullYear();
-	var selected_month = $('#CommentaryPublishedDateMonth').val();
-	var selected_day = $('#CommentaryPublishedDateDay').val();
-	var selected_year = $('#CommentaryPublishedDateYear').val();
+	var selected_month = $('#published_date[month]').val();
+	var selected_day = $('#published_date[day]').val();
+	var selected_year = $('#published_date[year]').val();
 	var selected_date = selected_year + selected_month + selected_day;
 	var this_date = this_year + this_month + this_day;
 	if (selected_date > this_date) {
 		$('#delayed_publishing_date').html('automatically on ' + selected_month + '-' + selected_day + '-' + selected_year);
 	} else {
-		$('#delayed_publishing_date').html('');
+		$('#delayed_publishing_date').html('automatically on ' + selected_month + '-' + selected_day + '-' + selected_year);
 	}
 }
 

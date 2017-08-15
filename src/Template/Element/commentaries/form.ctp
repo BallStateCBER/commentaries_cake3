@@ -11,7 +11,7 @@ use Cake\Core\Configure;
         $commentary,
         [
             'templates' => [
-                'select' => '<select class="form-control dates" name="{{name}}">{{content}}</select>'
+                'select' => '<select class="form-control dates" name="{{name}}" id="{{name}}">{{content}}</select>'
             ]
         ]
     ); ?>
@@ -40,7 +40,7 @@ use Cake\Core\Configure;
                         'class' => 'form-control'
                     ]
                 ); ?>
-            <?= $this->Form->control(
+            <?= $this->Form->input(
                     'published_date',
                     [
                         'type' => 'date',
@@ -75,6 +75,7 @@ use Cake\Core\Configure;
                 ); ?>
             <fieldset>
                 <legend>Publishing</legend>
+                <span id="delayed_publishing_date"></span>
                 <?= $this->Form->radio(
                         'is_published',
                         [
@@ -102,11 +103,11 @@ use Cake\Core\Configure;
     <script>
         toggleDelayPublishing();
         var input_ids = [
-            '#CommentaryPublishedDateMonth',
-            '#CommentaryPublishedDateDay',
-            '#CommentaryPublishedDateYear',
-            '#CommentaryIsPublished1',
-            '#CommentaryIsPublished0'
+            '#published_date[month]',
+            '#published_date[year]',
+            '#published_date[day]',
+            '#is-published-1',
+            '#is-published-0'
         ];
         var selector = input_ids.join(', ');
         $(selector).change(function() {
