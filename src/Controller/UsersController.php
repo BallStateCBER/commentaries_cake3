@@ -31,9 +31,15 @@ class UsersController extends AppController
     public function add()
     {
         if ($this->Auth->user('group_id') != 1) {
-            return $this->Flash->error(__('You are not an admin.'));
+            $this->Flash->error(__('You are not an admin.'));
         }
+
         $user = $this->Users->newEntity();
+
+        $groups = $this->Users->Groups->find('list', ['limit' => 200]);
+        $this->set(compact('user', 'groups'));
+        $this->set('_serialize', ['user']);
+
         if ($this->request->is('post')) {
             $user = $this->Users->patchEntity($user, $this->request->getData());
             if ($this->Users->save($user)) {
@@ -41,15 +47,12 @@ class UsersController extends AppController
             }
             return $this->Flash->error(__('The user could not be saved. Please, try again.'));
         }
-        $groups = $this->Users->Groups->find('list', ['limit' => 200]);
-        $this->set(compact('user', 'groups'));
-        $this->set('_serialize', ['user']);
     }
 
     public function adminIndex()
     {
         if ($this->Auth->user('group_id') != 1) {
-            return $this->Flash->error(__('You are not an admin.'));
+            $this->Flash->error(__('You are not an admin.'));
         }
         $users = $this->Users->find('all')
             ->contain('Groups');
@@ -69,7 +72,7 @@ class UsersController extends AppController
     public function delete($id = null)
     {
         if ($this->Auth->user('group_id') != 1) {
-            return $this->Flash->error(__('You are not an admin.'));
+            $this->Flash->error(__('You are not an admin.'));
         }
         $this->viewBuilder()->autoLayout(false);
         $this->request->allowMethod(['post', 'delete']);
@@ -98,7 +101,7 @@ class UsersController extends AppController
     public function edit($id = null)
     {
         if ($this->Auth->user('group_id') != 1) {
-            return $this->Flash->error(__('You are not an admin.'));
+            $this->Flash->error(__('You are not an admin.'));
         }
 
         $user = $this->Users->get($id, [
@@ -270,7 +273,7 @@ class UsersController extends AppController
             $password = $this->Users->generatePassword();
         }
 
-        if ($this->request->session()->read(['Auth.User.group_id']) == 3) {
+        if ($this->Auth->user('group_id') == 3) {
             $title = 'Add a Reporter to Newsmedia Alerts';
         } else {
             $title = 'Add Newsmedia Member';
