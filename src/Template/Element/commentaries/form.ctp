@@ -11,7 +11,8 @@ use Cake\Core\Configure;
         $commentary,
         [
             'templates' => [
-                'select' => '<select class="form-control dates" name="{{name}}" id="{{name}}">{{content}}</select>'
+                'nestingLabel' => '{{input}}',
+                'select' => '<select class="form-control dates" name="{{name}}"{{attrs}}>{{content}}</select>'
             ]
         ]
     ); ?>
@@ -43,12 +44,19 @@ use Cake\Core\Configure;
             <?= $this->Form->input(
                     'published_date',
                     [
+                        'year' => [
+                            'id' => 'dateYear'
+                        ],
+                        'month' => [
+                            'id' => 'dateMonth'
+                        ],
+                        'day' => [
+                            'id' => 'dateDay'
+                        ],
                         'type' => 'date',
-                        'dateFormat' => 'MDY',
                         'label' => 'Date',
                         'minYear' => 2001,
-                        'maxYear' => date('Y') + 1,
-                        'class' => 'form-control'
+                        'maxYear' => date('Y') + 1
                     ]
                 ); ?>
         </div>
@@ -75,19 +83,40 @@ use Cake\Core\Configure;
                 ); ?>
             <fieldset>
                 <legend>Publishing</legend>
-                <span id="delayed_publishing_date"></span>
-                <?= $this->Form->radio(
-                        'is_published',
-                        [
-                            1 => ' Publish <span id="delayed_publishing_date"></span>',
-                            0 => ' Save as Draft'
-                        ],
-                        [
-                            'value' => 1,
-                            'legend' => false,
-                            'separator' => '<br />'
-                        ]
+                <label for="is-published-1">
+                    <?= $this->Form->control(
+                            'is_published',
+                            [
+                                'type' => 'radio',
+                                'options' => [
+                                    1 => ''
+                                ],
+                                'default' => 1,
+                                'legend' => false,
+                                'label' => false,
+                                'id' => 'is-published-1',
+                                'hiddenField' => false
+                            ]
                     ); ?>
+                    Publish <span id="delayed_publishing_date"></span>
+                </label>
+                <label for="is-published-0">
+                    <?= $this->Form->control(
+                            'is_published',
+                            [
+                                'type' => 'radio',
+                                'options' => [
+                                    0 => ''
+                                ],
+                                'default' => 1,
+                                'legend' => false,
+                                'label' => false,
+                                'id' => 'is-published-0',
+                                'hiddenField' => false
+                            ]
+                    ); ?>
+                    Save as Draft
+                </label>
             </fieldset>
             <div class="col-lg-4" style="float:right;">
                 <?= $this->Form->submit('Submit', [
@@ -103,15 +132,32 @@ use Cake\Core\Configure;
     <script>
         toggleDelayPublishing();
         var input_ids = [
-            '#published_date[month]',
-            '#published_date[year]',
-            '#published_date[day]',
-            '#is-published-1',
-            '#is-published-0'
+            '#dateMonth',
+            '#dateYear',
+            '#dateDay'
         ];
         var selector = input_ids.join(', ');
         $(selector).change(function() {
-            toggleDelayPublishing();
+            var current_time = new Date();
+        	var this_month = current_time.getMonth() + 1;
+        	if (this_month < 10) {
+        		this_month = '0' + this_month;
+        	}
+        	var this_day = current_time.getDate();
+        	if (this_day < 10) {
+        		this_day = '0' + this_day;
+        	}
+        	var this_year =  current_time.getFullYear();
+        	var selected_month = $('#dateMonth').val();
+        	var selected_day = $('#dateDay').val();
+        	var selected_year = $('#dateYear').val();
+        	var selected_date = selected_year + selected_month + selected_day;
+        	var this_date = this_year + this_month + this_day;
+        	if (selected_date > this_date) {
+        		$('#delayed_publishing_date').html('automatically on ' + selected_month + '-' + selected_day + '-' + selected_year);
+        	} else {
+        		$('#delayed_publishing_date').html('');
+        	}
         });
     </script>
 </div>
