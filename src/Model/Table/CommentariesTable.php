@@ -40,6 +40,10 @@ class CommentariesTable extends Table
         $this->setPrimaryKey('id');
 
         $this->addBehavior('Timestamp');
+        $this->addBehavior('Muffin/Slug.Slug', [
+            // Optionally define your custom options here (see Configuration)
+        ]);
+
 
         $this->belongsTo('Users', [
             'foreignKey' => 'user_id',
@@ -90,10 +94,6 @@ class CommentariesTable extends Table
             ->dateTime('published_date')
             ->allowEmpty('published_date');
 
-        $validator
-            ->requirePresence('slug', 'create')
-            ->notEmpty('slug');
-
         return $validator;
     }
 
@@ -115,7 +115,8 @@ class CommentariesTable extends Table
     {
         return $this->find('list')
             ->where(['is_published' => 0])
-            -> order(['modified' => 'DESC']);
+            ->order(['modified' => 'DESC'])
+            ->toArray();
     }
 
     public function getNextForNewsmedia()
@@ -130,7 +131,7 @@ class CommentariesTable extends Table
 
     public function isMostRecentAlert($commentaryId)
     {
-        if (empty($commentaryId)) {
+        if (!isset($commentaryId)) {
             return false;
         }
         $result = $this->Users->find()

@@ -62,9 +62,9 @@ Router::scope('/', function (RouteBuilder $routes) {
         ['id' => '[0-9]+', 'pass' => ['id']]
     );
     Router::connect(
-        '/:id/:slug',
+        '/:slug',
         ['controller' => 'commentaries', 'action' => 'view'],
-        ['id' => '[0-9]+', 'slug' => '[-_a-z0-9]+', 'pass' => ['id', 'slug']]
+        ['slug' => '[-_a-z0-9]+', 'pass' => ['slug']]
     );
     Router::connect(
         "/:id/*",

@@ -187,6 +187,20 @@ class CommentariesController extends AppController
         return date('Y-m-d', strtotime($date['year'].'-'.$date['month'].'-'.$date['day']));
     }
 
+    // If publishing to a future date, save to drafts and auto-publish on the appropriate day
+    private function __setupAutopublish()
+    {
+        $publish = $this->request->data['is_published'];
+        $publishingDate = $this->request->data['published_date'];
+        $publishingDate = $publishingDate['year'].$publishingDate['month'].$publishingDate['day'];
+        if ($publish && $publishingDate > date('Ymd')) {
+            $this->request->data['delay_publishing'] = 1;
+            $this->request->data['is_published'] = 0;
+        } else {
+            $this->request->data['delay_publishing'] = 0;
+        }
+    }
+
     /**
      * Add method
      *
@@ -194,28 +208,32 @@ class CommentariesController extends AppController
      */
     public function add()
     {
-        if ($this->Auth->user('group_id') == 3) {
-            return $this->Flash->error(__('You are not authorized for this.'));
-        }
-        $commentary = $this->Commentaries->newEntity();
-        if ($this->request->is('post')) {
-            $commentary = $this->Commentaries->patchEntity($commentary, $this->request->getData());
-            $commentary->published_date = $this->__dateFormat($this->request->data['published_date']);
-            if ($this->Commentaries->save($commentary)) {
-                $this->Flash->success(__('The commentary has been saved.'));
-
-                return $this->redirect(['action' => 'index']);
-            }
-            $this->Flash->error(__('The commentary could not be saved. Please, try again.'));
-        }
         $authors = $this->Commentaries->Users->find('list', [
             'limit' => 200
         ])->where(['author' => 1]);
         $tags = $this->Commentaries->Tags->find('list', ['limit' => 200]);
         $this->TagManager->prepareEditor($this);
+
+        if ($this->Auth->user('group_id') == 3) {
+            return $this->Flash->error(__('You are not authorized for this.'));
+        }
+
+        $commentary = $this->Commentaries->newEntity();
+
         $this->set(compact('commentary', 'authors', 'tags'));
         $this->set('_serialize', ['commentary']);
         $this->set(['titleForLayout' => 'Add a Commentary']);
+
+        if ($this->request->is('post')) {
+            $this->__setupAutopublish();
+
+            $commentary = $this->Commentaries->patchEntity($commentary, $this->request->getData());
+            $commentary->published_date = $this->__dateFormat($this->request->data['published_date']);
+            if ($this->Commentaries->save($commentary)) {
+                return $this->Flash->success(__('The commentary has been saved.'));
+            }
+            $this->Flash->error(__('The commentary could not be saved. Please, try again.'));
+        }
     }
 
     /**
@@ -230,19 +248,11 @@ class CommentariesController extends AppController
         if ($this->Auth->user('group_id') == 3) {
             return $this->Flash->error(__('You are not authorized for this.'));
         }
+
         $commentary = $this->Commentaries->get($id, [
             'contain' => ['Tags']
         ]);
-        if ($this->request->is(['patch', 'post', 'put'])) {
-            $commentary = $this->Commentaries->patchEntity($commentary, $this->request->getData());
-            $commentary->published_date = $this->__dateFormat($this->request->data['published_date']);
-            if ($this->Commentaries->save($commentary)) {
-                $this->Flash->success(__('The commentary has been saved.'));
 
-                return $this->redirect(['action' => 'index']);
-            }
-            $this->Flash->error(__('The commentary could not be saved. Please, try again.'));
-        }
         $authors = $this->Commentaries->Users->find('list', [
             'limit' => 200
         ])->where(['author' => 1]);
@@ -251,6 +261,17 @@ class CommentariesController extends AppController
         $this->set(compact('commentary', 'authors', 'tags'));
         $this->set('_serialize', ['commentary']);
         $this->set(['titleForLayout' => "Edit commentary: $commentary->title"]);
+
+        if ($this->request->is(['patch', 'post', 'put'])) {
+            $this->__setupAutopublish();
+
+            $commentary = $this->Commentaries->patchEntity($commentary, $this->request->getData());
+            $commentary->published_date = $this->__dateFormat($this->request->data['published_date']);
+            if ($this->Commentaries->save($commentary)) {
+                return $this->Flash->success(__('The commentary has been saved.'));
+            }
+            $this->Flash->error(__('The commentary could not be saved. Please, try again.'));
+        }
     }
 
     /**

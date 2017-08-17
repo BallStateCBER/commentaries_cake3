@@ -14,7 +14,8 @@
         "twbs/bootstrap": "4.0.0-alpha.6",
         "ballstatecber/datacenter-plugin-cakephp3": "dev-master",
         "akkaweb/cakephp-ckeditor": "dev-master",
-        "oldskool/cakephp-js": "dev-master"
+        "oldskool/cakephp-js": "dev-master",
+        "muffin/slug": "^1.2"
     },
     "require-dev": {
         "psy/psysh": "@stable",

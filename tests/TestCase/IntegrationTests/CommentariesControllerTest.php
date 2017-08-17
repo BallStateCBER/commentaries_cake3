@@ -127,4 +127,120 @@ class CommentariesControllerTest extends IntegrationTestCase
         $this->assertResponseOk();
         $this->assertResponseContains('Proponents of this tax plan are knowingly disingenuous when they make the claim that the tax cuts will pay for themselves. However, opponents are equally misleading when claiming this is primarily a tax cut for the rich.');
     }
+
+    /**
+     * testAdd
+     *
+     * @return void
+     */
+    public function testAdd()
+    {
+        $this->get('/commentaries/add');
+        $this->assertRedirect();
+
+        $id = $this->Users->getIdFromEmail('cberdirector@bsu.edu');
+        $this->session(['Auth.User.id' => $id]);
+        $this->get('/commentaries/add');
+
+        $commentary = [
+            'user_id' => 8,
+            'title' => 'Placeholder Commentary',
+            'summary' => 'This is the placeholder summary.',
+            'published_date' => [
+                'year' => date('Y'),
+                'month' => date('m', strtotime('+1 month')),
+                'day' => date('d')
+            ],
+            'body' => 'Placeholder text can be really hard to come up with, but at what cost to society <i>is</i> placeholder text? According to my estimates, Erica has probably earned a total of twenty-five cents writing this placeholder text.',
+            'is_published' => 1
+        ];
+
+        $this->post('/commentaries/add', $commentary);
+        $this->assertResponseOk();
+        $this->assertResponseContains('The commentary has been saved.');
+
+        $exists = $this->Commentaries->find()
+            ->where(['title' => 'Placeholder Commentary'])
+            ->first();
+
+        if ($exists->slug) {
+            $this->assertResponseOk();
+        }
+    }
+
+    /**
+     * testDrafts
+     *
+     * @return void
+     */
+    public function testDrafts()
+    {
+        $id = $this->Users->getIdFromEmail('cberdirector@bsu.edu');
+        $this->session(['Auth.User.id' => $id]);
+
+        $this->get('/commentaries/drafts');
+        $this->assertResponseContains('Placeholder Commentary');
+    }
+
+    /**
+     * testEdit
+     *
+     * @return void
+     */
+    public function testEdit()
+    {
+        $exists = $this->Commentaries->find()
+            ->where(['title' => 'Placeholder Commentary'])
+            ->first();
+
+        $this->get("/commentaries/edit/$exists->id");
+        $this->assertRedirect();
+
+        $id = $this->Users->getIdFromEmail('cberdirector@bsu.edu');
+        $this->session(['Auth.User.id' => $id]);
+        $this->get("/commentaries/edit/$exists->id");
+
+        $commentary = [
+            'user_id' => 8,
+            'title' => 'Placeholder Article',
+            'summary' => 'This is the placeholder summary.',
+            'published_date' => [
+                'year' => date('Y'),
+                'month' => date('m'),
+                'day' => date('d')
+            ],
+            'body' => 'Placeholder text can be really hard to come up with, but at what cost to society <i>is</i> placeholder text? According to my estimates, Erica has probably earned a total of twenty-five cents writing this placeholder text.',
+            'is_published' => 1
+        ];
+
+        $this->post("/commentaries/edit/$exists->id", $commentary);
+        $this->assertResponseOk();
+        $this->assertResponseContains('The commentary has been saved.');
+
+        $exists = $this->Commentaries->find()
+            ->where(['title' => 'Placeholder Article'])
+            ->first();
+
+        if ($exists->slug) {
+            $this->assertResponseOk();
+        }
+    }
+
+    /**
+     * testDelete
+     *
+     * @return void
+     */
+    public function testDelete()
+    {
+        $id = $this->Users->getIdFromEmail('cberdirector@bsu.edu');
+        $this->session(['Auth.User.id' => $id]);
+
+        $commentary = $this->Commentaries->find()
+            ->where(['title' => 'Placeholder Article'])
+            ->first();
+
+        $this->post("/commentaries/delete/$commentary->id");
+        $this->assertResponseSuccess();
+    }
 }
