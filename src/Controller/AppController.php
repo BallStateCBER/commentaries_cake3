@@ -40,6 +40,7 @@ class AppController extends Controller
             'version' => '4.5.0'
             ],
         'CakeJs.Js',
+        'DataCenter.Tag',
         'Html'
     ];
 

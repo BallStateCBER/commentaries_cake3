@@ -138,6 +138,15 @@
                             Next Article to Publish
                         </a>
                     </li>
+                    <li>
+                        <?= $this->Html->link(
+                            'Manage Tags',
+                            [
+                                'controller' => 'tags',
+                                'action' => 'manage'
+                            ]
+                        ); ?>
+                    </li>
                 </ul>
             </li>
         <?php endif; ?>
