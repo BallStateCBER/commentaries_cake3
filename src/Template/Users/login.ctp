@@ -26,7 +26,7 @@
             'checked' => true
         ]);
     ?>
-    <?= $this->Form->button(__('Login'), ['class' => 'btn btn-secondary btn-sm']); ?>
+    <?= $this->Form->button(__('Login'), ['class' => 'btn btn-secondary btn-sm', 'id' => 'login-btn']); ?>
 </div>
 
 <?= $this->Form->end() ?>
