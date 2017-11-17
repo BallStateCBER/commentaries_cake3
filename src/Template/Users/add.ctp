@@ -8,10 +8,6 @@
     <div class="col-lg-6">
         <?= $this->Form->control('name', ['class' => 'form-control']);?>
         <?= $this->Form->control('email', ['class' => 'form-control']);?>
-        <?= $this->Form->radio('sex', [
-            'm' => 'Male',
-            'f' => 'Female'
-        ]); ?>
     </div>
 
     <div class="col-lg-12">

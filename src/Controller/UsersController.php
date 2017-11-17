@@ -1,7 +1,6 @@
 <?php
 namespace App\Controller;
 
-use App\Controller\AppController;
 use Cake\Core\Configure;
 use Cake\Routing\Router;
 
@@ -10,7 +9,7 @@ use Cake\Routing\Router;
  *
  * @property \App\Model\Table\UsersTable $Users
  *
- * @method \App\Model\Entity\User[] paginate($object = null, array $settings = [])
+ * @method \App\Model\Entity\User[]
  */
 class UsersController extends AppController
 {
@@ -26,7 +25,7 @@ class UsersController extends AppController
     /**
      * Add method
      *
-     * @return \Cake\Http\Response|null Redirects on successful add, renders view otherwise.
+     * @return null
      */
     public function add()
     {
@@ -43,10 +42,16 @@ class UsersController extends AppController
         if ($this->request->is('post')) {
             $user = $this->Users->patchEntity($user, $this->request->getData());
             if ($this->Users->save($user)) {
-                return $this->Flash->success(__('The user has been saved.'));
+                $this->Flash->success(__('The user has been saved.'));
+
+                return null;
             }
-            return $this->Flash->error(__('The user could not be saved. Please, try again.'));
+            $this->Flash->error(__('The user could not be saved. Please, try again.'));
+
+            return null;
         }
+
+        return null;
     }
 
     public function adminIndex()
@@ -74,7 +79,7 @@ class UsersController extends AppController
         if ($this->Auth->user('group_id') != 1) {
             $this->Flash->error(__('You are not an admin.'));
         }
-        $this->viewBuilder()->autoLayout(false);
+        $this->viewBuilder()->setLayout('blank');
         $this->request->allowMethod(['post', 'delete']);
         $user = $this->Users->get($id);
         if ($this->Users->delete($user)) {
@@ -95,7 +100,7 @@ class UsersController extends AppController
      * Edit method
      *
      * @param string|null $id User id.
-     * @return \Cake\Http\Response|null Redirects on successful edit, renders view otherwise.
+     * @return null
      * @throws \Cake\Network\Exception\NotFoundException When record not found.
      */
     public function edit($id = null)
@@ -115,17 +120,23 @@ class UsersController extends AppController
         if ($this->request->is(['patch', 'post', 'put'])) {
             $user = $this->Users->patchEntity($user, $this->request->getData());
             if ($this->Users->save($user)) {
-                return $this->Flash->success(__('The user has been saved.'));
+                $this->Flash->success(__('The user has been saved.'));
+
+                return null;
             }
-            return $this->Flash->error(__('The user could not be saved. Please, try again.'));
+            $this->Flash->error(__('The user could not be saved. Please, try again.'));
+
+            return null;
         }
+
+        return null;
     }
 
     public function forgotPassword()
     {
         if ($this->request->is('post')) {
             $adminEmail = Configure::read('admin_email');
-            $email = $this->Users->cleanEmail($this->request->data['email']);
+            $email = $this->Users->cleanEmail($this->request->getData('email'));
             if (empty($email)) {
                 $this->Flash->error('Please enter the email address associated with your account to have your password reset. Email <a href="mailto:'.$adminEmail.'">'.$adminEmail.'</a> if you need any assistance.');
             } else {
@@ -162,14 +173,14 @@ class UsersController extends AppController
                 }
 
                 // Remember login information
-                if ($this->request->data('remember_me')) {
+                if ($this->request->getData('remember_me')) {
                     $this->Cookie->configKey('User', [
                         'expires' => '+1 year',
                         'httpOnly' => true
                     ]);
                     $this->Cookie->write('User', [
-                        'email' => $this->request->data('email'),
-                        'password' => $this->request->data('password')
+                        'email' => $this->request->getData('email'),
+                        'password' => $this->request->getData('password')
                     ]);
                 }
                 return $this->redirect($this->Auth->redirectUrl());
@@ -178,6 +189,8 @@ class UsersController extends AppController
                 $this->Flash->error(__('We could not log you in. Please check your email & password.'));
             }
         }
+
+        return null;
     }
 
     public function logout()
@@ -190,7 +203,6 @@ class UsersController extends AppController
         $this->set('titleForLayout', 'My Profile');
 
         $id = $this->Auth->user('id');
-        $email = $this->Auth->user('email');
         $user = $this->Users->get($id);
 
         if ($this->request->is(['patch', 'post', 'put'])) {
@@ -198,11 +210,17 @@ class UsersController extends AppController
             if ($this->Users->save($user)) {
                 $data = $user->toArray();
                 $this->Auth->setUser($data);
-                return $this->Flash->success(__('Your account has been updated.'));
+                $this->Flash->success(__('Your account has been updated.'));
+
+                return null;
             }
-            return $this->Flash->error(__('Sorry, we could not update your information. Please try again.'));
+            $this->Flash->error(__('Sorry, we could not update your information. Please try again.'));
+
+            return null;
         }
         $this->set(compact('user'));
+
+        return null;
     }
 
     public function newsmediaMyAccount()
@@ -216,7 +234,9 @@ class UsersController extends AppController
         $this->set(compact('user'));
 
         if ($user->group_id != 3) {
-            return $this->Flash->error(__('You are not a member of the press.'));
+            $this->Flash->error(__('You are not a member of the press.'));
+
+            return null;
         }
 
         if ($this->request->is('post') || $this->request->is('put')) {
@@ -226,16 +246,24 @@ class UsersController extends AppController
             $user->email = $this->Users->cleanEmail($data['email']);
             $emailLookup = $this->Users->getIdFromEmail($data['email']);
             if ($emailLookup && $emailLookup !== $id) {
-                return $this->Flash->error(__('Sorry, that email is already in use.'));
+                $this->Flash->error(__('Sorry, that email is already in use.'));
+
+                return null;
             }
 
             if ($this->Users->save($user)) {
                 $data = $user->toArray();
                 $this->Auth->setUser($data);
-                return $this->Flash->success(__('Your account has been updated.'));
+                $this->Flash->success(__('Your account has been updated.'));
+
+                return null;
             }
-            return $this->Flash->error(__('Sorry, we could not update your information. Please try again.'));
+            $this->Flash->error(__('Sorry, we could not update your information. Please try again.'));
+
+            return null;
         }
+
+        return null;
     }
 
     public function addNewsmedia()
@@ -243,7 +271,7 @@ class UsersController extends AppController
         /* Set information about the next commentary to be published
          * if alerts have already been sent out for it and this user
          * needs to be caught up. */
-        $this->loadModel('Commentaries');
+        $alertsSent = 0;
 
         $nextCommentary = $this->Commentaries->getNextForNewsmedia();
         if (!empty($nextCommentary)) {
@@ -267,6 +295,7 @@ class UsersController extends AppController
         }
 
         $user = $this->Users->newEntity();
+        $password = '';
 
         // Show a randomly-generated password instead of a blank field
         if (! isset($user->password) || empty($user->password)) {
@@ -293,7 +322,7 @@ class UsersController extends AppController
             $user->group_id = 3;
             $user->nm_email_alerts = 1;
             $user->password = $password;
-            $user->email = $this->Users->cleanEmail($this->request->data['email']);
+            $user->email = $this->Users->cleanEmail($this->request->getData('email'));
 
             if ($this->Users->save($user)) {
                 $this->Flash->success('Newsmedia member added.');
@@ -302,7 +331,7 @@ class UsersController extends AppController
                     $this->Flash->error('There was an error sending the introductory email.');
                 }
 
-                if ($user->send_alert && ! empty($nextCommentary) && $alertsSent) {
+                if ($user['send_alert'] && ! empty($nextCommentary) && $alertsSent) {
                     if (!$this->Users->sendNewsmediaAlertEmail($user, $nextCommentary)) {
                         $this->Flash->error('There was an error sending an alert message for the article "'.$nextCommentary->title.'".');
                     }
@@ -340,19 +369,23 @@ class UsersController extends AppController
 
         if ($this->request->is('post')) {
             $user = $this->Users->patchEntity($user, [
-                'password' => $this->request->data['new_password'],
-                'confirm_password' => $this->request->data['new_confirm_password']
+                'password' => $this->request->getData('new_password'),
+                'confirm_password' => $this->request->getData('new_confirm_password')
             ]);
 
             if ($this->Users->save($user)) {
                 $data = $user->toArray();
                 $this->Auth->setUser($data);
-                return $this->Flash->success('Password changed. You are now logged in.');
+                $this->Flash->success('Password changed. You are now logged in.');
+
+                return null;
             }
 
             $this->Flash->error('There was an error changing your password. Please check to make sure they\'ve been entered correctly.');
             return $this->redirect('/');
         }
+
+        return null;
     }
 
     /**

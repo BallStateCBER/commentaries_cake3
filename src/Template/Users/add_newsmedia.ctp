@@ -24,23 +24,28 @@
     <?php endif; ?>
 
     <?= $this->Form->create($user); ?>
-    <div class="col-lg-6">
-        <?= $this->Form->input('name', [
-            'class' => 'form-control'
-        ]); ?>
+    <div class="row">
+        <div class="col-lg-6">
+            <?= $this->Form->input('name', [
+                'class' => 'form-control'
+            ]); ?>
+        </div>
+        <div class="col-lg-6">
+            <?= $this->Form->input('email', [
+                'class' => 'form-control'
+            ]); ?>
+        </div>
     </div>
-    <div class="col-lg-6">
-        <?= $this->Form->input('email', [
-            'class' => 'form-control'
-        ]); ?>
-    </div>
-    <div class="col-lg-6">
-        <?= $this->Form->input('password', [
-            'class' => 'form-control',
-            'type' => 'text',
-            'required' => true,
-            'value' => $password
-        ]); ?>
+    <div class="row">
+        <div class="col-lg-6">
+            <?= $this->Form->input('password', [
+                'class' => 'form-control',
+                'type' => 'text',
+                'required' => true,
+                'value' => $password
+            ]); ?>
+
+        </div>
     </div>
     <?php if (isset($nextCommentary)): ?>
         <label style="display:inline-block;">
@@ -51,6 +56,8 @@
             Immediately send this reporter an alert for the article <a href="<?= $url ?>"><?= $articleTitle ?></a>, due to be published on <?= $date ?>?
         </label>
     <?php endif; ?>
-    <?= $this->Form->submit('Add', ['class' => 'btn btn-sm']); ?>
+    <div class="col-lg-12">
+        <?= $this->Form->submit('Add', ['class' => 'btn btn-sm']); ?>
+    </div>
     <?= $this->Form->end(); ?>
 </div>

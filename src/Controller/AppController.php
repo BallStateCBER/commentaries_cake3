@@ -16,13 +16,17 @@ namespace App\Controller;
 
 use Cake\Controller\Controller;
 use Cake\Event\Event;
-use Cake\ORM\TableRegistry;
 
 /**
  * Application Controller
  *
  * Add your application-wide methods in the class below, your controllers
  * will inherit them.
+ *
+ * @property \App\Model\Table\CommentariesTable $Commentaries
+ * @property \Cake\ORM\Association\BelongsToMany $CommentariesTags
+ * @property \App\Model\Table\TagsTable $Tags
+ * @property \App\Model\Table\UsersTable $Users
  *
  * @link http://book.cakephp.org/3.0/en/controllers.html#the-app-controller
  */
@@ -96,12 +100,13 @@ class AppController extends Controller
         $this->loadComponent('RequestHandler');
 
         $this->Auth->allow();
-        /*
-         * Enable the following components for recommended CakePHP security settings.
-         * see http://book.cakephp.org/3.0/en/controllers/components/security.html
-         */
-        //$this->loadComponent('Security');
-        //$this->loadComponent('Csrf');
+
+        $this->loadModel('Commentaries');
+        $this->loadModel('CommentariesTags');
+        $this->loadModel('Tags');
+        $this->loadModel('Users');
+
+        $this->TagManager = $this->viewBuilder()->setHelpers(['DataCenter.Tag']);
     }
 
     /**
@@ -112,14 +117,12 @@ class AppController extends Controller
      */
     public function beforeRender(Event $event)
     {
-        $this->Users = TableRegistry::get('Users');
         if (!array_key_exists('_serialize', $this->viewVars) &&
             in_array($this->response->type(), ['application/json', 'application/xml'])
         ) {
             $this->set('_serialize', true);
         }
 
-        $this->Commentaries = TableRegistry::get('Commentaries');
         $recentCommentaries = $this->Commentaries->find()
             ->select(['id', 'title', 'summary', 'slug'])
             ->where(['is_published' => 1])
@@ -128,8 +131,7 @@ class AppController extends Controller
             ->toArray();
 
         $this->set([
-        #    'acl' => $this->Acl,
-            'authUser' => $this->request->session()->read('Auth.User.id') ? $this->Users->get($this->request->session()->read('Auth.User.id')): null,
+            'authUser' => $this->Auth->user('id') ? $this->Users->get($this->Auth->user('id')): null,
             'recentCommentaries' => $recentCommentaries,
             'topTags' => $this->TagManager->getTop('Commentaries', 10)
         ]);

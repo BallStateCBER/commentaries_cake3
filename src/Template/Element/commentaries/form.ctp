@@ -67,7 +67,7 @@ use Cake\Core\Configure;
             <?= $this->CKEditor->replace('body'); ?>
             <?= $this->element('DataCenter.jquery_ui'); ?>
             <?= $this->element(
-                    'DataCenter.tags/editor',
+                    'DataCenter.Tags/editor',
                     [
                         'available_tags' => $availableTags,
                         'selected_tags' => isset($this->request->data['Tags']) ? $this->request->data['Tags'] : [],

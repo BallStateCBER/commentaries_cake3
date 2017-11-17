@@ -1,8 +1,6 @@
 <?php
 namespace App\Controller;
 
-use App\Controller\AppController;
-use Cake\Http\Response;
 use Cake\ORM\TableRegistry;
 
 /**
@@ -70,7 +68,6 @@ class TagsController extends AppController
                     'value' => $result->id
                 ];
 
-                $tag = $result->id;
                 $tag = [
                     'label' => $result->name,
                     'value' => $result->id
@@ -145,10 +142,12 @@ class TagsController extends AppController
 
     public function getnodes()
     {
-        $this->loadModel('CommentariesTags');
+
         $node = filter_input(INPUT_POST, 'node');
         // retrieve the node id that Ext JS posts via ajax
         $parent = isset($node) ? intval($node) : 0;
+
+        $nodes = [];
 
         // find all the nodes underneath the parent node defined above
         if ($parent != 0) {
@@ -174,9 +173,6 @@ class TagsController extends AppController
                     ->select()
                     ->where(['tag_id' => $tagId])
                     ->count();
-                if ($node->no_commentaries) {
-                    $count == 0;
-                }
             }
 
             // Check for children
@@ -238,14 +234,14 @@ class TagsController extends AppController
         // Moving out of the 'Unlisted' group
         if ($inUnlistedBefore && ! $inUnlistedAfter) {
             //echo 'Making listed.';
-            $tag->listed = 1;
+            $tag['listed'] = 1;
             $this->Tags->save($tag);
         }
 
         // Moving into the 'Unlisted' group
         if (! $inUnlistedBefore && $inUnlistedAfter) {
             //echo 'Making unlisted.';
-            $tag->listed = 0;
+            $tag['listed'] = 0;
             $this->Tags->save($tag);
         }
 
@@ -324,6 +320,8 @@ class TagsController extends AppController
 
     public function remove($name)
     {
+        $message = '';
+        $class = '';
         if (!$name) {
             $message = "You have not entered a tag name. Please try again.";
             $class = "error";
@@ -353,6 +351,7 @@ class TagsController extends AppController
     {
         $deleteGroupId = $this->Tags->getDeleteGroupId();
         $unlistedGroupId = $this->Tags->getUnlistedGroupId();
+        $message = ''.
         $tags = $this->Tags->find()
             ->where([
                 'selectable' => 0,
@@ -431,13 +430,13 @@ class TagsController extends AppController
                 }
 
                 // associations?
-                $commentaries = $this->Tags->CommentariesTags->find()
+                $commentaries = $this->CommentariesTags->find()
                     ->where(['tag_id' => $tagId])
                     ->toArray();
 
                 foreach ($commentaries as $commentary) {
                     $commentary->tag_id = $firstTag;
-                    $this->Tags->CommentariesTags->save($commentary);
+                    $this->CommentariesTags->save($commentary);
                 }
             }
 
@@ -462,14 +461,15 @@ class TagsController extends AppController
     /**
      * Turns all associations with Tag $tagId into associations with Tag $merge_into_id
      * and deletes Tag $tagId, and moves any child tags under Tag $merge_into_id.
-     * @param int $tagId
-     * @param int $merge_into_id
+     *
+     * @param string $removedTagName name of removed tag
+     * @param string $retainedTagName name of retained tag
      */
     public function merge($removedTagName = '', $retainedTagName = '')
     {
-        $this->loadModel('CommentariesTags');
         $removedTagName = trim($removedTagName);
         $retainedTagName = trim($retainedTagName);
+        $retainedTagId = 0;
 
         // Verify input
         if ($removedTagName == '') {
@@ -628,7 +628,7 @@ class TagsController extends AppController
             }
             if (!empty($duplicates)) {
                 $message = 'That tag\'s name cannot be changed to "';
-                $message .= $this->request->data['name'];
+                $message .= $this->request->getData('name');
                 $message .= '" because another tag (';
                 $message .= print_r($oldTags);
                 $message .= ') already has that name. You can, however, merge this tag into that tag.';
@@ -639,8 +639,8 @@ class TagsController extends AppController
             $tag = $this->Tags->find()
                 ->where(['id' => $this->request->data['id']])
                 ->first();
-            $previousParentId = $tag->parent_id;
-            $newParentId = $this->request->data['parent_id'];
+            $previousParentId = $tag['parent_id'];
+            $newParentId = $this->request->getData('parent_id');
             $recoverTagTree = ($previousParentId != $newParentId);
 
             $tag = $this->Tags->patchEntity($tag, $this->request->getData());

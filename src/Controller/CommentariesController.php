@@ -1,16 +1,12 @@
 <?php
 namespace App\Controller;
 
-use App\Controller\AppController;
-use Cake\ORM\TableRegistry;
-use Cake\Utility\Hash;
-
 /**
  * Commentaries Controller
  *
  * @property \App\Model\Table\CommentariesTable $Commentaries
  *
- * @method \App\Model\Entity\Commentary[] paginate($object = null, array $settings = [])
+ * @method \App\Model\Entity\Commentary[]
  */
 class CommentariesController extends AppController
 {
@@ -21,9 +17,6 @@ class CommentariesController extends AppController
     public function initialize()
     {
         parent::initialize();
-        $this->Commentaries = TableRegistry::get('Commentaries');
-        $this->CommentariesTags = TableRegistry::get('CommentariesTags');
-        $this->Tags = TableRegistry::get('Tags');
 
         // deny methods for non-users
         $this->Auth->deny(['add', 'delete', 'drafts', 'edit', 'newsmediaIndex']);
@@ -72,6 +65,8 @@ class CommentariesController extends AppController
             'titleForLayout',
             'year'
         ));
+
+        return null;
     }
 
     /**
@@ -83,6 +78,7 @@ class CommentariesController extends AppController
     {
         $commentary = $this->Commentaries->find()
             ->where(['is_published' => 1])
+            ->andWhere(['published_date <=' => date('Y-m-d')])
             ->contain(['Tags', 'Users'])
             ->order(['published_date' => 'DESC'])
             ->first();
@@ -133,6 +129,12 @@ class CommentariesController extends AppController
             ->where(['id' => $tagId])
             ->toArray();
 
+        $this->set([
+            'tagName' => $tag[0]->name,
+            'commentaries' => $tag[0]->commentaries,
+            'titleForLayout' => ucwords($tag[0]->name)
+        ]);
+
         if (!is_numeric($tagId) || !isset($tag) || !$tag || !$tag[0]->name) {
             $this->Flash->error('Tag not found.');
             return $this->redirect([
@@ -141,11 +143,7 @@ class CommentariesController extends AppController
             ]);
         }
 
-        $this->set([
-            'tagName' => $tag[0]->name,
-            'commentaries' => $tag[0]->commentaries,
-            'titleForLayout' => ucwords($tag[0]->name)
-        ]);
+        return null;
     }
 
     public function tags()
@@ -188,23 +186,25 @@ class CommentariesController extends AppController
     }
 
     // If publishing to a future date, save to drafts and auto-publish on the appropriate day
-    private function __setupAutopublish()
+    private function __setupAutopublish($commentary)
     {
-        $publish = $this->request->data['is_published'];
-        $publishingDate = $this->request->data['published_date'];
+        $publish = $this->request->getData('is_published');
+        $publishingDate = $this->request->getData('published_date');
         $publishingDate = $publishingDate['year'].$publishingDate['month'].$publishingDate['day'];
         if ($publish && $publishingDate > date('Ymd')) {
-            $this->request->data['delay_publishing'] = 1;
-            $this->request->data['is_published'] = 0;
+            $commentary['delay_publishing'] = 1;
+            $commentary['is_published'] = 0;
         } else {
-            $this->request->data['delay_publishing'] = 0;
+            $commentary['delay_publishing'] = 0;
         }
+
+        return $commentary;
     }
 
     /**
      * Add method
      *
-     * @return \Cake\Http\Response|null Redirects on successful add, renders view otherwise.
+     * @return void
      */
     public function add()
     {
@@ -225,10 +225,9 @@ class CommentariesController extends AppController
         $this->set(['titleForLayout' => 'Add a Commentary']);
 
         if ($this->request->is('post')) {
-            $this->__setupAutopublish();
-
             $commentary = $this->Commentaries->patchEntity($commentary, $this->request->getData());
             $commentary->published_date = $this->__dateFormat($this->request->data['published_date']);
+            $this->__setupAutopublish($commentary);
             if ($this->Commentaries->save($commentary)) {
                 return $this->Flash->success(__('The commentary has been saved.'));
             }
@@ -263,10 +262,9 @@ class CommentariesController extends AppController
         $this->set(['titleForLayout' => "Edit commentary: $commentary->title"]);
 
         if ($this->request->is(['patch', 'post', 'put'])) {
-            $this->__setupAutopublish();
-
             $commentary = $this->Commentaries->patchEntity($commentary, $this->request->getData());
             $commentary->published_date = $this->__dateFormat($this->request->data['published_date']);
+            $this->__setupAutopublish($commentary);
             if ($this->Commentaries->save($commentary)) {
                 return $this->Flash->success(__('The commentary has been saved.'));
             }

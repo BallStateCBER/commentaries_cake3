@@ -12,10 +12,6 @@ use Cake\Core\Configure;
         <?= $this->Form->control('email', [
             'class' => 'form-control'
         ]); ?>
-        <?= $this->Form->radio('sex', [
-            'm' => 'Male',
-            'f' => 'Female'
-        ]); ?>
     </div>
 
     <div class="col-lg-12">
