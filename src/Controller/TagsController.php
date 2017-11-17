@@ -199,6 +199,8 @@ class TagsController extends AppController
 
         // send the nodes to our view
         $this->set(compact('nodes', 'showNoCommentaries'));
+
+        $this->viewBuilder()->setLayout('blank');
     }
 
     public function reorder()

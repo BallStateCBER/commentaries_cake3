@@ -14,6 +14,7 @@
  */
 namespace App\Controller;
 
+use App\Model\Table\UsersTable;
 use Cake\Controller\Controller;
 use Cake\Event\Event;
 
@@ -107,6 +108,18 @@ class AppController extends Controller
         $this->loadModel('Users');
 
         $this->TagManager = $this->viewBuilder()->setHelpers(['DataCenter.Tag']);
+
+        $recentCommentaries = $this->Commentaries->find()
+            ->select(['id', 'title', 'summary', 'slug'])
+            ->where(['is_published' => 1])
+            ->order(['published_date' => 'DESC'])
+            ->limit(4)
+            ->toArray();
+
+        $this->set([
+            'authUser' => $this->Auth->user('id') ? $this->Users->get($this->Auth->user('id')): null,
+            'recentCommentaries' => $recentCommentaries,
+        ]);
     }
 
     /**
@@ -123,16 +136,7 @@ class AppController extends Controller
             $this->set('_serialize', true);
         }
 
-        $recentCommentaries = $this->Commentaries->find()
-            ->select(['id', 'title', 'summary', 'slug'])
-            ->where(['is_published' => 1])
-            ->order(['published_date' => 'DESC'])
-            ->limit(4)
-            ->toArray();
-
         $this->set([
-            'authUser' => $this->Auth->user('id') ? $this->Users->get($this->Auth->user('id')): null,
-            'recentCommentaries' => $recentCommentaries,
             'topTags' => $this->TagManager->getTop('Commentaries', 10)
         ]);
     }

@@ -28,6 +28,15 @@ use Cake\View\Exception\MissingTemplateException;
  */
 class PagesController extends AppController
 {
+    /**
+     * initialize method
+     *
+     * @return void
+     */
+    public function initialize()
+    {
+        parent::initialize();
+    }
 
     /**
      * Displays a view
