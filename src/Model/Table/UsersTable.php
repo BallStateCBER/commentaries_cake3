@@ -197,18 +197,20 @@ class UsersTable extends Table
                             'controller' => 'commentaries',
                             'action' => 'view',
                             'id' => $commentary['id'],
-                            'slug' =>  $commentary['slug']
+                            'slug' => $commentary['slug']
                         ],
                         true
                     ),
-                    'newsmediaIndexUrl' => Router::url([
-                        'controller' => 'commentaries',
-                        'action' => 'newsmediaIndex',
+                    'newsmediaIndexUrl' => Router::url(
+                        [
+                            'controller' => 'commentaries',
+                            'action' => 'newsmediaIndex',
                         ],
                         true
                     ),
                     'date' => date('l, F jS', $timestamp)
                 ]);
+
         return $email->send();
     }
 
@@ -221,15 +223,17 @@ class UsersTable extends Table
     public function sendNewsmediaIntroEmail($user)
     {
         $email = new Email('default');
-        $newsmediaIndexUrl = Router::url([
-            'controller' => 'commentaries',
-            'action' => 'newsmediaIndex',
+        $newsmediaIndexUrl = Router::url(
+            [
+                'controller' => 'commentaries',
+                'action' => 'newsmediaIndex',
             ],
             true
         );
-        $loginUrl = Router::url([
-            'controller' => 'users',
-            'action' => 'login'
+        $loginUrl = Router::url(
+            [
+                'controller' => 'users',
+                'action' => 'login'
             ],
             true
         );
@@ -244,6 +248,7 @@ class UsersTable extends Table
                     'newsmediaIndexUrl',
                     'loginUrl'
                 ));
+
         return $email->send();
     }
 
@@ -274,6 +279,7 @@ class UsersTable extends Table
                     'email',
                     'resetUrl'
                 ));
+
         return $resetEmail->send();
     }
 }
