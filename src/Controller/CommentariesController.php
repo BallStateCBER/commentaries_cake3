@@ -180,11 +180,26 @@ class CommentariesController extends AppController
         $this->set('_serialize', ['commentary']);
     }
 
-    private function __addTags($commentary)
+    private function __addAndRemoveTags($commentary)
     {
-        foreach ($this->request->getData('data')['Tag'] as $id) {
-            $tag = $this->Tags->get(intval($id));
-            $this->Commentaries->Tags->link($commentary, [$tag]);
+        if (!isset($this->request->getData('data')['Tag'])) {
+            if (isset($commentary->tags)) {
+                // this suggests all tags have been removed
+                foreach ($commentary->tags as $tag) {
+                    $this->Commentaries->Tags->unlink($commentary, [$tag]);
+                }
+            }
+        } else {
+            if (isset($commentary->tags)) {
+                // clear out all the old tags to prevent duplicates
+                foreach ($commentary->tags as $tag) {
+                    $this->Commentaries->Tags->unlink($commentary, [$tag]);
+                }
+            }
+            foreach ($this->request->getData('data')['Tag'] as $id) {
+                $tag = $this->Tags->get(intval($id));
+                $this->Commentaries->Tags->link($commentary, [$tag]);
+            }
         }
     }
 
@@ -237,7 +252,7 @@ class CommentariesController extends AppController
             $commentary->published_date = $this->__dateFormat($this->request->data['published_date']);
             $this->__setupAutopublish($commentary);
             if ($this->Commentaries->save($commentary)) {
-                $this->__addTags($commentary);
+                $this->__addAndRemoveTags($commentary);
 
                 return $this->Flash->success(__('The commentary has been saved.'));
             }
@@ -276,7 +291,7 @@ class CommentariesController extends AppController
             $commentary->published_date = $this->__dateFormat($this->request->data['published_date']);
             $this->__setupAutopublish($commentary);
             if ($this->Commentaries->save($commentary)) {
-                $this->__addTags($commentary);
+                $this->__addAndRemoveTags($commentary);
 
                 return $this->Flash->success(__('The commentary has been saved.'));
             }
