@@ -9,7 +9,7 @@ try {
         'toServer' => false,
         'skipExisting' => ['toServer'],
         'raiseExceptions' => true
-   ]);
+    ]);
 } catch (InvalidArgumentException $e) {
     // If there's a problem loading the .env file - load .env.default
     // That means the code can assume appropriate env config always exists
@@ -180,7 +180,7 @@ return [
         'trace' => true,
     ],
 
-    /**
+     /**
      * Email configuration.
      *
      * By defining transports separately from delivery profiles you can easily
@@ -220,7 +220,7 @@ return [
          ],
      ],
 
-    /**
+     /**
      * Email delivery profiles
      *
      * Delivery profiles allow you to predefine various properties about email

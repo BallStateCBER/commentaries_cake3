@@ -13,7 +13,6 @@
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
 
-
 // You can remove this if you are confident that your PHP version is sufficient.
 if (version_compare(PHP_VERSION, '5.6.0') < 0) {
     trigger_error('Your PHP version must be equal or higher than 5.6.0 to use CakePHP.', E_USER_ERROR);
@@ -33,23 +32,13 @@ if (!extension_loaded('mbstring')) {
     trigger_error('You must enable the mbstring extension to use CakePHP.', E_USER_ERROR);
 }
 
-/*
-
 /**
-
  * Configure paths required to find CakePHP + general filepath
  * constants
  */
 require __DIR__ . '/paths.php';
 
-
-/*
-
-// Use composer to load the autoloader.
-require ROOT . DS . 'vendor' . DS . 'autoload.php';
-
 /**
-
  * Bootstrap CakePHP.
  *
  * Does the various bits of setup that CakePHP needs to do.
@@ -60,17 +49,13 @@ require ROOT . DS . 'vendor' . DS . 'autoload.php';
  */
 require CORE_PATH . 'config' . DS . 'bootstrap.php';
 
-
-
 // You can remove this if you are confident you have intl installed.
 if (!extension_loaded('intl')) {
     trigger_error('You must enable the intl extension to use CakePHP.', E_USER_ERROR);
 }
 
-
 use Cake\Cache\Cache;
 use Cake\Console\ConsoleErrorHandler;
-use Cake\Core\App;
 use Cake\Core\Configure;
 use Cake\Core\Configure\Engine\PhpConfig;
 use Cake\Core\Plugin;
@@ -81,19 +66,9 @@ use Cake\Log\Log;
 use Cake\Mailer\Email;
 use Cake\Network\Request;
 use Cake\Routing\DispatcherFactory;
-use Cake\Utility\Inflector;
-use Cake\Utility\Security;
-
-/*
-
-use Cake\Network\Email\Email;
-use Cake\Network\Request;
-use Cake\Routing\DispatcherFactory;
-use Cake\Utility\Inflector;
 use Cake\Utility\Security;
 
 /**
-
  * Read configuration file and inject configuration into various
  * CakePHP classes.
  *
@@ -124,40 +99,16 @@ if (Configure::read('debug')) {
     Configure::write('Cache._cake_core_.duration', '+2 minutes');
 }
 
-/*
-
-    die($e->getMessage() . "\n");
-}
-
-// Load an environment local configuration file.
-// You can use a file like app_local.php to provide local overrides to your
-// shared configuration.
-//Configure::load('app_local', 'default');
-
-// When debug = false the metadata cache should last
-// for a very very long time, as we don't want
-// to refresh the cache while users are doing requests.
-if (!Configure::read('debug')) {
-    Configure::write('Cache._cake_model_.duration', '+1 years');
-    Configure::write('Cache._cake_core_.duration', '+1 years');
-}
-
 /**
-
  * Set server timezone to UTC. You can change it to another timezone of your
  * choice but using UTC makes time calculations / conversions easier.
  */
 date_default_timezone_set('UTC');
 
-
-/*
-
 /**
-
  * Configure the mbstring extension to use the correct encoding.
  */
 mb_internal_encoding(Configure::read('App.encoding'));
-
 
 /*
  * Set the default locale. This controls how dates, number and currency is
@@ -187,22 +138,15 @@ if ($isCli) {
     (new ErrorHandler(Configure::read('Error')))->register();
 }
 
-
-/*
+/**
  * Include the CLI bootstrap overrides.
  */
-
-// Include the CLI bootstrap overrides.
 
 if ($isCli) {
     require __DIR__ . '/bootstrap_cli.php';
 }
 
-
-/*
-
 /**
-
  * Set the full base URL.
  * This URL is used as the base of all absolute links.
  *
@@ -256,7 +200,6 @@ Request::addDetector('tablet', function ($request) {
 
     return $detector->isTablet();
 });
-
 
 /*
  * Enable immutable time objects in the ORM.
