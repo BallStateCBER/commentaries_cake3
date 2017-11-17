@@ -1,9 +1,10 @@
 <?php
 namespace App\Model\Table;
 
+use App\Model\Entity\Commentary;
+use App\Model\Entity\User;
 use Cake\Core\Configure;
 use Cake\Mailer\Email;
-use Cake\ORM\Query;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Routing\Router;
@@ -12,17 +13,9 @@ use Cake\Validation\Validator;
 /**
  * Users Model
  *
- * @property \App\Model\Table\GroupsTable|\Cake\ORM\Association\BelongsTo $Groups
- * @property \App\Model\Table\LastAlertArticlesTable|\Cake\ORM\Association\BelongsTo $LastAlertArticles
  * @property \App\Model\Table\CommentariesTable|\Cake\ORM\Association\HasMany $Commentaries
  *
- * @method \App\Model\Entity\User get($primaryKey, $options = [])
- * @method \App\Model\Entity\User newEntity($data = null, array $options = [])
- * @method \App\Model\Entity\User[] newEntities(array $data, array $options = [])
- * @method \App\Model\Entity\User|bool save(\Cake\Datasource\EntityInterface $entity, $options = [])
- * @method \App\Model\Entity\User patchEntity(\Cake\Datasource\EntityInterface $entity, array $data, array $options = [])
- * @method \App\Model\Entity\User[] patchEntities($entities, array $data, array $options = [])
- * @method \App\Model\Entity\User findOrCreate($search, callable $callback = null, $options = [])
+ * @method \App\Model\Entity\User
  *
  * @mixin \Cake\ORM\Behavior\TimestampBehavior
  */
@@ -98,19 +91,38 @@ class UsersTable extends Table
         return $rules;
     }
 
+    /**
+     * cleanEmail method
+     *
+     * @param string $email of user
+     * @return string
+     */
     public function cleanEmail($email)
     {
         $email = trim($email);
         $email = strtolower($email);
+
         return $email;
     }
 
+    /**
+     * generatePassword method
+     *
+     * @return bool|string
+     */
     public function generatePassword()
     {
         $characters = str_shuffle('abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ23456789');
+
         return substr($characters, 0, 6);
     }
 
+    /**
+     * getEmailFromId method
+     *
+     * @param int $userId of user
+     * @return array|mixed|string
+     */
     public function getEmailFromId($userId)
     {
         $query = $this->find()
@@ -126,6 +138,12 @@ class UsersTable extends Table
         return $email;
     }
 
+    /**
+     * getIdFromEmail method
+     *
+     * @param string $email of user
+     * @return bool|mixed
+     */
     public function getIdFromEmail($email)
     {
         $result = $this->find()
@@ -135,16 +153,32 @@ class UsersTable extends Table
         if ($result) {
             return $result->id;
         }
+
         return false;
     }
 
+    /**
+     * getResetPasswordHash method
+     *
+     * @param int $userId of user
+     * @param string $email of user
+     * @return string
+     */
     public function getResetPasswordHash($userId, $email)
     {
         $salt = Configure::read('security_salt');
         $month = date('my');
-        return md5($userId.$email.$salt.$month);
+
+        return md5($userId . $email . $salt . $month);
     }
 
+    /**
+     * sendNewsmediaAlertEmail method
+     *
+     * @param User $user entity
+     * @param Commentary $commentary entity
+     * @return array
+     */
     public function sendNewsmediaAlertEmail($user, $commentary)
     {
         $email = new Email('default');
@@ -152,10 +186,10 @@ class UsersTable extends Table
         $email
                 ->setTo($user->email)
                 ->setSubject('CBER Commentaries: Alert')
-                ->template('newsmedia_alert')
-                ->emailFormat('both')
-                ->helpers(['Html', 'Text'])
-                ->viewVars([
+                ->setTemplate('newsmedia_alert')
+                ->setEmailFormat('both')
+                ->setHelpers(['Html', 'Text'])
+                ->setViewVars([
                     'commentary' => $commentary,
                     'recipientName' => $user->name,
                     'url' => Router::url(
@@ -178,6 +212,12 @@ class UsersTable extends Table
         return $email->send();
     }
 
+    /**
+     * sendNewsmediaIntroEmail method
+     *
+     * @param User $user of newsmedia
+     * @return array
+     */
     public function sendNewsmediaIntroEmail($user)
     {
         $email = new Email('default');
@@ -196,10 +236,10 @@ class UsersTable extends Table
         $email
                 ->setTo($user->email)
                 ->setSubject('CBER Commentaries: Intro')
-                ->template('newsmedia_intro')
-                ->emailFormat('both')
-                ->helpers(['Html', 'Text'])
-                ->viewVars(compact(
+                ->setTemplate('newsmedia_intro')
+                ->setEmailFormat('both')
+                ->setHelpers(['Html', 'Text'])
+                ->setViewVars(compact(
                     'user',
                     'newsmediaIndexUrl',
                     'loginUrl'
@@ -207,6 +247,13 @@ class UsersTable extends Table
         return $email->send();
     }
 
+    /**
+     * sendPasswordResetEmail method
+     *
+     * @param string $userId of user who needs password reset
+     * @param string $email of user who needs password reset
+     * @return array
+     */
     public function sendPasswordResetEmail($userId, $email)
     {
         $resetPasswordHash = $this->getResetPasswordHash($userId, $email);
@@ -220,10 +267,10 @@ class UsersTable extends Table
         $resetEmail
                 ->setTo($email)
                 ->setSubject('CBER Commentaries: Reset Password')
-                ->template('forgot_password')
-                ->emailFormat('both')
-                ->helpers(['Html', 'Text'])
-                ->viewVars(compact(
+                ->setTemplate('forgot_password')
+                ->setEmailFormat('both')
+                ->setHelpers(['Html', 'Text'])
+                ->setViewVars(compact(
                     'email',
                     'resetUrl'
                 ));
