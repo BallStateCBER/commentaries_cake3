@@ -70,8 +70,8 @@ use Cake\Core\Configure;
             <?= $this->element(
                     'DataCenter.tags/editor',
                     [
-                        'available_tags' => $availableTags,
-                        'selected_tags' => isset($this->request->data['Tags']) ? $this->request->data['Tags'] : [],
+                        'availableTags' => $availableTags,
+                        'selectedTags' => isset($commentary->tags) ? $commentary->tags : [],
                         'hide_label' => true,
                         'allow_custom' => true,
                         'options' => [
