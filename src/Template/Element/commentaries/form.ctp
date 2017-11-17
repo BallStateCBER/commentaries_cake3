@@ -66,6 +66,7 @@ use Cake\Core\Configure;
             <?= $this->Form->input('body'); ?>
             <?= $this->CKEditor->replace('body'); ?>
             <?= $this->element('DataCenter.jquery_ui'); ?>
+            <?= $this->Html->script('admin.js', ['inline' => false]); ?>
             <?= $this->element(
                     'DataCenter.tags/editor',
                     [
@@ -127,8 +128,6 @@ use Cake\Core\Configure;
             </div>
         </div>
     </div>
-
-    <?= $this->Html->script('admin.js', ['inline' => false]); ?>
     <script>
         toggleDelayPublishing();
         var input_ids = [

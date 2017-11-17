@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "daf762cc0048271751bf3106fde2c83d",
-    "content-hash": "8cd042d755cb7160094e6ecdcb139873",
+    "hash": "e8cd22413e0f42a21bfb34f737f36a0b",
+    "content-hash": "37308820ed3e166ed3a668ab50a41ae9",
     "packages": [
         {
             "name": "akkaweb/cakephp-ckeditor",
@@ -85,16 +85,16 @@
         },
         {
             "name": "ballstatecber/datacenter-plugin-cakephp3",
-            "version": "dev-master",
+            "version": "dev-development",
             "source": {
                 "type": "git",
                 "url": "https://github.com/BallStateCBER/datacenter-plugin-cakephp3.git",
-                "reference": "c31cf24b0a55f0791aee78cf8a8ca38ac92cac7b"
+                "reference": "4f6b6e6afa28b11b14352bebe3b1167490d3befb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/BallStateCBER/datacenter-plugin-cakephp3/zipball/c31cf24b0a55f0791aee78cf8a8ca38ac92cac7b",
-                "reference": "c31cf24b0a55f0791aee78cf8a8ca38ac92cac7b",
+                "url": "https://api.github.com/repos/BallStateCBER/datacenter-plugin-cakephp3/zipball/4f6b6e6afa28b11b14352bebe3b1167490d3befb",
+                "reference": "4f6b6e6afa28b11b14352bebe3b1167490d3befb",
                 "shasum": ""
             },
             "require": {
@@ -115,7 +115,7 @@
             },
             "notification-url": "https://packagist.org/downloads/",
             "description": "Ball State CBER DataCenter plugin for CakePHP 3",
-            "time": "2017-11-15 17:54:10"
+            "time": "2017-11-17 21:09:14"
         },
         {
             "name": "cakephp/cakephp",

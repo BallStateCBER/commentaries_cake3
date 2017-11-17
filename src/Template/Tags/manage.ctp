@@ -16,20 +16,6 @@
         <div id="tree-div" style="height: 400px; overflow: auto;"></div>
         <ul>
             <li>
-                Tags that cannot be selected (selectable = false) are in <span style="color: blue;">blue</span>.
-            </li>
-            <li>
-                Tags with no associated events are in <span style="color: red;">red</span>.
-            </li>
-            <li>
-                Do not move or edit the 'Delete' and 'Unlisted' groups. You may, however, move tags into and out of them.
-            </li>
-            <li>
-                The 'Unlisted' group is where new tags created by users automatically go.
-                <br />Tags moved into or out of this group will automatically have their 'listed' field set appropriately.
-                <br />Any tags (inside or outside of this group) with listed = false will not be presented as options when adding/editing events.
-            </li>
-            <li>
                 PROTIP: Move a tag by clicking to the right of it and dragging
                 it to the right of another tag, rather than clicking on its name and
                 dragging it on top of another tag's name. For some reason, this

@@ -180,6 +180,14 @@ class CommentariesController extends AppController
         $this->set('_serialize', ['commentary']);
     }
 
+    private function __addTags($commentary)
+    {
+        foreach ($this->request->getData('data')['Tag'] as $id) {
+            $tag = $this->Tags->get(intval($id));
+            $this->Commentaries->Tags->link($commentary, [$tag]);
+        }
+    }
+
     private function __dateFormat($date)
     {
         return date('Y-m-d', strtotime($date['year'].'-'.$date['month'].'-'.$date['day']));
@@ -229,6 +237,8 @@ class CommentariesController extends AppController
             $commentary->published_date = $this->__dateFormat($this->request->data['published_date']);
             $this->__setupAutopublish($commentary);
             if ($this->Commentaries->save($commentary)) {
+                $this->__addTags($commentary);
+
                 return $this->Flash->success(__('The commentary has been saved.'));
             }
             $this->Flash->error(__('The commentary could not be saved. Please, try again.'));
@@ -266,6 +276,8 @@ class CommentariesController extends AppController
             $commentary->published_date = $this->__dateFormat($this->request->data['published_date']);
             $this->__setupAutopublish($commentary);
             if ($this->Commentaries->save($commentary)) {
+                $this->__addTags($commentary);
+
                 return $this->Flash->success(__('The commentary has been saved.'));
             }
             $this->Flash->error(__('The commentary could not be saved. Please, try again.'));

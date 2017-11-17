@@ -12,7 +12,7 @@
         "cakephp/plugin-installer": "~1.0",
         "josegonzalez/dotenv": "dev-master",
         "twbs/bootstrap": "~3.0",
-        "ballstatecber/datacenter-plugin-cakephp3": "dev-master",
+        "ballstatecber/datacenter-plugin-cakephp3": "dev-development",
         "akkaweb/cakephp-ckeditor": "dev-master",
         "oldskool/cakephp-js": "dev-master",
         "muffin/slug": "^1.2"
