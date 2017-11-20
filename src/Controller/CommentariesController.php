@@ -217,7 +217,7 @@ class CommentariesController extends AppController
      * private __addAndRemoveTags method
      *
      * @param \App\Model\Entity\Commentary $commentary entity
-     * return void
+     * @return void
      */
     private function __addAndRemoveTags($commentary)
     {
@@ -245,7 +245,7 @@ class CommentariesController extends AppController
     /**
      * private __dateFormat method
      *
-     * @param array $date
+     * @param array $date to format
      * @return false|string
      */
     private function __dateFormat($date)

@@ -48,7 +48,7 @@ class AppController extends Controller
         'DataCenter.Tag',
         'Html'
     ];
-    
+
     public $components = [
         'Auth',
         'DataCenter.Flash',
@@ -67,7 +67,8 @@ class AppController extends Controller
     public function initialize()
     {
         parent::initialize();
-        $this->loadComponent('Auth',
+        $this->loadComponent(
+            'Auth',
             [
             'loginAction' => [
                 'prefix' => false,

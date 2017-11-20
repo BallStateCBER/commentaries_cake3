@@ -191,7 +191,6 @@ class TagsController extends AppController
      */
     public function reorder()
     {
-
         // retrieve the node instructions from javascript
         // delta is the difference in position (1 = next node, -1 = previous node)
 
