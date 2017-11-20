@@ -1,11 +1,9 @@
 <?php
 namespace App\Model\Table;
 
-use Cake\ORM\Query;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\ORM\TableRegistry;
-use Cake\Utility\Hash;
 use Cake\Validation\Validator;
 
 /**
@@ -15,14 +13,6 @@ use Cake\Validation\Validator;
  * @property \Cake\ORM\Association\BelongsTo $Users
  * @property \Cake\ORM\Association\HasMany $ChildTags
  * @property \Cake\ORM\Association\BelongsToMany $Commentaries
- *
- * @method \App\Model\Entity\Tag get($primaryKey, $options = [])
- * @method \App\Model\Entity\Tag newEntity($data = null, array $options = [])
- * @method \App\Model\Entity\Tag[] newEntities(array $data, array $options = [])
- * @method \App\Model\Entity\Tag|bool save(\Cake\Datasource\EntityInterface $entity, $options = [])
- * @method \App\Model\Entity\Tag patchEntity(\Cake\Datasource\EntityInterface $entity, array $data, array $options = [])
- * @method \App\Model\Entity\Tag[] patchEntities($entities, array $data, array $options = [])
- * @method \App\Model\Entity\Tag findOrCreate($search, callable $callback = null, $options = [])
  *
  * @mixin \Cake\ORM\Behavior\TimestampBehavior
  * @mixin \Cake\ORM\Behavior\TreeBehavior
@@ -105,6 +95,12 @@ class TagsTable extends Table
         return $rules;
     }
 
+    /**
+     * getAllWithCounts method
+     *
+     * @param array $conditions to get counts of
+     * @return array of tags
+     */
     public function getAllWithCounts($conditions)
     {
         $results = $this->Commentaries->find()
@@ -133,14 +129,11 @@ class TagsTable extends Table
     }
 
     /**
-     * Returns the ID of the 'delete' tag group for tags to be deleted.
-     * @return int
+     * getIdFromName method
+     *
+     * @param string $name of tag
+     * @return bool|mixed of id
      */
-    public function getDeleteGroupId()
-    {
-        return 214;
-    }
-
     public function getIdFromName($name)
     {
         $result = $this->find()
@@ -150,60 +143,43 @@ class TagsTable extends Table
         if (empty($result)) {
             return false;
         }
+
         return $result->id;
     }
 
+    /**
+     * getIdFromSlug methpod
+     *
+     * @param string $slug of tag
+     * @return int of id
+     */
     public function getIdFromSlug($slug)
     {
         $splitSlug = explode('_', $slug);
+
         return (int) $splitSlug[0];
     }
 
-    public function getIndentLevel($name)
-    {
-        $level = 0;
-        for ($i = 0; $i < strlen($name); $i++) {
-            if ($name[$i] == "\t" || $name[$i] == '-') {
-                $level++;
-                continue;
-            }
-            break;
-        }
-        return $level;
-    }
-
-    public function getTagFromId($tagId)
-    {
-        $result = $this->find()
-            ->select()
-            ->where(['id' => $tagId])
-            ->first();
-        if (empty($result)) {
-            return false;
-        }
-        return $result;
-    }
-
     /**
-     * Returns the ID of the 'unlisted' tag group that new custom tags automatically go into.
-     * @return int
+     * getUpcoming tags
+     *
+     * @param array $filter out for future tags
+     * @return array|mixed getWithCounts method
      */
-    public function getUnlistedGroupId()
-    {
-        return 213;
-    }
-
     public function getUpcoming($filter = [])
     {
         $filter['direction'] = 'future';
+
         return $this->getWithCounts($filter);
     }
 
+    /**
+     * getUsedTagIds method
+     *
+     * @return array $retval
+     */
     public function getUsedTagIds()
     {
-        $this->CommentariesTags = TableRegistry::get('CommentariesTags');
-        $findOptions = [];
-
         $results = $this->CommentariesTags->find('all')
                     ->select(['tag_id'])
                     ->distinct(['tag_id'])
@@ -213,9 +189,17 @@ class TagsTable extends Table
         foreach ($results as $result) {
             $retval[] = $result->tag_id;
         }
+
         return $retval;
     }
 
+    /**
+     * getWithCounts method
+     *
+     * @param array $filter through the tags
+     * @param string $sort by alpha
+     * @return array|mixed $tags or $finalTags
+     */
     public function getWithCounts($filter = [], $sort = 'alpha')
     {
         // Apply filters and find tags
@@ -247,37 +231,7 @@ class TagsTable extends Table
                 $finalTags[$tag['name']] = $tag;
             }
         }
+
         return $finalTags;
-    }
-
-    public function isUnderUnlistedGroup($id = null)
-    {
-        if (!$id) {
-            if (!$this->id) {
-                throw new InternalErrorException('Required tag ID not supplied to Tag::isUnderUnlistedGroup().');
-            }
-            $id = $this->id;
-        }
-        $unlistedGroupId = $this->getUnlistedGroupId();
-
-        // Assume that after 100 levels, a circular path must have been found and exit
-        for ($n = 0; $n <= 100; $n++) {
-            $tag = $this->get($id);
-
-            // Child of root
-            if (empty($tag->parent_id)) {
-                return false;
-            }
-
-            // Child of 'unlisted'
-            if ($tag->parent_id == $unlistedGroupId) {
-                return true;
-            }
-
-            // Go up a level
-            $id = $tag->parent_id;
-        }
-
-        return false;
     }
 }

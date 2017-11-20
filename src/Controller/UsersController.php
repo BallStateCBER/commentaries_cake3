@@ -13,6 +13,11 @@ use Cake\Routing\Router;
  */
 class UsersController extends AppController
 {
+    /**
+     * initialize method
+     *
+     * return void
+     */
     public function initialize()
     {
         parent::initialize();
@@ -54,6 +59,11 @@ class UsersController extends AppController
         return null;
     }
 
+    /**
+     * adminIndex method
+     *
+     * return void
+     */
     public function adminIndex()
     {
         if ($this->Auth->user('group_id') != 1) {
@@ -84,12 +94,14 @@ class UsersController extends AppController
         $user = $this->Users->get($id);
         if ($this->Users->delete($user)) {
             $this->Flash->success(__('The user has been deleted.'));
+
             return $this->redirect([
                 'controller' => 'users',
                 'action' => 'adminIndex'
             ]);
         }
         $this->Flash->error(__('The user could not be deleted. Please, try again.'));
+
         return $this->redirect([
             'controller' => 'users',
             'action' => 'adminIndex'
@@ -132,6 +144,11 @@ class UsersController extends AppController
         return null;
     }
 
+    /**
+     * forgot password method
+     *
+     * @return void
+     */
     public function forgotPassword()
     {
         if ($this->request->is('post')) {
@@ -145,10 +162,18 @@ class UsersController extends AppController
                     if ($this->Users->sendPasswordResetEmail($userId, $email)) {
                         $this->Flash->success('Message sent. You should be receiving an email shortly with a link to reset your password.');
                     } else {
-                        $this->Flash->error('There was an error sending your password-resetting email out. Please try again, and if it continues to not work, email <a href="mailto:'.$adminEmail.'">'.$adminEmail.'</a> if you need any assistance.');
+                        $this->Flash->error(
+                            'There was an error sending your password-resetting email out. 
+                            Please try again, and if it continues to not work, email <a href="mailto:' . $adminEmail . '">' . $adminEmail .
+                            '</a> if you need any assistance.'
+                        );
                     }
                 } else {
-                    $this->Flash->error('We couldn\'t find an account registered with the email address <strong>'.$email.'</strong>. Make sure you spelled it correctly. Email <a href="mailto:'.$adminEmail.'">'.$adminEmail.'</a> if you need any assistance.');
+                    $this->Flash->error(
+                        'We couldn\'t find an account registered with the email address <strong>' . $email .
+                        '</strong>. Make sure you spelled it correctly. Email <a href="mailto:' . $adminEmail .
+                        '">' . $adminEmail . '</a> if you need any assistance.'
+                    );
                 }
             }
         }
@@ -157,6 +182,11 @@ class UsersController extends AppController
         ]);
     }
 
+    /**
+     * login method
+     *
+     * @return \Cake\Http\Response|null
+     */
     public function login()
     {
         $this->set('titleForLayout', 'Log In');
@@ -193,11 +223,21 @@ class UsersController extends AppController
         return null;
     }
 
+    /**
+     * logout method
+     *
+     * @return \Cake\Http\Response|null
+     */
     public function logout()
     {
         return $this->redirect($this->Auth->logout());
     }
 
+    /**
+     * myAccount method
+     *
+     * @return null
+     */
     public function myAccount()
     {
         $this->set('titleForLayout', 'My Profile');
@@ -223,6 +263,11 @@ class UsersController extends AppController
         return null;
     }
 
+    /**
+     * newsmediaMyAccount method
+     *
+     * @return null
+     */
     public function newsmediaMyAccount()
     {
         $id = $this->Auth->user('id');
@@ -266,6 +311,11 @@ class UsersController extends AppController
         return null;
     }
 
+    /**
+     * addNewsmedia method
+     *
+     * @return null
+     */
     public function addNewsmedia()
     {
         /* Set information about the next commentary to be published
@@ -333,21 +383,31 @@ class UsersController extends AppController
 
                 if ($user['send_alert'] && ! empty($nextCommentary) && $alertsSent) {
                     if (!$this->Users->sendNewsmediaAlertEmail($user, $nextCommentary)) {
-                        $this->Flash->error('There was an error sending an alert message for the article "'.$nextCommentary->title.'".');
+                        $this->Flash->error('There was an error sending an alert message for the article "' . $nextCommentary->title . '".');
                     }
                 }
 
                 // Clear form
                 $this->request->data = [];
                 $this->request->data['send_alert'] = true;
+
                 return;
             }
             $this->Flash->error('There was an error adding the user.');
         } else {
             $this->request->data['send_alert'] = true;
         }
+
+        return null;
     }
 
+    /**
+     * resetPassword method
+     *
+     * @param int|null $userId who needs reset
+     * @param string|null $resetPasswordHash to reset the password
+     * @return \Cake\Http\Response|null
+     */
     public function resetPassword($userId = null, $resetPasswordHash = null)
     {
         $user = $this->Users->get($userId);
@@ -382,6 +442,7 @@ class UsersController extends AppController
             }
 
             $this->Flash->error('There was an error changing your password. Please check to make sure they\'ve been entered correctly.');
+
             return $this->redirect('/');
         }
 

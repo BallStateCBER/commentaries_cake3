@@ -22,8 +22,6 @@ use Cake\ORM\Entity;
  * @property \Cake\I18n\FrozenTime $created
  * @property \Cake\I18n\FrozenTime $modified
  *
- * @property \App\Model\Entity\Group $group
- * @property \App\Model\Entity\LastAlertArticle $last_alert_article
  * @property \App\Model\Entity\Commentary[] $commentaries
  */
 class User extends Entity
@@ -44,9 +42,10 @@ class User extends Entity
     ];
 
     /**
-     * Fields that are excluded from JSON versions of the entity.
+     * password hasher
      *
-     * @var array
+     * @param string $password password
+     * @return bool|string either the hashed password or false
      */
     protected function _setPassword($password)
     {

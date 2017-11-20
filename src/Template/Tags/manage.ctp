@@ -36,9 +36,8 @@
 Vegetables
 -Taters</pre>
         <?= $this->Form->input('name', ['type' => 'textarea', 'label' => false, 'style' => 'width: 100%;']); ?>
-        <?= $this->Form->input('parent_name', ['label' => 'Parent Tag (optional)', 'type' => 'text', 'class' => 'search_field form-control']); ?>
         <p>
-            All tags will be created as both listed and selectable.
+            All tags will be created as selectable.
         </p>
         <?= $this->Form->submit('Add', ['class' => 'btn']) ?>
         <?= $this->Form->end(); ?>

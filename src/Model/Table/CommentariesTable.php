@@ -1,7 +1,6 @@
 <?php
 namespace App\Model\Table;
 
-use Cake\ORM\Query;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
@@ -11,14 +10,6 @@ use Cake\Validation\Validator;
  *
  * @property \App\Model\Table\UsersTable|\Cake\ORM\Association\BelongsTo $Users
  * @property \App\Model\Table\TagsTable|\Cake\ORM\Association\BelongsToMany $Tags
- *
- * @method \App\Model\Entity\Commentary get($primaryKey, $options = [])
- * @method \App\Model\Entity\Commentary newEntity($data = null, array $options = [])
- * @method \App\Model\Entity\Commentary[] newEntities(array $data, array $options = [])
- * @method \App\Model\Entity\Commentary|bool save(\Cake\Datasource\EntityInterface $entity, $options = [])
- * @method \App\Model\Entity\Commentary patchEntity(\Cake\Datasource\EntityInterface $entity, array $data, array $options = [])
- * @method \App\Model\Entity\Commentary[] patchEntities($entities, array $data, array $options = [])
- * @method \App\Model\Entity\Commentary findOrCreate($search, callable $callback = null, $options = [])
  *
  * @mixin \Cake\ORM\Behavior\TimestampBehavior
  */
@@ -43,7 +34,6 @@ class CommentariesTable extends Table
         $this->addBehavior('Muffin/Slug.Slug', [
             // Optionally define your custom options here (see Configuration)
         ]);
-
 
         $this->belongsTo('Users', [
             'foreignKey' => 'user_id',
@@ -111,6 +101,11 @@ class CommentariesTable extends Table
         return $rules;
     }
 
+    /**
+     * getUnpublishedList method
+     *
+     * @return array of the unpublished
+     */
     public function getUnpublishedList()
     {
         return $this->find('list')
@@ -119,6 +114,11 @@ class CommentariesTable extends Table
             ->toArray();
     }
 
+    /**
+     * getNextForNewsmedia method
+     *
+     * @return array|\Cake\Datasource\EntityInterface|null of next for newsmedia
+     */
     public function getNextForNewsmedia()
     {
         return $this->find()
@@ -129,6 +129,12 @@ class CommentariesTable extends Table
             ->first();
     }
 
+    /**
+     * isMostRecentAlert method
+     *
+     * @param int $commentaryId of commentary
+     * @return bool was it most recent alert?
+     */
     public function isMostRecentAlert($commentaryId)
     {
         if (!isset($commentaryId)) {
@@ -137,6 +143,7 @@ class CommentariesTable extends Table
         $result = $this->Users->find()
             ->where(['last_alert_article_id' => $commentaryId])
             ->count();
+
         return $result > 0;
     }
 }

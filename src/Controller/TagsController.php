@@ -224,52 +224,6 @@ class TagsController extends AppController
         exit('1');
     }
 
-    public function reparent()
-    {
-        $node = intval($_POST['node']);
-        $parent = ($_POST['parent'] == 'root') ? 0 : intval($_POST['parent']);
-        $parent = $this->Tags->get($parent);
-        $inUnlistedBefore = $this->Tags->isUnderUnlistedGroup($node);
-        $inUnlistedAfter = ($_POST['parent'] == 'root') ? false : $this->Tags->isUnderUnlistedGroup($parent->id);
-        $tag = $this->Tags->get($node);
-
-        // Moving out of the 'Unlisted' group
-        if ($inUnlistedBefore && ! $inUnlistedAfter) {
-            //echo 'Making listed.';
-            $tag['listed'] = 1;
-            $this->Tags->save($tag);
-        }
-
-        // Moving into the 'Unlisted' group
-        if (! $inUnlistedBefore && $inUnlistedAfter) {
-            //echo 'Making unlisted.';
-            $tag['listed'] = 0;
-            $this->Tags->save($tag);
-        }
-
-        // Move tag
-        $tag->parent_id = $parent->id;
-        $this->Tags->save($tag);
-
-        // If position == 0, then we move it straight to the top
-        // otherwise we calculate the distance to move ($delta).
-        // We have to check if $delta > 0 before moving due to a bug
-        // in the tree behaviour (https://trac.cakephp.org/ticket/4037)
-        $position = intval($_POST['position']);
-        if ($position == 0) {
-            $this->Tags->moveUp($tag, true);
-        } else {
-            $count = $this->Tags->childCount($parent, true);
-            $delta = $count-$position-1;
-            if ($delta > 0) {
-                $this->Tags->moveUp($tag, $delta);
-            }
-        }
-
-        // send success response
-        exit('1');
-    }
-
     /**
      * Returns a path from the root of the Tag tree to the tag with the provided name
      * @param string $tagName
@@ -286,7 +240,7 @@ class TagsController extends AppController
             if ($parentId) {
                 $rootFound = false;
                 while (!$rootFound) {
-                    $parent = $this->Tags->getTagFromId($parentId);
+                    $parent = $this->Tags->get($parentId);
                     if ($parent) {
                         $path[] = "{$parent->name} ({$parent->id})";
                         if (!$parentId = $parent->parent_id) {
@@ -685,39 +639,15 @@ class TagsController extends AppController
         if (!$this->request->is('post')) {
             return;
         }
-        if (trim($this->request->data['name']) == '') {
+        if (trim($this->request->getData('name')) == '') {
             return $this->Flash->error('Tag name is blank.');
-        }
-
-        // Determine parent_id
-        $rootParentId = $this->request->data['parent_name'] == '' ? $this->Tags->getUnlistedGroupId() : $this->Tags->getIdFromName($this->request->data['parent_name']);
-        if (!$rootParentId) {
-            return $this->Flash->error("Parent tag \"" . $this->request->data['parent_name'] . "\" not found");
         }
 
         $class = 'success';
         $message = '';
-        $inputtedNames = explode("\n", trim(strtolower($this->request->data['name'])));
-        $level = 0;
-        $parents = [$rootParentId];
-        foreach ($inputtedNames as $lineNum => $name) {
-            $level = $this->Tags->getIndentLevel($name);
-
-            // Discard any now-irrelevant data
-            $parents = array_slice($parents, 0, $level + 1);
-
-            // Determine this tag's parent_id
-            if ($level == 0) {
-                $parentId = $rootParentId;
-            } elseif (isset($parents[$level])) {
-                $parentId = $parents[$level];
-            } else {
-                $class = 'error';
-                $message .= "Error with nested tag structure. Looks like there's an extra indent in line $lineNum: \"$name\".<br />";
-            }
-
-            // Strip leading/trailing whitespace and hyphens used for indenting
-            $name = trim(ltrim($name, '-'));
+        $inputtedNames = explode("\n", trim(strtolower($this->request->getData('name'))));
+        foreach ($inputtedNames as $name) {
+            $parentId = null;
 
             // Confirm that the tag name is non-blank and non-redundant
             if (!$name) {
@@ -735,13 +665,12 @@ class TagsController extends AppController
             // Add tag to database
             $newTag = $this->Tags->newEntity();
             $newTag->name = $name;
-            $newTag->user_id = $this->request->session()->read('Auth.User.id');
+            $newTag->user_id = $this->request->getSession()->read('Auth.User.id');
             $newTag->parent_id = $parentId;
             $newTag->listed = 0;
             $newTag->selectable = 1;
             if ($this->Tags->save($newTag)) {
                 $this->Flash->success("Created tag #{$newTag->id}: $name");
-                $parents[$level + 1] = $newTag->id;
                 continue;
             }
             $class = 'error';

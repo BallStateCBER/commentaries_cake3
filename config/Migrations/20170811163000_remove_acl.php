@@ -1,4 +1,5 @@
 <?php
+namespace App\Migrations\RemoveAcl;
 
 use Phinx\Migration\AbstractMigration;
 
@@ -25,7 +26,7 @@ class RemoveAcl extends AbstractMigration
      * Remember to call "create()" or "update()" and NOT "save()" when working
      * with the Table class.
      *
-     * @return void;
+     * @return void
      */
     public function change()
     {
