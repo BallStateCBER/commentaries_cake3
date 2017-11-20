@@ -115,16 +115,8 @@ Vegetables
         </p>
         <ul>
             <li>
-                <?= $this->Html->link('Regroup unlisted tags', ['controller' => 'tags', 'action' => 'groupUnlisted']); ?>
-                <br />Moves unlisted root-level tags into the 'Unlisted' group
-            </li>
-            <li>
                 <?= $this->Html->link('Recover tag tree', ['controller' => 'tags', 'action' => 'recover']); ?>
                 <br />If the tree structure in the database (lft and rght fields) has gotten screwed up
-            </li>
-            <li>
-                <?= $this->Html->link('Remove unlisted, unused, root-level, childless tags', ['controller' => 'tags', 'action' => 'removeUnlistedUnused']); ?>
-                <br />These are probably just taking up space.
             </li>
             <li>
                 <?= $this->Html->link('Remove duplicate tags', ['controller' => 'tags', 'action' => 'duplicates']); ?>

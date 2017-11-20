@@ -125,7 +125,7 @@ class CommentariesTable extends Table
             ->where(['is_published' => 0])
             ->andWhere(['delay_publishing' => 1])
             ->andWhere(['published_date >' => date('Y-m-d')])
-            -> order(['published_date' => 'ASC'])
+            ->order(['published_date' => 'ASC'])
             ->first();
     }
 

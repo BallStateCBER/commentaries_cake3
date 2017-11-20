@@ -148,7 +148,7 @@ class TagsTable extends Table
     }
 
     /**
-     * getIdFromSlug methpod
+     * getIdFromSlug method
      *
      * @param string $slug of tag
      * @return int of id
@@ -157,7 +157,7 @@ class TagsTable extends Table
     {
         $splitSlug = explode('_', $slug);
 
-        return (int) $splitSlug[0];
+        return (int)$splitSlug[0];
     }
 
     /**

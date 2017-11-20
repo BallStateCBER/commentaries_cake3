@@ -16,7 +16,7 @@ class UsersController extends AppController
     /**
      * initialize method
      *
-     * return void
+     * @return void
      */
     public function initialize()
     {
@@ -62,7 +62,7 @@ class UsersController extends AppController
     /**
      * adminIndex method
      *
-     * return void
+     * @return void
      */
     public function adminIndex()
     {
@@ -155,7 +155,8 @@ class UsersController extends AppController
             $adminEmail = Configure::read('admin_email');
             $email = $this->Users->cleanEmail($this->request->getData('email'));
             if (empty($email)) {
-                $this->Flash->error('Please enter the email address associated with your account to have your password reset. Email <a href="mailto:'.$adminEmail.'">'.$adminEmail.'</a> if you need any assistance.');
+                $this->Flash->error('Please enter the email address associated with your account to have your password reset. 
+                Email <a href="mailto:' . $adminEmail . '">' . $adminEmail . '</a> if you need any assistance.');
             } else {
                 $userId = $this->Users->getIdFromEmail($email);
                 if ($userId) {
@@ -213,6 +214,7 @@ class UsersController extends AppController
                         'password' => $this->request->getData('password')
                     ]);
                 }
+
                 return $this->redirect($this->Auth->redirectUrl());
             }
             if (!$user) {
@@ -391,7 +393,7 @@ class UsersController extends AppController
                 $this->request->data = [];
                 $this->request->data['send_alert'] = true;
 
-                return;
+                return null;
             }
             $this->Flash->error('There was an error adding the user.');
         } else {
