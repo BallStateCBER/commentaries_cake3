@@ -14,6 +14,11 @@ class CommentariesController extends AppController
         'Rss'
     ];
 
+    /**
+     * initialize method
+     *
+     * @return void
+     */
     public function initialize()
     {
         parent::initialize();
@@ -22,6 +27,12 @@ class CommentariesController extends AppController
         $this->Auth->deny(['add', 'delete', 'drafts', 'edit', 'newsmediaIndex']);
     }
 
+    /**
+     * browse method
+     *
+     * @param int|null $year to browse by
+     * @return array|null
+     */
     public function browse($year = null)
     {
         $publishedDates = $this->Commentaries->find()
@@ -90,6 +101,11 @@ class CommentariesController extends AppController
         ]);
     }
 
+    /**
+     * newsmediaIndex method
+     *
+     * @return void
+     */
     public function newsmediaIndex()
     {
         $this->set([
@@ -98,6 +114,11 @@ class CommentariesController extends AppController
         ]);
     }
 
+    /**
+     * rss method
+     *
+     * @return void
+     */
     public function rss()
     {
         $commentaries = $this->Commentaries->find()
@@ -115,6 +136,12 @@ class CommentariesController extends AppController
         $this->viewbuilder()->setLayout('rss');
     }
 
+    /**
+     * tagged method
+     *
+     * @param null $tagId of tag to group by
+     * @return \Cake\Http\Response|null
+     */
     public function tagged($tagId = null)
     {
         $tag = $this->Tags->find()
@@ -122,7 +149,7 @@ class CommentariesController extends AppController
                 'Commentaries' => [
                     'strategy' => 'select',
                     'queryBuilder' => function ($q) {
-                        return $q->distinct('Commentaries.id')->order(['Commentaries.published_date' =>'DESC']);
+                        return $q->distinct('Commentaries.id')->order(['Commentaries.published_date' => 'DESC']);
                     }
                 ]
             ])
@@ -137,6 +164,7 @@ class CommentariesController extends AppController
 
         if (!is_numeric($tagId) || !isset($tag) || !$tag || !$tag[0]->name) {
             $this->Flash->error('Tag not found.');
+
             return $this->redirect([
                 'controller' => 'commentaries',
                 'action' => 'tags'
@@ -146,6 +174,11 @@ class CommentariesController extends AppController
         return null;
     }
 
+    /**
+     * tags method
+     *
+     * @return void
+     */
     public function tags()
     {
         $tagCloud = $this->TagManager->getCloud('Commentaries');
@@ -180,6 +213,12 @@ class CommentariesController extends AppController
         $this->set('_serialize', ['commentary']);
     }
 
+    /**
+     * private __addAndRemoveTags method
+     *
+     * @param \App\Model\Entity\Commentary $commentary entity
+     * return void
+     */
     private function __addAndRemoveTags($commentary)
     {
         if (!isset($this->request->getData('data')['Tag'])) {
@@ -203,17 +242,28 @@ class CommentariesController extends AppController
         }
     }
 
+    /**
+     * private __dateFormat method
+     *
+     * @param array $date
+     * @return false|string
+     */
     private function __dateFormat($date)
     {
-        return date('Y-m-d', strtotime($date['year'].'-'.$date['month'].'-'.$date['day']));
+        return date('Y-m-d', strtotime($date['year'] . '-' . $date['month'] . '-' . $date['day']));
     }
 
-    // If publishing to a future date, save to drafts and auto-publish on the appropriate day
+    /**
+     * If publishing to a future date, save to drafts and auto-publish on the appropriate day
+     *
+     * @param array $commentary entity
+     * @return array
+     */
     private function __setupAutopublish($commentary)
     {
         $publish = $this->request->getData('is_published');
         $publishingDate = $this->request->getData('published_date');
-        $publishingDate = $publishingDate['year'].$publishingDate['month'].$publishingDate['day'];
+        $publishingDate = $publishingDate['year'] . $publishingDate['month'] . $publishingDate['day'];
         if ($publish && $publishingDate > date('Ymd')) {
             $commentary['delay_publishing'] = 1;
             $commentary['is_published'] = 0;
@@ -227,7 +277,7 @@ class CommentariesController extends AppController
     /**
      * Add method
      *
-     * @return void
+     * @return null
      */
     public function add()
     {
@@ -253,11 +303,14 @@ class CommentariesController extends AppController
             $this->__setupAutopublish($commentary);
             if ($this->Commentaries->save($commentary)) {
                 $this->__addAndRemoveTags($commentary);
+                $this->Flash->success(__('The commentary has been saved.'));
 
-                return $this->Flash->success(__('The commentary has been saved.'));
+                return null;
             }
             $this->Flash->error(__('The commentary could not be saved. Please, try again.'));
         }
+
+        return null;
     }
 
     /**
@@ -270,7 +323,9 @@ class CommentariesController extends AppController
     public function edit($id = null)
     {
         if ($this->Auth->user('group_id') == 3) {
-            return $this->Flash->error(__('You are not authorized for this.'));
+            $this->Flash->error(__('You are not authorized for this.'));
+
+            return null;
         }
 
         $commentary = $this->Commentaries->get($id, [
@@ -292,8 +347,9 @@ class CommentariesController extends AppController
             $this->__setupAutopublish($commentary);
             if ($this->Commentaries->save($commentary)) {
                 $this->__addAndRemoveTags($commentary);
+                $this->Flash->success(__('The commentary has been saved.'));
 
-                return $this->Flash->success(__('The commentary has been saved.'));
+                return null;
             }
             $this->Flash->error(__('The commentary could not be saved. Please, try again.'));
         }
@@ -309,7 +365,9 @@ class CommentariesController extends AppController
     public function delete($id = null)
     {
         if ($this->Auth->user('group_id') == 3) {
-            return $this->Flash->error(__('You are not authorized for this.'));
+            $this->Flash->error(__('You are not authorized for this.'));
+
+            return null;
         }
         $this->request->allowMethod(['post', 'delete']);
         $commentary = $this->Commentaries->get($id);
@@ -322,6 +380,11 @@ class CommentariesController extends AppController
         return $this->redirect(['action' => 'index']);
     }
 
+    /**
+     * drafts method
+     *
+     * @return array|null
+     */
     public function drafts()
     {
         // Get commentaries
@@ -338,5 +401,7 @@ class CommentariesController extends AppController
             'commentaries' => $commentaries,
             'titleForLayout' => 'Commentary Drafts'
         ]);
+
+        return null;
     }
 }

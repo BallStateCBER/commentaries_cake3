@@ -51,10 +51,10 @@ class TagsController extends AppController
         // in order, until $limit tags are found.
         $likeConditions = [
             $stringToComplete,
-            $stringToComplete.' %',
-            $stringToComplete.'%',
-            '% '.$stringToComplete.'%',
-            '%'.$stringToComplete.'%'
+            $stringToComplete . ' %',
+            $stringToComplete . '%',
+            '% ' . $stringToComplete . '%',
+            '%' . $stringToComplete . '%'
         ];
 
         // Collect tags up to $limit
@@ -72,7 +72,7 @@ class TagsController extends AppController
             }
             $results = $this->Tags->find()
                 ->where($conditions)
-                ->limit($limit-count($tags));
+                ->limit($limit - count($tags));
             if (!empty($tags)) {
                 foreach (array_keys($tags) as $tag) {
                     $results = $results->andWhere(['id !=' => $tag]);
@@ -268,6 +268,7 @@ class TagsController extends AppController
      * remove method
      *
      * @param string $name of tag to be removed
+     * @return void
      */
     public function remove($name)
     {
@@ -416,7 +417,7 @@ class TagsController extends AppController
             ->count();
         if ($associatedCount) {
             $results = $this->CommentariesTags->find()
-                ->where(['tag_id'=> $removedTagId])
+                ->where(['tag_id' => $removedTagId])
                 ->toArray();
 
             foreach ($results as $result) {
@@ -498,7 +499,7 @@ class TagsController extends AppController
     /**
      * edit tags
      *
-     * @param string|null $tagName
+     * @param string|null $tagName of tag to edit
      * @return null
      */
     public function edit($tagName = null)
