@@ -9,7 +9,6 @@
         <li><a href="#tab-remove">Remove</a></li>
         <li><a href="#tab-edit">Edit</a></li>
         <li><a href="#tab-merge">Merge</a></li>
-        <li><a href="#tab-find">Find</a></li>
         <li><a href="#tab-fix">Fix</a></li>
     </ul>
     <div id="tab-arrange">
@@ -27,14 +26,6 @@
     <div id="tab-add">
         <?= $this->Form->create('Tag', ['url' => ['controller' => 'tags', 'action' => 'add']]); ?>
         <strong>Tag</strong>(s)<br />
-        Multiple tags go on separate lines. Child-tags can be indented under parent-tags with one hyphen or tab per level. Example:
-    <pre style="background-color: #eee; font-size: 80%; margin-left: 20px; width: 200px;">Fruits
--Apples
---Granny Smith
---Red Delicious
--Nanners
-Vegetables
--Taters</pre>
         <?= $this->Form->input('name', ['type' => 'textarea', 'label' => false, 'style' => 'width: 100%;']); ?>
         <p>
             All tags will be created as selectable.
@@ -47,16 +38,14 @@ Vegetables
 
     <div id="tab-remove">
         <p class="alert alert-info">
-            Warning: If a tag is removed, all child-tags will also be removed. This cannot be undone.
+            Warning: this cannot be undone.
         </p>
-        <?= $this->Html->link('Remove all tags in the "Delete" group', [
-            'controller' => 'tags', 'action' => 'emptyDeleteGroup'
-        ]); ?>
         <p>
-            Or start typing a tag name:
+            Start typing a tag name:
         </p>
         <form id="tag_remove_form">
             <input type="text" id="tag_remove_field" class="search_field form-control" />
+            <br />
             <input type="submit" value="Remove" class="btn" />
         </form>
         <div class="results"></div>
@@ -87,24 +76,10 @@ Vegetables
             <input type="text" id="tag_merge_into_field" class="search_field form-control"/>
 
             <span class="footnote">(The first tag will be <strong>removed</strong>.)</span>
-            <br />
+            <br /><br />
             <input type="submit" value="Merge" class="btn" />
         </form>
         <div class="results" id="merge_results"></div>
-    </div>
-
-    <div id="tab-find">
-        <p>
-            Start typing a tag name:
-        </p>
-        <div>
-            <form id="tag_search_form">
-                <input type="text" class="search_field form-control" />
-                <br />
-                <input type="submit" value="Trace path to this tag" class="btn" />
-            </form>
-        </div>
-        <div class="results" id="trace_results"></div>
     </div>
 
     <div id="tab-fix">
@@ -124,7 +99,7 @@ Vegetables
             </li>
             <li>
                 <?= $this->Html->link('Remove broken associations', ['controller' => 'tags', 'action' => 'removeBrokenAssociations']); ?>
-                <br />Associations in the events_tags table involving either nonexistent tags or events.
+                <br />Associations in the commentaries_tags table involving either nonexistent tags or events.
             </li>
         </ul>
         <div class="results"></div>

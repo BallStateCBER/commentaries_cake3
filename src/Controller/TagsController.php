@@ -94,7 +94,6 @@ class TagsController extends AppController
             }
         }
 
-        $this->set(compact('tags'));
         $this->viewBuilder()->setLayout('blank');
     }
 
@@ -105,6 +104,7 @@ class TagsController extends AppController
      */
     public function recover()
     {
+        $this->viewBuilder()->setLayout('ajax');
         list($startUsec, $startSec) = explode(" ", microtime());
         set_time_limit(3600);
         $this->Tags->recover();
@@ -113,8 +113,10 @@ class TagsController extends AppController
         $endTime = $endUsec + $endSec;
         $loadingTime = $endTime - $startTime;
         $minutes = round($loadingTime / 60, 2);
-        $this->render('/Tags/flash');
+        
         $this->Flash->success("Done recovering tag tree (took $minutes minutes).");
+
+        $this->render('/Tags/flash');
     }
 
     /**
@@ -207,46 +209,6 @@ class TagsController extends AppController
 
         // send success response
         exit('1');
-    }
-
-    /**
-     * Returns a path from the root of the Tag tree to the tag with the provided name
-     *
-     * @param string $tagName to trace
-     * @return void
-     */
-    public function trace($tagName = '')
-    {
-        $path = [];
-        $tagId = $this->Tags->getIdFromName($tagName);
-        $targetTag = $this->Tags->get($tagId);
-        if ($targetTag) {
-            $targetTagId = $targetTag->id;
-            $parentId = $targetTag->parent_id;
-            $path[] = "{$targetTag->name} ({$targetTagId})";
-            if ($parentId) {
-                $rootFound = false;
-                while (!$rootFound) {
-                    $parent = $this->Tags->get($parentId);
-                    if ($parent) {
-                        $path[] = "{$parent->name} ({$parent->id})";
-                        if (!$parentId = $parent->parent_id) {
-                            $rootFound = true;
-                        }
-                    }
-                    if (!$parent) {
-                        $path[] = "(Parent data tag with id $parentId not found)";
-                        break;
-                    }
-                }
-            }
-        }
-        if (!$targetTag) {
-            $path[] = "(Tag named '$tagName' not found)";
-        }
-        $this->viewBuilder()->setLayout('ajax');
-        $path = array_reverse($path);
-        $this->set(compact('path', 'targetTag', 'parent'));
     }
 
     /**
@@ -601,7 +563,7 @@ class TagsController extends AppController
                 ->count();
             if ($exists) {
                 $class = 'error';
-                $message .= "Cannot create the tag \"$name\" because a tag with that name already exists.<br />";
+                $message .= "Cannot create the tag \"$name\" because a tag with that name already exists.";
                 continue;
             }
 

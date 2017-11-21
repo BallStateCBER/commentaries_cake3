@@ -117,10 +117,12 @@ class AppController extends Controller
             ->limit(4)
             ->toArray();
 
-        $this->set([
-            'authUser' => $this->Auth->user('id') ? $this->Users->get($this->Auth->user('id')): null,
-            'recentCommentaries' => $recentCommentaries,
-        ]);
+        if ($this->request->getParam('action') != 'autoComplete') {
+            $this->set([
+                'authUser' => $this->Auth->user('id') ? $this->Users->get($this->Auth->user('id')): null,
+                'recentCommentaries' => $recentCommentaries,
+            ]);
+        }
     }
 
     /**
@@ -136,9 +138,10 @@ class AppController extends Controller
         ) {
             $this->set('_serialize', true);
         }
-
-        $this->set([
-            'topTags' => $this->TagManager->getTop('Commentaries', 10)
-        ]);
+        if ($this->request->getParam('action') != 'autoComplete') {
+            $this->set([
+                'topTags' => $this->TagManager->getTop('Commentaries', 10)
+            ]);
+        }
     }
 }
