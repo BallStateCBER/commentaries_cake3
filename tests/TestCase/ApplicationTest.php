@@ -28,6 +28,14 @@ use Cake\TestSuite\IntegrationTestCase;
  */
 class ApplicationTest extends IntegrationTestCase
 {
+    public $fixtures = [
+        'app.commentaries',
+        'app.commentaries_tags',
+        'app.groups',
+        'app.tags',
+        'app.users'
+    ];
+
     public $commentaries;
     public $commentariesTags;
     public $groups;
@@ -37,7 +45,7 @@ class ApplicationTest extends IntegrationTestCase
     public $commentary;
     public $newsmedia;
 
-    public $classes = [
+    public $objects = [
         'Commentaries',
         'CommentariesTags',
         'Groups',
@@ -48,11 +56,11 @@ class ApplicationTest extends IntegrationTestCase
     public function setUp()
     {
         parent::setUp();
-        foreach ($this->classes as $object) {
+        foreach ($this->objects as $object) {
             $this->$object = TableRegistry::get($object);
         }
 
-        foreach ($this->classes as $class) {
+        foreach ($this->objects as $class) {
             $fixture = "App\Test\Fixture\\" . $class . "Fixture";
             $object = new $fixture();
             $class = strtolower($class);
@@ -99,5 +107,19 @@ class ApplicationTest extends IntegrationTestCase
         $this->assertInstanceOf(ErrorHandlerMiddleware::class, $middleware->get(0));
         $this->assertInstanceOf(AssetMiddleware::class, $middleware->get(1));
         $this->assertInstanceOf(RoutingMiddleware::class, $middleware->get(2));
+    }
+
+    /**
+     * tearDown method
+     *
+     * @return void
+     */
+    public function tearDown()
+    {
+        foreach ($this->objects as $object) {
+            unset($this->$object);
+        }
+
+        parent::tearDown();
     }
 }
