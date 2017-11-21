@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "e8cd22413e0f42a21bfb34f737f36a0b",
-    "content-hash": "37308820ed3e166ed3a668ab50a41ae9",
+    "hash": "6a54268427b8a73a6f3a571d8bf29cd5",
+    "content-hash": "4e3e481d3329ca656a38b9d713b65264",
     "packages": [
         {
             "name": "akkaweb/cakephp-ckeditor",
@@ -89,12 +89,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/BallStateCBER/datacenter-plugin-cakephp3.git",
-                "reference": "4f6b6e6afa28b11b14352bebe3b1167490d3befb"
+                "reference": "c7ed689ae4e632750baf9401aa9b931720d0cbf6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/BallStateCBER/datacenter-plugin-cakephp3/zipball/4f6b6e6afa28b11b14352bebe3b1167490d3befb",
-                "reference": "4f6b6e6afa28b11b14352bebe3b1167490d3befb",
+                "url": "https://api.github.com/repos/BallStateCBER/datacenter-plugin-cakephp3/zipball/c7ed689ae4e632750baf9401aa9b931720d0cbf6",
+                "reference": "c7ed689ae4e632750baf9401aa9b931720d0cbf6",
                 "shasum": ""
             },
             "require": {
@@ -115,20 +115,20 @@
             },
             "notification-url": "https://packagist.org/downloads/",
             "description": "Ball State CBER DataCenter plugin for CakePHP 3",
-            "time": "2017-11-17 21:09:14"
+            "time": "2017-11-21 16:41:32"
         },
         {
             "name": "cakephp/cakephp",
-            "version": "3.5.5",
+            "version": "3.5.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/cakephp/cakephp.git",
-                "reference": "042d0cd868412fa60d9ea63e5e299e65289768c0"
+                "reference": "357d6176af73d279217ff5623dc566b8ac8117b6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/cakephp/cakephp/zipball/042d0cd868412fa60d9ea63e5e299e65289768c0",
-                "reference": "042d0cd868412fa60d9ea63e5e299e65289768c0",
+                "url": "https://api.github.com/repos/cakephp/cakephp/zipball/357d6176af73d279217ff5623dc566b8ac8117b6",
+                "reference": "357d6176af73d279217ff5623dc566b8ac8117b6",
                 "shasum": ""
             },
             "require": {
@@ -201,7 +201,7 @@
                 "rapid-development",
                 "validation"
             ],
-            "time": "2017-11-02 01:05:43"
+            "time": "2017-11-18 01:33:26"
         },
         {
             "name": "cakephp/cakephp-codesniffer",
@@ -656,6 +656,57 @@
                 "validator"
             ],
             "time": "2017-04-03 19:08:52"
+        },
+        {
+            "name": "friendsofcake/fixturize",
+            "version": "1.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/FriendsOfCake/fixturize.git",
+                "reference": "0b1ea7fddd2ee0b48c27fad05a8d1809b752111c"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/FriendsOfCake/fixturize/zipball/0b1ea7fddd2ee0b48c27fad05a8d1809b752111c",
+                "reference": "0b1ea7fddd2ee0b48c27fad05a8d1809b752111c",
+                "shasum": ""
+            },
+            "require": {
+                "cakephp/cakephp": "^3.2"
+            },
+            "type": "cakephp-plugin",
+            "autoload": {
+                "psr-4": {
+                    "FriendsOfCake\\Fixturize\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Christian Winther",
+                    "homepage": "http://cakephp.nu/",
+                    "role": "Author"
+                },
+                {
+                    "name": "José Lorenzo Rodríguez",
+                    "homepage": "https://github.com/lorenzo",
+                    "role": "Contributor"
+                }
+            ],
+            "description": "CakePHP Fixture classes to help increase productivity or performance",
+            "homepage": "https://github.com/FriendsOfCake/fixturize",
+            "keywords": [
+                "Fixture",
+                "cakephp",
+                "fixtures",
+                "performance",
+                "phpunit",
+                "unittest"
+            ],
+            "time": "2017-05-08 12:42:01"
         },
         {
             "name": "josegonzalez/dotenv",

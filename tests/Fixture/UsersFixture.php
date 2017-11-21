@@ -1,7 +1,7 @@
 <?php
 namespace App\Test\Fixture;
 
-use Cake\TestSuite\Fixture\TestFixture;
+use FriendsOfCake\Fixturize\TestSuite\Fixture\ChecksumTestFixture as TestFixture;
 
 /**
  * UsersFixture
@@ -9,13 +9,60 @@ use Cake\TestSuite\Fixture\TestFixture;
  */
 class UsersFixture extends TestFixture
 {
+    /*
+     * initialize fixture method
+     */
+    public function init()
+    {
+        parent::init();
+        $this->records = [
+            [
+                'id' => 1,
+                'name' => 'Addy Admin',
+                'email' => 'admin@bsu.edu',
+                'password' => '$2y$10$uiKXsQPTT.nUa4RbZRoVduDkqMtuGMiJnj0PDOC6eoxPDxo6tevjy',
+                'active' => 1,
+                'group_id' => 1,
+                'author' => 1,
+                'picture' => 'Lorem ipsum dolor sit amet',
+                'nm_email_alerts' => 1,
+                'created' => date('Y-m-d h:i:s', strtotime('-7 days')),
+                'modified' => date('Y-m-d h:i:s', strtotime('-7 days'))
+            ],
+            [
+                'id' => 2,
+                'name' => 'Commentary Connie',
+                'email' => 'commentary@bsu.edu',
+                'password' => '$2y$10$ksYHH2W1n/QcWceoW5GUXe9hC4EsPSEHwJsh27mRdAeVgILAmQXhm',
+                'active' => 1,
+                'group_id' => 2,
+                'author' => 1,
+                'picture' => 'Lorem ipsum dolor sit amet',
+                'nm_email_alerts' => 1,
+                'created' => date('Y-m-d h:i:s', strtotime('-7 days')),
+                'modified' => date('Y-m-d h:i:s', strtotime('-7 days'))
+            ],
+            [
+                'id' => 3,
+                'name' => 'Newsie Newsmedia',
+                'email' => 'newsmedia@bsu.edu',
+                'password' => '$2y$10$e0uBVvSu4Vnn0U8mGR5jCOZDriQnAeivEQ.SknfUj9vskF9TvybJy',
+                'active' => 1,
+                'group_id' => 3,
+                'author' => 0,
+                'picture' => 'Lorem ipsum dolor sit amet',
+                'nm_email_alerts' => 1,
+                'created' => date('Y-m-d h:i:s', strtotime('-7 days')),
+                'modified' => date('Y-m-d h:i:s', strtotime('-7 days'))
+            ]
+        ];
+    }
 
     /**
      * Fields
      *
      * @var array
      */
-    // @codingStandardsIgnoreStart
     public $fields = [
         'id' => ['type' => 'integer', 'length' => 11, 'unsigned' => false, 'null' => false, 'default' => null, 'comment' => '', 'autoIncrement' => true, 'precision' => null],
         'name' => ['type' => 'string', 'length' => 100, 'null' => false, 'default' => null, 'collate' => 'utf8_general_ci', 'comment' => '', 'precision' => null, 'fixed' => null],
@@ -38,31 +85,6 @@ class UsersFixture extends TestFixture
         '_options' => [
             'engine' => 'MyISAM',
             'collation' => 'utf8_general_ci'
-        ],
-    ];
-    // @codingStandardsIgnoreEnd
-
-    /**
-     * Records
-     *
-     * @var array
-     */
-    public $records = [
-        [
-            'id' => 1,
-            'name' => 'Lorem ipsum dolor sit amet',
-            'email' => 'Lorem ipsum dolor sit amet',
-            'bio' => 'Lorem ipsum dolor sit amet, aliquet feugiat. Convallis morbi fringilla gravida, phasellus feugiat dapibus velit nunc, pulvinar eget sollicitudin venenatis cum nullam, vivamus ut a sed, mollitia lectus. Nulla vestibulum massa neque ut et, id hendrerit sit, feugiat in taciti enim proin nibh, tempor dignissim, rhoncus duis vestibulum nunc mattis convallis.',
-            'sex' => 'Lorem ipsum dolor sit ame',
-            'password' => 'Lorem ipsum dolor sit amet',
-            'active' => 1,
-            'group_id' => 1,
-            'author' => 1,
-            'picture' => 'Lorem ipsum dolor sit amet',
-            'nm_email_alerts' => 1,
-            'last_alert_article_id' => 1,
-            'created' => '2017-11-03 20:03:22',
-            'modified' => '2017-11-03 20:03:22'
         ],
     ];
 }

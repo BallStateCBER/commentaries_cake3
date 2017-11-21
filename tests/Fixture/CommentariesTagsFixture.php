@@ -1,7 +1,7 @@
 <?php
 namespace App\Test\Fixture;
 
-use Cake\TestSuite\Fixture\TestFixture;
+use FriendsOfCake\Fixturize\TestSuite\Fixture\ChecksumTestFixture as TestFixture;
 
 /**
  * CommentariesTagsFixture
@@ -9,13 +9,49 @@ use Cake\TestSuite\Fixture\TestFixture;
  */
 class CommentariesTagsFixture extends TestFixture
 {
+    /*
+     * initialize fixture method
+     */
+    public function init()
+    {
+        parent::init();
+        $this->records = [
+            [
+                'commentary_id' => 1,
+                'tag_id' => 1
+            ],
+            [
+                'commentary_id' => 1,
+                'tag_id' => 4
+            ],
+            [
+                'commentary_id' => 2,
+                'tag_id' => 2
+            ],
+            [
+                'commentary_id' => 2,
+                'tag_id' => 1
+            ],
+            [
+                'commentary_id' => 3,
+                'tag_id' => 3
+            ],
+            [
+                'commentary_id' => 3,
+                'tag_id' => 1
+            ],
+            [
+                'commentary_id' => 3,
+                'tag_id' => 5
+            ]
+        ];
+    }
 
     /**
      * Fields
      *
      * @var array
      */
-    // @codingStandardsIgnoreStart
     public $fields = [
         'id' => ['type' => 'integer', 'length' => 11, 'unsigned' => false, 'null' => false, 'default' => null, 'comment' => '', 'autoIncrement' => true, 'precision' => null],
         'commentary_id' => ['type' => 'integer', 'length' => 11, 'unsigned' => false, 'null' => false, 'default' => null, 'comment' => '', 'precision' => null, 'autoIncrement' => null],
@@ -26,20 +62,6 @@ class CommentariesTagsFixture extends TestFixture
         '_options' => [
             'engine' => 'MyISAM',
             'collation' => 'utf8_general_ci'
-        ],
-    ];
-    // @codingStandardsIgnoreEnd
-
-    /**
-     * Records
-     *
-     * @var array
-     */
-    public $records = [
-        [
-            'id' => 1,
-            'commentary_id' => 1,
-            'tag_id' => 1
         ],
     ];
 }

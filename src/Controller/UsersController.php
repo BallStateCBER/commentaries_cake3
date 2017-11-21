@@ -39,7 +39,8 @@ class UsersController extends AppController
         }
 
         $user = $this->Users->newEntity();
-        $this->set(compact('user'));
+        $groups = $this->Groups->find('list')->toArray();
+        $this->set(compact('groups', 'user'));
         $this->set('_serialize', ['user']);
 
         if ($this->request->is('post')) {

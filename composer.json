@@ -15,7 +15,8 @@
         "ballstatecber/datacenter-plugin-cakephp3": "dev-development",
         "akkaweb/cakephp-ckeditor": "dev-master",
         "oldskool/cakephp-js": "dev-master",
-        "muffin/slug": "^1.2"
+        "muffin/slug": "^1.2",
+        "friendsofcake/fixturize": "^1.0"
     },
     "require-dev": {
         "psy/psysh": "@stable",

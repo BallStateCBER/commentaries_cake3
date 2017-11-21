@@ -113,7 +113,6 @@ class TagsController extends AppController
         $endTime = $endUsec + $endSec;
         $loadingTime = $endTime - $startTime;
         $minutes = round($loadingTime / 60, 2);
-        
         $this->Flash->success("Done recovering tag tree (took $minutes minutes).");
 
         $this->render('/Tags/flash');

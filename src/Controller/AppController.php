@@ -105,6 +105,7 @@ class AppController extends Controller
 
         $this->loadModel('Commentaries');
         $this->loadModel('CommentariesTags');
+        $this->loadModel('Groups');
         $this->loadModel('Tags');
         $this->loadModel('Users');
 

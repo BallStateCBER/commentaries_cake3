@@ -15,8 +15,10 @@
 namespace App\Test\TestCase;
 
 use App\Application;
+use App\Test\Fixture\UsersFixture;
 use Cake\Error\Middleware\ErrorHandlerMiddleware;
 use Cake\Http\MiddlewareQueue;
+use Cake\ORM\TableRegistry;
 use Cake\Routing\Middleware\AssetMiddleware;
 use Cake\Routing\Middleware\RoutingMiddleware;
 use Cake\TestSuite\IntegrationTestCase;
@@ -26,6 +28,61 @@ use Cake\TestSuite\IntegrationTestCase;
  */
 class ApplicationTest extends IntegrationTestCase
 {
+    public $commentaries;
+    public $commentariesTags;
+    public $groups;
+    public $tags;
+
+    public $admin;
+    public $commentary;
+    public $newsmedia;
+
+    public $classes = [
+        'Commentaries',
+        'CommentariesTags',
+        'Groups',
+        'Tags',
+        'Users'
+    ];
+
+    public function setUp()
+    {
+        parent::setUp();
+        foreach ($this->classes as $object) {
+            $this->$object = TableRegistry::get($object);
+        }
+
+        foreach ($this->classes as $class) {
+            $fixture = "App\Test\Fixture\\" . $class . "Fixture";
+            $object = new $fixture();
+            $class = strtolower($class);
+            $this->$class = [];
+            foreach ($object->records as $fix) {
+                $this->$class[] = $fix;
+            }
+        }
+
+        // set up the users fixtures
+        $usersFixture = new UsersFixture();
+
+        $this->admin = [
+            'Auth' => [
+                'User' => $usersFixture->records[0]
+            ]
+        ];
+
+        $this->commentary = [
+            'Auth' => [
+                'User' => $usersFixture->records[1]
+            ]
+        ];
+
+        $this->newsmedia = [
+            'Auth' => [
+                'User' => $usersFixture->records[2]
+            ]
+        ];
+    }
 
     /**
      * testMiddleware
