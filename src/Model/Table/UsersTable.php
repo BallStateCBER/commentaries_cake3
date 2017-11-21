@@ -175,8 +175,8 @@ class UsersTable extends Table
     /**
      * sendNewsmediaAlertEmail method
      *
-     * @param User $user entity
-     * @param Commentary $commentary entity
+     * @param User|\Cake\Datasource\EntityInterface $user entity
+     * @param Commentary|\Cake\Datasource\EntityInterface $commentary entity
      * @return array
      */
     public function sendNewsmediaAlertEmail($user, $commentary)
@@ -217,7 +217,7 @@ class UsersTable extends Table
     /**
      * sendNewsmediaIntroEmail method
      *
-     * @param User $user of newsmedia
+     * @param User|\Cake\Datasource\EntityInterface $user of newsmedia
      * @return array
      */
     public function sendNewsmediaIntroEmail($user)

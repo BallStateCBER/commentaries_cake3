@@ -216,7 +216,7 @@ class CommentariesController extends AppController
     /**
      * private __addAndRemoveTags method
      *
-     * @param \App\Model\Entity\Commentary $commentary entity
+     * @param \Cake\Datasource\EntityInterface $commentary entity
      * @return void
      */
     private function __addAndRemoveTags($commentary)
@@ -256,7 +256,7 @@ class CommentariesController extends AppController
     /**
      * If publishing to a future date, save to drafts and auto-publish on the appropriate day
      *
-     * @param array $commentary entity
+     * @param \Cake\Datasource\EntityInterface|array $commentary entity
      * @return array
      */
     private function __setupAutopublish($commentary)
@@ -288,7 +288,9 @@ class CommentariesController extends AppController
         $this->TagManager->prepareEditor($this);
 
         if ($this->Auth->user('group_id') == 3) {
-            return $this->Flash->error(__('You are not authorized for this.'));
+            $this->Flash->error(__('You are not authorized for this.'));
+
+            return null;
         }
 
         $commentary = $this->Commentaries->newEntity();
@@ -299,7 +301,7 @@ class CommentariesController extends AppController
 
         if ($this->request->is('post')) {
             $commentary = $this->Commentaries->patchEntity($commentary, $this->request->getData());
-            $commentary->published_date = $this->__dateFormat($this->request->data['published_date']);
+            $commentary->published_date = $this->__dateFormat($this->request->getData('published_date'));
             $this->__setupAutopublish($commentary);
             if ($this->Commentaries->save($commentary)) {
                 $this->__addAndRemoveTags($commentary);
@@ -343,7 +345,7 @@ class CommentariesController extends AppController
 
         if ($this->request->is(['patch', 'post', 'put'])) {
             $commentary = $this->Commentaries->patchEntity($commentary, $this->request->getData());
-            $commentary->published_date = $this->__dateFormat($this->request->data['published_date']);
+            $commentary->published_date = $this->__dateFormat($this->request->getData('published_date'));
             $this->__setupAutopublish($commentary);
             if ($this->Commentaries->save($commentary)) {
                 $this->__addAndRemoveTags($commentary);
@@ -353,6 +355,8 @@ class CommentariesController extends AppController
             }
             $this->Flash->error(__('The commentary could not be saved. Please, try again.'));
         }
+
+        return null;
     }
 
     /**

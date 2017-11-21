@@ -39,9 +39,7 @@ class UsersController extends AppController
         }
 
         $user = $this->Users->newEntity();
-
-        $groups = $this->Users->Groups->find('list', ['limit' => 200]);
-        $this->set(compact('user', 'groups'));
+        $this->set(compact('user'));
         $this->set('_serialize', ['user']);
 
         if ($this->request->is('post')) {
@@ -124,9 +122,7 @@ class UsersController extends AppController
         $user = $this->Users->get($id, [
             'contain' => []
         ]);
-
-        $groups = $this->Users->Groups->find('list', ['limit' => 200]);
-        $this->set(compact('user', 'groups'));
+        $this->set(compact('user'));
         $this->set('_serialize', ['user']);
 
         if ($this->request->is(['patch', 'post', 'put'])) {
@@ -385,19 +381,13 @@ class UsersController extends AppController
 
                 if ($user['send_alert'] && ! empty($nextCommentary) && $alertsSent) {
                     if (!$this->Users->sendNewsmediaAlertEmail($user, $nextCommentary)) {
-                        $this->Flash->error('There was an error sending an alert message for the article "' . $nextCommentary->title . '".');
+                        $this->Flash->error('There was an error sending an alert message for the article "' . $nextCommentary['title'] . '".');
                     }
                 }
-
-                // Clear form
-                $this->request->data = [];
-                $this->request->data['send_alert'] = true;
 
                 return null;
             }
             $this->Flash->error('There was an error adding the user.');
-        } else {
-            $this->request->data['send_alert'] = true;
         }
 
         return null;

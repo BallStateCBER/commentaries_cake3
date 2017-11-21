@@ -14,7 +14,6 @@
  */
 namespace App\Controller;
 
-use App\Model\Table\UsersTable;
 use Cake\Controller\Controller;
 use Cake\Event\Event;
 
@@ -27,6 +26,7 @@ use Cake\Event\Event;
  * @property \App\Model\Table\CommentariesTable $Commentaries
  * @property \Cake\ORM\Association\BelongsToMany $CommentariesTags
  * @property \App\Model\Table\TagsTable $Tags
+ * @property \DataCenter\Controller\Component\TagManagerComponent $TagManager;
  * @property \App\Model\Table\UsersTable $Users
  *
  * @link http://book.cakephp.org/3.0/en/controllers.html#the-app-controller
@@ -132,7 +132,7 @@ class AppController extends Controller
     public function beforeRender(Event $event)
     {
         if (!array_key_exists('_serialize', $this->viewVars) &&
-            in_array($this->response->type(), ['application/json', 'application/xml'])
+            in_array($this->response->getType(), ['application/json', 'application/xml'])
         ) {
             $this->set('_serialize', true);
         }
