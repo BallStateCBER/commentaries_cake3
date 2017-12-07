@@ -50,7 +50,6 @@ class AppController extends Controller
     ];
 
     public $components = [
-        'Auth',
         'DataCenter.Flash',
         'DataCenter.TagManager'
     ];
@@ -67,39 +66,41 @@ class AppController extends Controller
     public function initialize()
     {
         parent::initialize();
-        $this->loadComponent(
-            'Auth',
-            [
-            'loginAction' => [
-                'prefix' => false,
-                'controller' => 'Users',
-                'action' => 'login'
-            ],
-            'logoutRedirect' => [
-                'prefix' => false,
-                'controller' => 'Commentaries',
-                'action' => 'index'
-            ],
-            'authenticate' => [
-                'Form' => [
-                    'fields' => [
-                        'username' => 'email',
-                        'password' => 'password'
-                    ],
-                    'passwordHasher' => [
-                        'className' => 'Fallback',
-                        'hashers' => [
-                            'Default',
-                            'Weak' => ['hashType' => 'sha1']
-                            ]
-                        ]
-                    ]
-                ]
-            ]
-        );
         $this->loadComponent('Cookie');
         $this->loadComponent('Flash');
         $this->loadComponent('RequestHandler');
+        $this->loadComponent(
+            'Auth',
+            [
+                'loginAction' => [
+                    'prefix' => false,
+                    'controller' => 'Users',
+                    'action' => 'login'
+                ],
+                'logoutRedirect' => [
+                    'prefix' => false,
+                    'controller' => 'Events',
+                    'action' => 'index'
+                ],
+                'authenticate' => [
+                    'Form' => [
+                        'fields' => [
+                            'username' => 'email',
+                            'password' => 'password'
+                        ],
+                        'passwordHasher' => [
+                            'className' => 'Fallback',
+                            'hashers' => [
+                                'Default',
+                                'Weak' => ['hashType' => 'sha1']
+                            ]
+                        ]
+                    ]
+                ],
+                'authError' => 'You are not authorized to view this page',
+                'authorize' => 'Controller'
+            ]
+        );
 
         $this->Auth->allow();
 

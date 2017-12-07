@@ -10,6 +10,32 @@ namespace App\Controller;
  */
 class CommentariesController extends AppController
 {
+    /**
+     * Determines whether or not the user is authorized to make the current request
+     *
+     * @param User|null $user User entity
+     * @return bool
+     */
+    public function isAuthorized($user = null)
+    {
+        if ($this->request->getParam('action') == 'newsmediaIndex') {
+            if (!isset($user)) {
+                return false;
+            }
+        }
+        $adminActions = ['add', 'delete', 'edit'];
+        if (in_array($adminActions, $this->request->getParam('action'))) {
+            if (!isset($user)) {
+                return false;
+            }
+            if ($user['group_id'] == 3) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
     public $helpers = [
         'Rss'
     ];

@@ -14,6 +14,26 @@ use Cake\Routing\Router;
 class UsersController extends AppController
 {
     /**
+     * Determines whether or not the user is authorized to make the current request
+     *
+     * @param User|null $user User entity
+     * @return bool
+     */
+    public function isAuthorized($user = null)
+    {
+        if (isset($user)) {
+            if ($user['group_id'] == 1) {
+                return true;
+            }
+        }
+        if ($this->request->getParam('action') == 'login') {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
      * initialize method
      *
      * @return void

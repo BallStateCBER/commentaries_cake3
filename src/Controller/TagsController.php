@@ -10,6 +10,46 @@ use Cake\ORM\TableRegistry;
  */
 class TagsController extends AppController
 {
+    public $adminActions = [
+        'add',
+        'edit',
+        'getName',
+        'getNodes',
+        'groupUnlisted',
+        'manage',
+        'merge',
+        'recover',
+        'remove',
+        'reorder',
+        'reparent',
+        'trace'
+    ];
+
+    /**
+     * Determines whether or not the user is authorized to make the current request
+     *
+     * @param \App\Model\Entity\User|null $user User entity
+     * @return bool
+     */
+    public function isAuthorized($user = null)
+    {
+        if (isset($user)) {
+            // Admins can access everything
+            if ($user['group_id'] == 1) {
+                return true;
+
+                // Some actions are admin-only
+            } elseif (in_array($this->request->getParam('action'), $this->adminActions)) {
+                return false;
+            }
+
+            // Logged-in users can access everything else
+            return true;
+        }
+
+        return false;
+    }
+
     /**
      * initialize method
      *

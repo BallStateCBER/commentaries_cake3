@@ -1,5 +1,5 @@
 <?php
-namespace App\Migrations\RemoveAcl;
+// @codingStandardsIgnoreFile
 
 use Phinx\Migration\AbstractMigration;
 
