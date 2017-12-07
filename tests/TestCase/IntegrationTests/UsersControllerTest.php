@@ -44,7 +44,6 @@ class UsersControllerTest extends ApplicationTest
         ];
 
         $this->post('/login', $data);
-
-        $this->assertResponseContains('anything?');
+        $this->assertRedirect();
     }
 }
