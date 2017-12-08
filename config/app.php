@@ -180,7 +180,7 @@ return [
         'trace' => true,
     ],
 
-    /**
+     /**
      * Email configuration.
      *
      * By defining transports separately from delivery profiles you can easily
@@ -220,7 +220,7 @@ return [
          ],
      ],
 
-    /**
+     /**
      * Email delivery profiles
      *
      * Delivery profiles allow you to predefine various properties about email
