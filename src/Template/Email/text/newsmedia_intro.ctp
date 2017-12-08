@@ -1,10 +1,10 @@
-<?= $user->name; ?>,
+<?= $user['name']; ?>,
 
 You have been subscribed to the newsmedia alert service for Mike Hicks's Weekly Commentaries. Every Wednesday at approximately 2:00pm EST, we will send you an email alert containing a link to the next commentary due to be published. Also, you can visit <?= $newsmediaIndexUrl; ?> at any time to view the next commentary to publish, if it's available.
 
 You can now log in to the Weekly Commentary website at <?= $loginUrl; ?> using the following information.
-- Email: <?= $user->email; ?>
-- Password: <?= $user->password; ?>
+- Email: <?= $user['email']; ?>
+- Password: <?= $user['password']; ?>
 
 Once logged in, you can
 - Change your email address

@@ -7,7 +7,7 @@
 </p>
 
 <p>
-	The article, "<?= $commentary->title; ?>", is scheduled to be published on <?= $date; ?>, and its permanent address is <a href="<?= $url; ?>"><?= $url; ?></a>.
+	The article, "<?= $commentary['title']; ?>", is scheduled to be published on <?= $date; ?>, and its permanent address is <a href="<?= $url; ?>"><?= $url; ?></a>.
 </p>
 
 <p>

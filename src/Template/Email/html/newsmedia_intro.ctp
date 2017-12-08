@@ -1,5 +1,5 @@
 <p>
-	<?= $user->name; ?>,
+	<?= $user['name']; ?>,
 </p>
 
 <p>
@@ -16,10 +16,10 @@
 </p>
 <ul>
 	<li>
-		Email: <?= $user->email; ?>
+		Email: <?= $user['email']; ?>
 	</li>
 	<li>
-		Password: <?= $user->password; ?>
+		Password: <?= $user['password']; ?>
 	</li>
 </ul>
 

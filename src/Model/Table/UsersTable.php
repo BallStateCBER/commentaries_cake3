@@ -182,16 +182,16 @@ class UsersTable extends Table
     public function sendNewsmediaAlertEmail($user, $commentary)
     {
         $email = new Email('default');
-        $timestamp = strtotime($commentary->published_date);
+        $timestamp = strtotime($commentary['published_date']);
         $email
-                ->setTo($user->email)
+                ->setTo($user['email'])
                 ->setSubject('CBER Commentaries: Alert')
                 ->setTemplate('newsmedia_alert')
                 ->setEmailFormat('both')
                 ->setHelpers(['Html', 'Text'])
                 ->setViewVars([
                     'commentary' => $commentary,
-                    'recipientName' => $user->name,
+                    'recipientName' => $user['name'],
                     'url' => Router::url(
                         [
                             'controller' => 'commentaries',
@@ -238,7 +238,7 @@ class UsersTable extends Table
             true
         );
         $email
-                ->setTo($user->email)
+                ->setTo($user['email'])
                 ->setSubject('CBER Commentaries: Intro')
                 ->setTemplate('newsmedia_intro')
                 ->setEmailFormat('both')
