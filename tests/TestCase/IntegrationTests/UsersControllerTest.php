@@ -2,7 +2,6 @@
 namespace App\Test\TestCase\Controller;
 
 use App\Test\TestCase\ApplicationTest;
-use Cake\Utility\Security;
 
 class UsersControllerTest extends ApplicationTest
 {

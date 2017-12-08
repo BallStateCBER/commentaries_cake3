@@ -1,6 +1,8 @@
 <?php
 namespace App\Test\Fixture;
 
+use Cake\Auth\DefaultPasswordHasher;
+use Cake\Auth\WeakPasswordHasher;
 use FriendsOfCake\Fixturize\TestSuite\Fixture\ChecksumTestFixture as TestFixture;
 
 /**
@@ -14,13 +16,15 @@ class UsersFixture extends TestFixture
      */
     public function init()
     {
+        $hasher = new DefaultPasswordHasher();
+        $oldHash = new WeakPasswordHasher();
         parent::init();
         $this->records = [
             [
                 'id' => 1,
                 'name' => 'Addy Admin',
                 'email' => 'admin@bsu.edu',
-                'password' => '$2y$10$kLAsD6QwhXLBfotThN6fOOVJ7RH2j.ea1WMrK0oXAN5yRwpKc/FJq',
+                'password' => $hasher->hash('placeholder'),
                 'active' => 1,
                 'group_id' => 1,
                 'author' => 1,
@@ -33,7 +37,7 @@ class UsersFixture extends TestFixture
                 'id' => 2,
                 'name' => 'Commentary Connie',
                 'email' => 'commentary@bsu.edu',
-                'password' => '$2y$10$Y8sW3EGZ47sIibABaGQmze7n4iHjNTdeM8YAzep0Pa0Bfq6ZBs2ca',
+                'password' => $hasher->hash('placeholder'),
                 'active' => 1,
                 'group_id' => 2,
                 'author' => 1,
@@ -46,7 +50,7 @@ class UsersFixture extends TestFixture
                 'id' => 3,
                 'name' => 'Newsie Newsmedia',
                 'email' => 'newsmedia@bsu.edu',
-                'password' => 'ff55435345834a3fe224936776c2aa15f6ed5358',
+                'password' => $oldHash->hash('placeholder'),
                 'active' => 1,
                 'group_id' => 3,
                 'author' => 0,
