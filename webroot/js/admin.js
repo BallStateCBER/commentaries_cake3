@@ -203,8 +203,8 @@ function toggleDelayPublishing() {
 	var selected_month = $('#dateMonth').val();
 	var selected_day = $('#dateDay').val();
 	var selected_year = $('#dateYear').val();
-	var selected_date = selected_year + selected_month + selected_day;
-	var this_date = this_year + this_month + this_day;
+	var selected_date = "" + selected_year + selected_month + selected_day;
+	var this_date = "" + this_year + this_month + this_day;
 	if (selected_date > this_date) {
 		$('#delayed_publishing_date').html('automatically on ' + selected_month + '-' + selected_day + '-' + selected_year);
 	} else {
