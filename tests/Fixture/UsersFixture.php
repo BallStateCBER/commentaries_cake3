@@ -46,7 +46,7 @@ class UsersFixture extends TestFixture
                 'id' => 3,
                 'name' => 'Newsie Newsmedia',
                 'email' => 'newsmedia@bsu.edu',
-                'password' => '644178fbad97d3adc50967b4a6a71ea1c513aa29',
+                'password' => 'ff55435345834a3fe224936776c2aa15f6ed5358',
                 'active' => 1,
                 'group_id' => 3,
                 'author' => 0,

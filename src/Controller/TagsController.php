@@ -36,7 +36,6 @@ class TagsController extends AppController
         $this->Auth->deny($this->adminActions);
     }
 
-
     /**
      * Determines whether or not the user is authorized to make the current request
      *
