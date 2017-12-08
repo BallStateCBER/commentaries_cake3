@@ -49,7 +49,7 @@ class CommentariesFixture extends TestFixture
                 'body' => 'Craft beer +1 readymade hashtag. Hammock roof party unicorn readymade bicycle rights bespoke. Cornhole waistcoat kickstarter, kitsch taxidermy aesthetic bicycle rights normcore occupy health goth cloud bread crucifix pitchfork. Chartreuse austin hell of forage, occupy quinoa enamel pin echo park hella taiyaki tacos. Humblebrag la croix polaroid, mixtape cornhole pok pok thundercats selvage pug health goth. Cred sustainable YOLO lumbersexual jianbing locavore chia. Mlkshk tousled +1, occupy fixie echo park retro umami pickled meggings. Schlitz wayfarers vexillologist kitsch bespoke. Kale chips pop-up blue bottle selvage tote bag vape authentic post-ironic street art meditation pinterest thundercats literally pabst cray. Aesthetic ramps viral, retro four loko squid try-hard photo booth keytar. Wayfarers messenger bag pinterest palo santo bicycle rights cornhole quinoa snackwave organic. Kombucha PBR&amp;B man braid godard iPhone af. Kickstarter intelligentsia chillwave offal skateboard, artisan lo-fi woke hell of semiotics knausgaard man braid selfies cold-pressed.',
                 'user_id' => 1,
                 'is_published' => 0,
-                'delay_publishing' => 0,
+                'delay_publishing' => 1,
                 'published_date' => date('Y-m-d h:i:s', strtotime('+2 days')),
                 'slug' => 'i-have-left-the-field-of-economics-in-favor-of-becoming-a-linguist-in-hipster-ipsum',
                 'created' => date('Y-m-d h:i:s', strtotime('-7 days')),
@@ -64,10 +64,10 @@ class CommentariesFixture extends TestFixture
      */
     public $fields = [
         'id' => ['type' => 'integer', 'length' => 11, 'unsigned' => false, 'null' => false, 'default' => null, 'comment' => '', 'autoIncrement' => true, 'precision' => null],
-        'title' => ['type' => 'string', 'length' => 200, 'null' => false, 'default' => null, 'collate' => 'utf8_general_ci', 'comment' => '', 'precision' => null, 'fixed' => null],
-        'summary' => ['type' => 'string', 'length' => 1000, 'null' => false, 'default' => null, 'collate' => 'utf8_general_ci', 'comment' => '', 'precision' => null, 'fixed' => null],
-        'body' => ['type' => 'text', 'length' => null, 'null' => false, 'default' => null, 'collate' => 'utf8_general_ci', 'comment' => '', 'precision' => null],
-        'user_id' => ['type' => 'integer', 'length' => 11, 'unsigned' => false, 'null' => false, 'default' => null, 'comment' => '', 'precision' => null, 'autoIncrement' => null],
+        'title' => ['type' => 'string', 'length' => 200, 'null' => false, 'default' => '', 'collate' => 'utf8_general_ci', 'comment' => '', 'precision' => null, 'fixed' => null],
+        'summary' => ['type' => 'string', 'length' => 1000, 'null' => false, 'default' => '', 'collate' => 'utf8_general_ci', 'comment' => '', 'precision' => null, 'fixed' => null],
+        'body' => ['type' => 'text', 'length' => null, 'null' => false, 'default' => '', 'collate' => 'utf8_general_ci', 'comment' => '', 'precision' => null],
+        'user_id' => ['type' => 'integer', 'length' => 11, 'unsigned' => false, 'null' => false, 'default' => 1, 'comment' => '', 'precision' => null, 'autoIncrement' => null],
         'is_published' => ['type' => 'boolean', 'length' => null, 'null' => false, 'default' => '1', 'comment' => '', 'precision' => null],
         'delay_publishing' => ['type' => 'boolean', 'length' => null, 'null' => false, 'default' => '0', 'comment' => '', 'precision' => null],
         'published_date' => ['type' => 'datetime', 'length' => null, 'null' => true, 'default' => null, 'comment' => '', 'precision' => null],
