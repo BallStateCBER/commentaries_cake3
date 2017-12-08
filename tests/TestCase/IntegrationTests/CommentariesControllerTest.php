@@ -38,4 +38,30 @@ class CommentariesControllerTest extends ApplicationTest
         $this->assertResponseContains(date('Y'));
         $this->assertResponseContains($this->commentaries[0]['title']);
     }
+
+    /**
+     * testIndex method
+     *
+     * @return void
+     */
+    public function testIndex()
+    {
+        $this->get('/');
+        $this->assertResponseOk();
+        $this->assertResponseContains($this->commentaries[0]['body']);
+        $this->assertResponseContains($this->commentaries[0]['title']);
+    }
+
+    /**
+     * testNewsmediaIndex method
+     *
+     * @return void
+     */
+    public function testNewsmediaIndex()
+    {
+        $this->get('/');
+        $this->assertResponseOk();
+        $this->assertResponseContains($this->commentaries[0]['body']);
+        $this->assertResponseContains($this->commentaries[0]['title']);
+    }
 }

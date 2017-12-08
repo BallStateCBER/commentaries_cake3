@@ -14,6 +14,20 @@ use Cake\Routing\Router;
 class UsersController extends AppController
 {
     /**
+     * initialize method
+     *
+     * @return void
+     */
+    public function initialize()
+    {
+        parent::initialize();
+        $this->loadComponent('Paginator');
+
+        // deny methods for non-users
+        $this->Auth->deny(['add', 'adminIndex', 'addNewsmedia', 'delete', 'logout', 'myAccount', 'index']);
+    }
+
+    /**
      * Determines whether or not the user is authorized to make the current request
      *
      * @param User|null $user User entity
@@ -31,20 +45,6 @@ class UsersController extends AppController
         }
 
         return false;
-    }
-
-    /**
-     * initialize method
-     *
-     * @return void
-     */
-    public function initialize()
-    {
-        parent::initialize();
-        $this->loadComponent('Paginator');
-
-        // deny methods for non-users
-        $this->Auth->deny(['add', 'adminIndex', 'delete', 'logout', 'myAccount', 'index']);
     }
 
     /**

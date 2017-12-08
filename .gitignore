@@ -1,7 +1,4 @@
 /vendor/*
-/config/app.php
-/config/.env.production
-/config/.env
 /tmp/*
 /logs/*
 

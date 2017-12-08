@@ -1,6 +1,8 @@
 <?php
 namespace App\Controller;
 
+use App\Model\Entity\User;
+
 /**
  * Commentaries Controller
  *
@@ -10,32 +12,6 @@ namespace App\Controller;
  */
 class CommentariesController extends AppController
 {
-    /**
-     * Determines whether or not the user is authorized to make the current request
-     *
-     * @param User|null $user User entity
-     * @return bool
-     */
-    public function isAuthorized($user = null)
-    {
-        if ($this->request->getParam('action') == 'newsmediaIndex') {
-            if (!isset($user)) {
-                return false;
-            }
-        }
-        $adminActions = ['add', 'delete', 'edit'];
-        if (in_array($adminActions, $this->request->getParam('action'))) {
-            if (!isset($user)) {
-                return false;
-            }
-            if ($user['group_id'] == 3) {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
     public $helpers = [
         'Rss'
     ];
@@ -48,9 +24,33 @@ class CommentariesController extends AppController
     public function initialize()
     {
         parent::initialize();
-
-        // deny methods for non-users
         $this->Auth->deny(['add', 'delete', 'drafts', 'edit', 'newsmediaIndex']);
+    }
+
+    /**
+     * Determines whether or not the user is authorized to make the current request
+     *
+     * @param User|null $user User entity
+     * @return bool
+     */
+    public function isAuthorized($user)
+    {
+        if ($this->request->getParam('action') == 'newsmediaIndex') {
+            if (!isset($user)) {
+                return false;
+            }
+        }
+        $adminActions = ['add', 'delete', 'drafts', 'edit'];
+        if (in_array($adminActions, $this->request->getParam('action'))) {
+            if (!isset($user)) {
+                return false;
+            }
+            if ($user['group_id'] == 3) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     /**

@@ -79,7 +79,7 @@ class AppController extends Controller
                 ],
                 'logoutRedirect' => [
                     'prefix' => false,
-                    'controller' => 'Events',
+                    'controller' => 'Commentaries',
                     'action' => 'index'
                 ],
                 'authenticate' => [

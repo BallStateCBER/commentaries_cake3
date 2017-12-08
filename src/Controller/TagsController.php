@@ -14,7 +14,7 @@ class TagsController extends AppController
         'add',
         'edit',
         'getName',
-        'getNodes',
+        'getnodes',
         'groupUnlisted',
         'manage',
         'merge',
@@ -24,6 +24,18 @@ class TagsController extends AppController
         'reparent',
         'trace'
     ];
+
+    /**
+     * initialize method
+     *
+     * @return void
+     */
+    public function initialize()
+    {
+        parent::initialize();
+        $this->Auth->deny($this->adminActions);
+    }
+
 
     /**
      * Determines whether or not the user is authorized to make the current request
@@ -37,9 +49,8 @@ class TagsController extends AppController
             // Admins can access everything
             if ($user['group_id'] == 1) {
                 return true;
-
-                // Some actions are admin-only
             } elseif (in_array($this->request->getParam('action'), $this->adminActions)) {
+                // Some actions are admin-only
                 return false;
             }
 
@@ -48,19 +59,6 @@ class TagsController extends AppController
         }
 
         return false;
-    }
-
-    /**
-     * initialize method
-     *
-     * @return void
-     */
-    public function initialize()
-    {
-        parent::initialize();
-        $this->Auth->deny([
-            'getnodes', 'manage'
-        ]);
     }
 
     /**
