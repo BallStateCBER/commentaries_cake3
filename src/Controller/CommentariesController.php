@@ -53,7 +53,6 @@ class CommentariesController extends AppController
         return true;
     }
 
-
     /**
      * private __addAndRemoveTags method
      *
