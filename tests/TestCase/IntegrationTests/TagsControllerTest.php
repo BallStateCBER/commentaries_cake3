@@ -23,6 +23,18 @@ class TagsControllerTest extends ApplicationTest
     {
         parent::tearDown();
     }
+
+    /**
+     * test autocomplete method for tags
+     *
+     * @return void
+     */
+    public function testTagAutocomplete()
+    {
+        $this->get('/tags/autoComplete/0/0?term=blvck');
+        $this->assertResponseOk();
+        $this->assertResponseContains('"label":"blvck ceiling"');
+    }
     /**
      * Test adding, editing, and deleting tags
      *

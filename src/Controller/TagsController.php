@@ -131,6 +131,7 @@ class TagsController extends AppController
             }
         }
 
+        $this->set(compact('tags'));
         $this->viewBuilder()->setLayout('blank');
     }
 
