@@ -1,6 +1,7 @@
 <?php
 namespace App\Controller;
 
+use App\Model\Entity\User;
 use Cake\Core\Configure;
 use Cake\Routing\Router;
 
@@ -35,13 +36,10 @@ class UsersController extends AppController
      */
     public function isAuthorized($user = null)
     {
-        if (isset($user)) {
+        if (isset($user['group_id'])) {
             if ($user['group_id'] == 1) {
                 return true;
             }
-        }
-        if ($this->request->getParam('action') == 'login') {
-            return true;
         }
 
         return false;
@@ -105,11 +103,7 @@ class UsersController extends AppController
      */
     public function delete($id = null)
     {
-        if ($this->Auth->user('group_id') != 1) {
-            $this->Flash->error(__('You are not an admin.'));
-        }
         $this->viewBuilder()->setLayout('blank');
-        $this->request->allowMethod(['post', 'delete']);
         $user = $this->Users->get($id);
         if ($this->Users->delete($user)) {
             $this->Flash->success(__('The user has been deleted.'));
