@@ -521,7 +521,6 @@ class TagsController extends AppController
         $this->render('/Tags/flash');
     }
 
-
     /**
      * remove method
      *
