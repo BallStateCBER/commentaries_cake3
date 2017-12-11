@@ -182,4 +182,27 @@ class UsersControllerTest extends ApplicationTest
 
         $this->markTestIncomplete();
     }
+
+    /**
+     * test addNewsmedia function
+     *
+     * @return void
+     */
+    public function testAddNewsmedia()
+    {
+        $this->session($this->admin);
+        $this->get('/newsmedia/subscribe');
+        $this->assertResponseOk();
+        $data = [
+            'name' => 'Clepsydra',
+            'email' => 'clepsydra@bsu.edu',
+            'password' => $this->Users->generatePassword()
+        ];
+
+        $this->post('/newsmedia/subscribe', $data);
+        $this->assertResponseContains('Newsmedia member added.');
+
+        $user = $this->Users->find()->where(['name' => 'Clepsydra'])->firstOrFail();
+        $this->assertEquals('Clepsydra', $user['name']);
+    }
 }

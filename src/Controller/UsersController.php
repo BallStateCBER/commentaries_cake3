@@ -386,6 +386,7 @@ class UsersController extends AppController
             $user->nm_email_alerts = 1;
             $user->password = $password;
             $user->email = $this->Users->cleanEmail($this->request->getData('email'));
+            $user->name = $this->request->getData('name');
 
             if ($this->Users->save($user)) {
                 $this->Flash->success('Newsmedia member added.');
