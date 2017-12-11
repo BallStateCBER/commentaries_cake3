@@ -77,6 +77,91 @@ class UsersController extends AppController
     }
 
     /**
+     * addNewsmedia method
+     *
+     * @return null
+     */
+    public function addNewsmedia()
+    {
+        /* Set information about the next commentary to be published
+         * if alerts have already been sent out for it and this user
+         * needs to be caught up. */
+        $alertsSent = 0;
+
+        $nextCommentary = $this->Commentaries->getNextForNewsmedia();
+        if (!empty($nextCommentary)) {
+            $commentaryId = $nextCommentary->id;
+            $alertsSent = $this->Commentaries->isMostRecentAlert($commentaryId);
+            if ($alertsSent) {
+                $this->set(compact('nextCommentary'));
+            }
+        }
+
+        if (isset($nextCommentary) && ! empty($nextCommentary)) {
+            $articleTitle = $nextCommentary['title'];
+            $date = date('l, F jS', strtotime($nextCommentary['published_date']));
+            $url = Router::url([
+                'controller' => 'commentaries',
+                'action' => 'view',
+                'id' => $nextCommentary['id'],
+                'slug' => $nextCommentary['slug']
+            ]);
+            $this->set(compact('articleTitle', 'date', 'url'));
+        }
+
+        $user = $this->Users->newEntity();
+        $password = '';
+
+        // Show a randomly-generated password instead of a blank field
+        if (! isset($user->password) || empty($user->password)) {
+            $password = $this->Users->generatePassword();
+        }
+
+        if ($this->Auth->user('group_id') == 3) {
+            $title = 'Add a Reporter to Newsmedia Alerts';
+        } else {
+            $title = 'Add Newsmedia Member';
+        }
+        $this->set([
+            'titleForLayout' => $title
+        ]);
+
+        $this->set(compact('password', 'user'));
+
+        if ($this->request->is('post')) {
+            // Make sure password isn't blank
+            if ($user->password === '') {
+                $user->password = $this->Users->generatePassword();
+            }
+
+            $user->group_id = 3;
+            $user->nm_email_alerts = 1;
+            $user->password = $password;
+            $user->email = $this->Users->cleanEmail($this->request->getData('email'));
+            $user->name = $this->request->getData('name');
+
+            if ($this->Users->save($user)) {
+                $this->Flash->success('Newsmedia member added.');
+
+                if (!$this->Users->sendNewsmediaIntroEmail($user)) {
+                    $this->Flash->error('There was an error sending the introductory email.');
+                }
+
+                if ($user['send_alert'] && ! empty($nextCommentary) && $alertsSent) {
+                    if (!$this->Users->sendNewsmediaAlertEmail($user, $nextCommentary)) {
+                        $this->Flash->error('There was an error sending an alert message for the article "' . $nextCommentary['title'] . '".');
+                    }
+                }
+
+                return null;
+            }
+            $this->Flash->error('There was an error adding the user.');
+        }
+
+        return null;
+    }
+
+    /**
      * adminIndex method
      *
      * @return void
@@ -192,6 +277,22 @@ class UsersController extends AppController
         $this->set([
             'titleForLayout' => 'Forgot Password'
         ]);
+    }
+
+    /**
+     * Index method
+     *
+     * @return \Cake\Http\Response|void
+     */
+    public function index()
+    {
+        $this->paginate = [
+            'contain' => ['Groups']
+        ];
+        $users = $this->paginate($this->Users);
+
+        $this->set(compact('users'));
+        $this->set('_serialize', ['users']);
     }
 
     /**
@@ -325,91 +426,6 @@ class UsersController extends AppController
     }
 
     /**
-     * addNewsmedia method
-     *
-     * @return null
-     */
-    public function addNewsmedia()
-    {
-        /* Set information about the next commentary to be published
-         * if alerts have already been sent out for it and this user
-         * needs to be caught up. */
-        $alertsSent = 0;
-
-        $nextCommentary = $this->Commentaries->getNextForNewsmedia();
-        if (!empty($nextCommentary)) {
-            $commentaryId = $nextCommentary->id;
-            $alertsSent = $this->Commentaries->isMostRecentAlert($commentaryId);
-            if ($alertsSent) {
-                $this->set(compact('nextCommentary'));
-            }
-        }
-
-        if (isset($nextCommentary) && ! empty($nextCommentary)) {
-            $articleTitle = $nextCommentary['title'];
-            $date = date('l, F jS', strtotime($nextCommentary['published_date']));
-            $url = Router::url([
-                'controller' => 'commentaries',
-                'action' => 'view',
-                'id' => $nextCommentary['id'],
-                'slug' => $nextCommentary['slug']
-            ]);
-            $this->set(compact('articleTitle', 'date', 'url'));
-        }
-
-        $user = $this->Users->newEntity();
-        $password = '';
-
-        // Show a randomly-generated password instead of a blank field
-        if (! isset($user->password) || empty($user->password)) {
-            $password = $this->Users->generatePassword();
-        }
-
-        if ($this->Auth->user('group_id') == 3) {
-            $title = 'Add a Reporter to Newsmedia Alerts';
-        } else {
-            $title = 'Add Newsmedia Member';
-        }
-        $this->set([
-            'titleForLayout' => $title
-        ]);
-
-        $this->set(compact('password', 'user'));
-
-        if ($this->request->is('post')) {
-            // Make sure password isn't blank
-            if ($user->password === '') {
-                $user->password = $this->Users->generatePassword();
-            }
-
-            $user->group_id = 3;
-            $user->nm_email_alerts = 1;
-            $user->password = $password;
-            $user->email = $this->Users->cleanEmail($this->request->getData('email'));
-            $user->name = $this->request->getData('name');
-
-            if ($this->Users->save($user)) {
-                $this->Flash->success('Newsmedia member added.');
-
-                if (!$this->Users->sendNewsmediaIntroEmail($user)) {
-                    $this->Flash->error('There was an error sending the introductory email.');
-                }
-
-                if ($user['send_alert'] && ! empty($nextCommentary) && $alertsSent) {
-                    if (!$this->Users->sendNewsmediaAlertEmail($user, $nextCommentary)) {
-                        $this->Flash->error('There was an error sending an alert message for the article "' . $nextCommentary['title'] . '".');
-                    }
-                }
-
-                return null;
-            }
-            $this->Flash->error('There was an error adding the user.');
-        }
-
-        return null;
-    }
-
-    /**
      * resetPassword method
      *
      * @param int|null $userId who needs reset
@@ -455,22 +471,6 @@ class UsersController extends AppController
         }
 
         return null;
-    }
-
-    /**
-     * Index method
-     *
-     * @return \Cake\Http\Response|void
-     */
-    public function index()
-    {
-        $this->paginate = [
-            'contain' => ['Groups']
-        ];
-        $users = $this->paginate($this->Users);
-
-        $this->set(compact('users'));
-        $this->set('_serialize', ['users']);
     }
 
     /**
