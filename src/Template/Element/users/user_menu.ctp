@@ -4,9 +4,9 @@
 ?>
 
 <div id="user_menu">
-    <h3>
+    <h2>
         <?= $session->read('Auth.User.name'); ?>
-    </h3>
+    </h2>
     <ul class="root">
         <li>
             <ul>

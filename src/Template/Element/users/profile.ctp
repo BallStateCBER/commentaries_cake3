@@ -1,7 +1,7 @@
 <div class="profile_box">
 	<div class="picture">
 		<?php if ($user['picture']): ?>
-			<img src="/img/users/<?php echo $user['picture']; ?>" />
+			<img src="/img/users/<?php echo $user['picture']; ?>" alt="<?= $user['name'] ?>" />
 		<?php endif; ?> 
 	</div>
 	<p class="about">
