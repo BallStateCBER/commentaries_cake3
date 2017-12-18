@@ -14,10 +14,10 @@ use Cake\Core\Configure;
 </p>
 
 <?= $this->Form->create('User', ['url' => ['controller' => 'Users', 'action' => 'forgotPassword']]); ?>
-<div class="col-lg-6">
+<div class="col-lg-12" align="center">
     <?php
         echo $this->Form->input('email', ['class' => 'form-control', 'label' => false]);
-        echo $this->Form->button('Send password-resetting email', ['class' => 'form-control']);
+        echo $this->Form->button('Send password-resetting email', ['class' => 'btn btn-default']);
         echo $this->Form->end();
     ?>
 </div>

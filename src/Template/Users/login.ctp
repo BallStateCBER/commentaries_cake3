@@ -12,7 +12,6 @@
 <div class="col-lg-12">
     <div class='col-lg-6'>
         <?= $this->Form->control('password', ['class' => 'form-control']); ?>
-        <?= $this->Html->link(__('Forgot password?'), ['controller' => 'Users', 'action' => 'forgotPassword'], ['class' => 'nav-link']); ?>
     </div>
 </div>
 
@@ -27,6 +26,14 @@
         ]);
     ?>
     <?= $this->Form->button(__('Login'), ['class' => 'btn btn-default', 'id' => 'login-btn']); ?>
+</div>
+<div class="col-lg-12">
+    <div class="col-lg-6" style='margin:5px;'>
+        <?= $this->Html->link(__('Forgot password?'),
+            ['controller' => 'Users', 'action' => 'forgotPassword'],
+            ['class' => 'nav-link']
+        ); ?>
+    </div>
 </div>
 
 <?= $this->Form->end() ?>
