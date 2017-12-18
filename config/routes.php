@@ -74,7 +74,7 @@ Router::scope('/', function (RouteBuilder $routes) {
     );
 
     // So /index.rss leads to the RSS feed
-    Router::connect('/index', ['controller' => 'commentaries', 'action' => 'rss']);
+    Router::connect('/index.rss', ['controller' => 'commentaries', 'action' => 'rss']);
     Router::connect('/drafts', ['controller' => 'commentaries', 'action' => 'drafts']);
 
     Router::connect('/newsmedia', ['controller' => 'commentaries', 'action' => 'newsmedia_index']);
