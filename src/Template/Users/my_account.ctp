@@ -13,9 +13,9 @@ use Cake\Core\Configure;
         'class' => 'form-control',
         'value' => $authUser->email
     ]); ?>
-    <?= $this->Form->radio('sex', [
-        'm' => 'Male',
-        'f' => 'Female'
+    <?= $this->Form->control('gender', [
+        'class' => 'form-control',
+        'value' => $authUser->gender
     ]); ?>
 </div>
 
