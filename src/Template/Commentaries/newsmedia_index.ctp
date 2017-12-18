@@ -3,7 +3,7 @@
 </h1>
 
 <?php if (empty($commentary)): ?>
-    <div class="notification_message">
+    <div class="alert alert-info">
         <p>
             The next article to publish has not yet been added. Please check back later.
         </p>

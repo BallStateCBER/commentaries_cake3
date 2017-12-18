@@ -30,7 +30,7 @@
         <p>
             All tags will be created as selectable.
         </p>
-        <?= $this->Form->submit('Add', ['class' => 'btn']) ?>
+        <?= $this->Form->submit('Add', ['class' => 'btn btn-default']) ?>
         <?= $this->Form->end(); ?>
 
         <div id="add_results"></div>
@@ -46,7 +46,7 @@
         <form id="tag_remove_form">
             <input type="text" id="tag_remove_field" class="search_field form-control" />
             <br />
-            <input type="submit" value="Remove" class="btn" />
+            <input type="submit" value="Remove" class="btn btn-default" />
         </form>
         <div class="results"></div>
     </div>
@@ -59,7 +59,7 @@
             <form id="tag_edit_search_form">
                 <input type="text" class="search_field form-control" />
                 <br />
-                <input type="submit" value="Edit this tag" class="btn" />
+                <input type="submit" value="Edit this tag" class="btn btn-default" />
             </form>
         </div>
         <div class="results" id="edit_results"></div>
@@ -77,7 +77,7 @@
 
             <span class="footnote">(The first tag will be <strong>removed</strong>.)</span>
             <br /><br />
-            <input type="submit" value="Merge" class="btn" />
+            <input type="submit" value="Merge" class="btn btn-default" />
         </form>
         <div class="results" id="merge_results"></div>
     </div>

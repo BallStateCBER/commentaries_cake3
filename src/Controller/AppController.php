@@ -112,18 +112,20 @@ class AppController extends Controller
 
         $this->TagManager = $this->viewBuilder()->setHelpers(['DataCenter.Tag']);
 
-        $recentCommentaries = $this->Commentaries->find()
-            ->select(['id', 'title', 'summary', 'slug'])
-            ->where(['is_published' => 1])
-            ->order(['published_date' => 'DESC'])
-            ->limit(4)
-            ->toArray();
-
         if ($this->request->getParam('action') != 'autoComplete') {
-            $this->set([
-                'authUser' => $this->Auth->user('id') ? $this->Users->get($this->Auth->user('id')): null,
-                'recentCommentaries' => $recentCommentaries,
-            ]);
+            $recentCommentaries = $this->Commentaries->find()
+                ->select(['id', 'title', 'summary', 'slug'])
+                ->where(['is_published' => 1])
+                ->order(['published_date' => 'DESC'])
+                ->limit(4)
+                ->toArray();
+
+            if ($this->request->getParam('action') != 'autoComplete') {
+                $this->set([
+                    'authUser' => $this->Auth->user('id') ? $this->Users->get($this->Auth->user('id')): null,
+                    'recentCommentaries' => $recentCommentaries,
+                ]);
+            }
         }
     }
 
