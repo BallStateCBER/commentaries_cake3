@@ -60,16 +60,4 @@
             </tr>
         <?php endforeach; ?>
     </table>
-
-    <div class="paging">
-        <?php
-        if ($this->Paginator->hasPrev()) {
-            echo $this->Paginator->prev('< ' . __('previous'), [], null, ['class' => 'prev disabled']);
-        }
-        echo $this->Paginator->numbers(['separator' => '']);
-        if ($this->Paginator->hasNext()) {
-            echo $this->Paginator->next(__('next') . ' >', [], null, ['class' => 'next disabled']);
-        }
-        ?>
-    </div>
 </div>

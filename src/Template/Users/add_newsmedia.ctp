@@ -24,19 +24,21 @@
     <?php endif; ?>
 
     <?= $this->Form->create($user); ?>
-    <div class="row">
+    <div class="col-lg-12">
         <div class="col-lg-6">
             <?= $this->Form->input('name', [
                 'class' => 'form-control'
             ]); ?>
         </div>
+    </div>
+    <div class="col-lg-12">
         <div class="col-lg-6">
             <?= $this->Form->input('email', [
                 'class' => 'form-control'
             ]); ?>
         </div>
     </div>
-    <div class="row">
+    <div class="col-lg-12">
         <div class="col-lg-6">
             <?= $this->Form->input('password', [
                 'class' => 'form-control',
@@ -44,20 +46,19 @@
                 'required' => true,
                 'value' => $password
             ]); ?>
-
         </div>
-    </div>
-    <?php if (isset($nextCommentary)): ?>
-        <label style="display:inline-block;">
-            <?= $this->Form->input('send_alert', [
-                'type' => 'checkbox',
-                'label' => false
-            ]); ?>
-            Immediately send this reporter an alert for the article <a href="<?= $url ?>"><?= $articleTitle ?></a>, due to be published on <?= $date ?>?
-        </label>
-    <?php endif; ?>
-    <div class="col-lg-12">
-        <?= $this->Form->submit('Add', ['class' => 'btn btn-sm']); ?>
+        <?php if (isset($nextCommentary)): ?>
+            <label style="display:inline-block;">
+                <?= $this->Form->input('send_alert', [
+                    'type' => 'checkbox',
+                    'label' => false
+                ]); ?>
+                Immediately send this reporter an alert for the article <a href="<?= $url ?>"><?= $articleTitle ?></a>, due to be published on <?= $date ?>?
+            </label>
+        <?php endif; ?>
+        <div class="col-lg-12">
+            <?= $this->Form->submit('Add', ['class' => 'btn btn-sm']); ?>
+        </div>
     </div>
     <?= $this->Form->end(); ?>
 </div>

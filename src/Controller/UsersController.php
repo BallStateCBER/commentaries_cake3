@@ -175,7 +175,8 @@ class UsersController extends AppController
             ->contain('Groups');
         $this->set([
             'titleForLayout' => 'Manage Users',
-            'users' => $this->paginate($users)
+            #'users' => $this->paginate($users)
+            'users' => $users
         ]);
     }
 
