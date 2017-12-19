@@ -1,4 +1,6 @@
 <?php
+// @codingStandardsIgnoreFile
+
 use Migrations\AbstractMigration;
 
 class ChangeSexToGender extends AbstractMigration
