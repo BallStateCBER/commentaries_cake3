@@ -11,14 +11,27 @@
 
     ?>
     <div id="tag_cloud" class="tag_cloud">
+        <?php
+        $minCount = $maxCount = null;
+        foreach ($tagCloud as $tag) {
+            if ($minCount == null) {
+                $minCount = $maxCount = $tag['occurrences'];
+            }
+            if ($tag['occurrences'] < $minCount) {
+                $minCount = $tag['occurrences'];
+            }
+            if ($tag['occurrences'] > $maxCount) {
+                $maxCount = $tag['occurrences'];
+            }
+        }
+        $countRange = max($maxCount - $minCount, 1);
+        $minFontSize = 20;
+        $maxFontSize = 40;
+        $fontSizeRange = $maxFontSize - $minFontSize;
+        ?>
         <?php foreach ($tagCloud as $key => $tag): ?>
-            <?php
-                $fontSize = $maxFontSize - $minFontSize;
-                $fontSize *= $tag['occurrences'] / $maxOccurrences;
-                $fontSize += $minFontSize;
-                $fontSize = ceil($fontSize);
-
-                echo $this->Html->link(
+            <?php $fontSize = $minFontSize + round($fontSizeRange * (($tag['occurrences'] - $minCount) / $countRange)) ?>
+            <?= $this->Html->link(
                     str_replace(' ', '&nbsp;', $tag['name']),
                     ['controller' => 'commentaries', 'action' => 'tagged', 'id' => $tag['id']],
                     [
