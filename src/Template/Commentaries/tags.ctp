@@ -25,7 +25,7 @@
             }
         }
         $countRange = max($maxCount - $minCount, 1);
-        $minFontSize = 20;
+        $minFontSize = 13;
         $maxFontSize = 40;
         $fontSizeRange = $maxFontSize - $minFontSize;
         ?>
