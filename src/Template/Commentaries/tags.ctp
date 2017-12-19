@@ -2,13 +2,17 @@
     <?= $titleForLayout; ?>
 </h1>
 <div id="tag_list">
-    <div class="controls">
-        <strong>
-            View:
-        </strong>
-        <a href="#" id="tag_cloud_handle">Cloud</a>
-        |
-        <a href="#" id="tag_list_handle">List</a>
+    <div class="controls" align="center">
+        <h2>
+            Toggle mode:
+        </h2>
+        <h2>
+            <a href="#" id="tag_cloud_handle">Cloud View</a>
+        </h2>
+        <h2>|</h2>
+        <h2>
+            <a href="#" id="tag_list_handle">List View</a>
+        </h2>
     </div>
 
     <?php
