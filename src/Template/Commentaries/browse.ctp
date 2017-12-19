@@ -12,7 +12,7 @@ $totalYears = count($years);
     <li>
         Select a year &rarr;
     </li>
-    <select class="form-control" data-url="/browse/<?= $year; ?>">
+    <select class="form-control year-select" data-url="/browse/<?= $year; ?>">
         <?php foreach ($years as $y): ?>
             <option <?php if ($y == $year): ?>selected="selected"<?php endif; ?>>
                 <?= $y; ?>
