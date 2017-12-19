@@ -2,20 +2,23 @@
     <?= $titleForLayout; ?>
 </h1>
 
-<?php $years = range($latestYear, $earliestYear); ?>
+<?php
+$years = range($latestYear, $earliestYear);
+$totalYears = count($years);
+
+?>
 
 <ul class="commentary_years">
     <li>
         Select a year &rarr;
     </li>
-    <?php foreach ($years as $y): ?>
-        <li<?php if ($y == $year): ?> class="selected"<?php endif; ?>>
-            <?= $this->Html->link(
-                $y,
-                ['controller' => 'commentaries', 'action' => 'browse', $y]
-            ); ?>
-        </li>
-    <?php endforeach; ?>
+    <select class="form-control" data-url="/browse/<?= $year; ?>">
+        <?php foreach ($years as $y): ?>
+            <option <?php if ($y == $year): ?>selected="selected"<?php endif; ?>>
+                <?= $y; ?>
+            </option>
+        <?php endforeach; ?>
+    </select>
 </ul>
 
 <?php if (isset($commentaries) && ! empty($commentaries)): ?>
