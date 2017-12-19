@@ -3,7 +3,7 @@
 </h1>
 <div id="tag_list">
     <div class="controls" align="center">
-        <a href="#" id="tag_cloud_handle" class="btn btn-default">Cloud View</a>
+        <a href="#" id="tag_cloud_handle" class="btn btn-default selected">Cloud View</a>
         <a href="#" id="tag_list_handle" class="btn btn-default">List View</a>
     </div>
 
@@ -64,12 +64,17 @@
         event.preventDefault();
         $('#tag_cloud').show();
         $('#tag_list_inner').hide();
+        $('#tag_cloud_handle').addClass('selected');
+        $('#tag_list_handle').removeClass('selected');
     });
 
     $('#tag_list_handle').click(function(event) {
         event.preventDefault();
         $('#tag_cloud').hide();
         $('#tag_list_inner').show();
+        $('#tag_list_handle').addClass('selected');
+        $('#tag_cloud_handle').removeClass('selected');
+
     });
     </script>
 </div>
