@@ -323,9 +323,6 @@ ul.auto_complete {
 
 	.controls {
 		background-color: #EEE;
-        h2 {
-            display: inline-block;
-        }
 	}
 	ul.letters {
 		background-color: #EEE;
@@ -351,7 +348,17 @@ ul.auto_complete {
 		vertical-align: middle;
 	}
 }
-#tag_cloud_handle, #tag_list_handle {
+#tag_cloud_handle,
+#tag_list_handle {
+    background-color: #007788;
+    color: #fff;
+    margin: 10px;
+}
+#tag_cloud_handle:active,
+#tag_list_handle:active,
+#tag_cloud_handle:hover,
+#tag_list_handle:hover {
+    background-color: #fff;
     color: #007788;
 }
 .tagged_items_by_model {

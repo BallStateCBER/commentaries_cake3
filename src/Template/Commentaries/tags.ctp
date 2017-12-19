@@ -3,16 +3,8 @@
 </h1>
 <div id="tag_list">
     <div class="controls" align="center">
-        <h2>
-            Toggle mode:
-        </h2>
-        <h2>
-            <a href="#" id="tag_cloud_handle">Cloud View</a>
-        </h2>
-        <h2>|</h2>
-        <h2>
-            <a href="#" id="tag_list_handle">List View</a>
-        </h2>
+        <a href="#" id="tag_cloud_handle" class="btn btn-default">Cloud View</a>
+        <a href="#" id="tag_list_handle" class="btn btn-default">List View</a>
     </div>
 
     <?php
