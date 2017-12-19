@@ -74,9 +74,6 @@ class TagsController extends AppController
 
             return null;
         }
-
-        $class = 'success';
-        $message = '';
         $inputtedNames = explode("\n", trim(strtolower($this->request->getData('name'))));
         foreach ($inputtedNames as $name) {
             $parentId = null;
@@ -89,8 +86,7 @@ class TagsController extends AppController
                 ->where(['name' => $name])
                 ->count();
             if ($exists) {
-                $class = 'error';
-                $message .= "Cannot create the tag \"$name\" because a tag with that name already exists.";
+                $this->Flash->error("Cannot create the tag \"$name\" because a tag with that name already exists.");
                 continue;
             }
 
@@ -105,11 +101,8 @@ class TagsController extends AppController
                 $this->Flash->success("Created tag #{$newTag->id}: $name");
                 continue;
             }
-            $class = 'error';
             $this->Flash->error("Error creating the tag \"$name\"");
         }
-
-        $this->Flash->$class($message);
         $this->render('/Tags/flash');
 
         return null;
@@ -118,9 +111,11 @@ class TagsController extends AppController
     /**
      * autoComplete method
      *
+     * @param bool $onlyListed of entry
+     * @param bool $onlySelectable of entry
      * @return void
      */
-    public function autoComplete()
+    public function autoComplete($onlyListed, $onlySelectable)
     {
         $stringToComplete = filter_input(INPUT_GET, 'term');
         $limit = 10;
@@ -154,12 +149,12 @@ class TagsController extends AppController
             foreach ($results as $result) {
                 $tags[$result->id] = [
                     'label' => $result->name,
-                    'value' => $result->id
+                    'value' => $result->name
                 ];
 
                 $tag = [
                     'label' => $result->name,
-                    'value' => $result->id
+                    'value' => $result->name
                 ];
                 $this->set([$x => $tag]);
                 $x = $x + 1;
@@ -260,6 +255,7 @@ class TagsController extends AppController
         }
         $id = $this->Tags->getIdFromName($tagName);
         $tag = $this->Tags->get($id);
+        $this->set(compact('tag'));
         if ($this->request->is('put') || $this->request->is('post')) {
             $name = strtolower(trim($this->request->getData('name')));
             $duplicates = $this->Tags->find()

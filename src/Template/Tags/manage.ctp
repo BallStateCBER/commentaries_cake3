@@ -85,8 +85,7 @@
     <div id="tab-fix">
         <p>
             These functions are safe to use at any time, and should be used to fix relevant problems
-            that come up. But these were initially only set up to assist in the transition from
-            The Muncie Scene's tag system to the new system.
+            that come up.
         </p>
         <ul>
             <li>
