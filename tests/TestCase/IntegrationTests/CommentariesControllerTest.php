@@ -208,7 +208,7 @@ class CommentariesControllerTest extends ApplicationTest
      */
     public function testRssIndex()
     {
-        $this->get('/index');
+        $this->get('/index.rss');
         $this->assertResponseOk();
         $this->assertResponseContains($this->commentaries[0]['title']);
     }
