@@ -26,7 +26,7 @@
     <div id="tab-add">
         <?= $this->Form->create('Tag', ['url' => ['controller' => 'tags', 'action' => 'add']]); ?>
         <strong>Tag</strong>(s)<br />
-        <?= $this->Form->input('name', ['type' => 'textarea', 'label' => false, 'style' => 'width: 100%;']); ?>
+        <?= $this->Form->input('name', ['type' => 'textarea', 'label' => false, 'class' => 'form-control']); ?>
         <p>
             All tags will be created as selectable.
         </p>
