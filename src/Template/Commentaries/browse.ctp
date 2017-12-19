@@ -9,10 +9,10 @@ $totalYears = count($years);
 ?>
 
 <ul class="commentary_years">
-    <li>
+    <label for="year-select">
         Select a year &rarr;
-    </li>
-    <select class="form-control year-select" onchange="location = this.value;">
+    </label>
+    <select id="year-select" class="form-control year-select" onchange="location = this.value;">
         <?php foreach ($years as $y): ?>
             <option <?php if ($y == $year): ?>selected="selected"<?php endif; ?> value="/commentaries/browse/<?= $y ?>">
                 <?= $y; ?>
