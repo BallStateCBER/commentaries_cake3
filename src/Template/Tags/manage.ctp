@@ -26,6 +26,12 @@
     <div id="tab-add">
         <?= $this->Form->create('Tag', ['url' => ['controller' => 'tags', 'action' => 'add']]); ?>
         <strong>Tag</strong>(s)<br />
+        Multiple tags go on separate lines. Example:
+        <pre style="background-color: #eee; font-size: 80%; margin-left: 20px; width: 200px;">
+Agriculture
+China
+Quality Of Place
+        </pre>
         <?= $this->Form->input('name', ['type' => 'textarea', 'label' => false, 'class' => 'form-control']); ?>
         <p>
             All tags will be created as selectable.
