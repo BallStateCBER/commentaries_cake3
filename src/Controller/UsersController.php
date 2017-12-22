@@ -362,6 +362,9 @@ class UsersController extends AppController
 
         if ($this->request->is(['patch', 'post', 'put'])) {
             $user = $this->Users->patchEntity($user, $this->request->getData());
+            if ($this->request->getData('password') != $this->request->getData('confirm_password')) {
+                $this->Flash->error('Your passwords do not match. Please check your passwords and try again.');
+            }
             if (empty($this->request->getData('password'))) {
                 $password = $this->Users->getOldPassword($id);
                 $user->password = $password;

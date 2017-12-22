@@ -9,9 +9,6 @@ use Cake\Core\Configure;
         'class' => 'form-control',
         'value' => $authUser->name
     ]); ?>
-    <?= $this->Form->control('password', [
-        'class' => 'form-control'
-    ]) ?>
     <?= $this->Form->control('email', [
         'class' => 'form-control',
         'value' => $authUser->email
@@ -28,6 +25,16 @@ use Cake\Core\Configure;
 </div>
 
 <div class="col-lg-6">
+    <?= $this->Form->control('password', [
+        'class' => 'form-control'
+    ]) ?>
+    <?= $this->Form->control('confirm_password', [
+        'class' => 'form-control'
+    ]) ?>
+</div>
+
+<div class="col-lg-12">
     <?= $this->Form->button(__('Submit'), ['class' => 'btn btn-secondary btn-sm']); ?>
 </div>
+
 <?= $this->Form->end(); ?>

@@ -35,14 +35,9 @@ class AppController extends Controller
 {
     public $helpers = [
         'AkkaCKEditor.CKEditor' =>
-            ['distribution' => 'basic',
-            'local_plugin' => [
-                'emojione' => [
-                    'location' => WWW_ROOT . 'js',
-                    'file' => 'emojione.js'
-                    ]
-                ],
-            'version' => '4.5.0'
+            [
+                'distribution' => 'basic',
+                'version' => '4.5.0'
             ],
         'CakeJs.Js',
         'DataCenter.Tag',

@@ -71,7 +71,7 @@ class UsersTable extends Table
             ->allowEmpty('bio');
 
         $validator
-            ->allowEmpty('sex');
+            ->allowEmpty('gender');
 
         return $validator;
     }

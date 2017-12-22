@@ -67,6 +67,7 @@ class UsersControllerTest extends ApplicationTest
         $data = [
             'name' => 'Admin Person',
             'password' => 'spaceholder',
+            'confirm-password' => 'spaceholder',
             'email' => 'madmin@bsu.edu',
             'gender' => 'Nonbinary',
             'bio' => 'Blah blah blah stuff stuff stuff things things things'
