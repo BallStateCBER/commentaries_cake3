@@ -362,6 +362,10 @@ class UsersController extends AppController
 
         if ($this->request->is(['patch', 'post', 'put'])) {
             $user = $this->Users->patchEntity($user, $this->request->getData());
+            if (empty($this->request->getData('password'))) {
+                $password = $this->Users->getOldPassword($id);
+                $user->password = $password;
+            }
             if ($this->Users->save($user)) {
                 $data = $user->toArray();
                 $this->Auth->setUser($data);

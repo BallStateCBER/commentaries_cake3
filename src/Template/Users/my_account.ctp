@@ -9,6 +9,9 @@ use Cake\Core\Configure;
         'class' => 'form-control',
         'value' => $authUser->name
     ]); ?>
+    <?= $this->Form->control('password', [
+        'class' => 'form-control'
+    ]) ?>
     <?= $this->Form->control('email', [
         'class' => 'form-control',
         'value' => $authUser->email
