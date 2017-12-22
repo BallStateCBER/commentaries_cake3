@@ -250,9 +250,8 @@ class TagsController extends AppController
      */
     public function edit($tagName = null)
     {
-        if ($this->request->is('ajax')) {
-            $this->viewBuilder()->setLayout('ajax');
-        }
+        $this->viewBuilder()->setLayout('ajax');
+
         $id = $this->Tags->getIdFromName($tagName);
         $tag = $this->Tags->get($id);
         $this->set(compact('tag'));
@@ -272,6 +271,7 @@ class TagsController extends AppController
                 $message .= print_r($oldTags);
                 $message .= ') already has that name. You can, however, merge this tag into that tag.';
                 $this->Flash->error($message);
+                $this->render('/Tags/flash');
 
                 return null;
             }
@@ -281,6 +281,7 @@ class TagsController extends AppController
             if ($this->Tags->save($tag)) {
                 $message = 'Tag successfully edited.';
                 $this->Flash->success($message);
+                $this->render('/Tags/flash');
 
                 return null;
             }
@@ -290,6 +291,7 @@ class TagsController extends AppController
         }
         if (!$tagName) {
             $this->Flash->error('Please try again, but with a tag name provided this time.');
+            $this->render('/Tags/flash');
 
             return null;
         }
@@ -298,6 +300,7 @@ class TagsController extends AppController
             ->first();
         if (empty($result)) {
             $this->Flash->error("Could not find a tag with the exact tag name \"$tagName\".");
+            $this->render('/Tags/flash');
 
             return null;
         }
