@@ -37,7 +37,7 @@ class AppController extends Controller
         'AkkaCKEditor.CKEditor' =>
             [
                 'distribution' => 'basic',
-                'version' => '4.5.0'
+                'version' => '4.4.7'
             ],
         'CakeJs.Js',
         'DataCenter.Tag',

@@ -1,9 +1,5 @@
-<?php
-use Cake\Core\Configure;
-
-?>
 <?= $this->CKEditor->loadJs(); ?>
-<?= $this->Form->create($user, ['url' => ['controller' => 'Users', 'action' => 'myAccount']]); ?>
+<?= $this->Form->create($user, ['url' => ['controller' => 'Users', 'action' => 'edit']]); ?>
 <div class="col-lg-6">
     <?= $this->Form->control('name', [
         'class' => 'form-control'

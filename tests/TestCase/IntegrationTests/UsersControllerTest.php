@@ -182,6 +182,7 @@ class UsersControllerTest extends ApplicationTest
         $this->assertResponseContains('The user has been saved');
 
         $user = $this->Users->find()->where(['name' => $newUser['name']])->first();
+        $this->assertEquals($user['bio'], $newUser['bio']);
         $this->get('/users/edit/' . $user['id']);
 
         $accountInfo = [

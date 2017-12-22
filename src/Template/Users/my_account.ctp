@@ -1,7 +1,3 @@
-<?php
-use Cake\Core\Configure;
-
-?>
 <?= $this->CKEditor->loadJs(); ?>
 <?= $this->Form->create('User', ['url' => ['controller' => 'Users', 'action' => 'myAccount']]); ?>
 <div class="col-lg-6">
@@ -19,7 +15,7 @@ use Cake\Core\Configure;
     ]); ?>
 </div>
 
-<div class="col-lg-12">
+<div class="col-lg-8">
     <?= $this->Form->input('bio'); ?>
     <?= $this->CKEditor->replace('bio'); ?>
 </div>
