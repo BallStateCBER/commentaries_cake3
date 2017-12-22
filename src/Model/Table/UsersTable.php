@@ -158,6 +158,19 @@ class UsersTable extends Table
     }
 
     /**
+     * getOldPassword function
+     *
+     * @param int $id of user
+     * @return string
+     */
+    public function getOldPassword($id)
+    {
+        $user = $this->get($id);
+
+        return $user->password;
+    }
+
+    /**
      * getResetPasswordHash method
      *
      * @param int $userId of user
