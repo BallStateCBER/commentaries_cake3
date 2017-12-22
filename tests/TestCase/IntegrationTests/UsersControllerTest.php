@@ -60,6 +60,38 @@ class UsersControllerTest extends ApplicationTest
 
         $this->get('/users/admin');
         $this->assertResponseContains('admin@bsu.edu');
+
+        $this->get('/users/my-account');
+        $this->assertResponseOk();
+
+        $data = [
+            'name' => 'Admin Person',
+            'password' => 'spaceholder',
+            'email' => 'madmin@bsu.edu',
+            'gender' => 'Nonbinary',
+            'bio' => 'Blah blah blah stuff stuff stuff things things things'
+        ];
+
+        $this->post('/users/my-account', $data);
+        $this->assertResponseContains('been updated');
+
+        $this->get('logout');
+
+        $login = [
+            $data['email'],
+            $data['password']
+        ];
+
+        $this->post('/login', $login);
+        $this->assertResponseSuccess();
+
+        $this->get('/users/admin');
+        $this->assertResponseContains($data['name']);
+        $this->assertResponseContains($data['email']);
+
+        $this->get('/users/my-account');
+        $this->assertResponseContains($data['gender']);
+        $this->assertResponseContains($data['bio']);
     }
     /**
      * Test logout
@@ -80,6 +112,8 @@ class UsersControllerTest extends ApplicationTest
     }
     /**
      * Test the procedure for resetting one's password
+     *
+     * @return void
      */
     public function testPasswordResetProcedure()
     {
