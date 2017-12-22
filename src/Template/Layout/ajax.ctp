@@ -16,4 +16,3 @@
 <?= $this->fetch('content');
 
 $this->extend('DataCenter.ajax');
-echo $this->fetch('content');
