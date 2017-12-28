@@ -449,11 +449,11 @@ class CommentariesController extends AppController
         }
 
         $newsmedia = $this->Users->find()
-            ->where(['group_id' => 3])
+            ->where(['nm_email_alerts' => 1])
+            ->andWhere(['group_id' => 3])
             ->andWhere([
-                'nm_email_alerts' => 1,
+                'last_alert_article_id' => null,
                 'OR' => [
-                    'last_alert_article_id' => null,
                     'last_alert_article_id <>' => $commentary['id']
                 ]
             ])
@@ -467,7 +467,7 @@ class CommentariesController extends AppController
         }
 
         // Impose limit on how many emails are sent out in one batch
-        $limit = 5;
+        $limit = 50;
         if ($count > $limit) {
             $newsmedia = array_slice($newsmedia, 0, $limit);
         }
@@ -521,11 +521,11 @@ class CommentariesController extends AppController
      * sendTimedAlert
      *
      * @param $cronJobPassword
-     * @return null;
+     * @return null
      */
     public function sendTimedAlert($cronJobPassword)
     {
-        $alertDay = 'Wednesday';
+        $alertDay = 'Thursday';
         if (date('l') != $alertDay) {
             $this->Flash->error('Alerts are only sent out on ' . $alertDay . 's');
         } elseif (date('Hi') < '1400') {
