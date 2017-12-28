@@ -497,7 +497,7 @@ class CommentariesController extends AppController
             }
         }
         if (! empty($errorRecipients)) {
-            $this->Flash->error('Error sending newsmedia alerts to the following: '.implode(', ', $errorRecipients));
+            $this->Flash->error('Error sending newsmedia alerts to the following: ' . implode(', ', $errorRecipients));
         }
         $this->Flash->success('Total time spent: ' . DebugTimer::requestTime());
         $this->__sendNewsmediaAlertReport();
@@ -520,7 +520,7 @@ class CommentariesController extends AppController
     /**
      * sendTimedAlert
      *
-     * @param $cronJobPassword
+     * @param string $cronJobPassword to do the alerts
      * @return null
      */
     public function sendTimedAlert($cronJobPassword)
