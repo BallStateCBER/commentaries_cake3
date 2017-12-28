@@ -2,7 +2,7 @@
     Add a New User
 </h1>
 <?= $this->CKEditor->loadJs(); ?>
-<?= $this->Form->create('User');?>
+<?= $this->Form->create($user);?>
 
 <div class="col-lg-6">
     <?= $this->Form->control('name', ['class' => 'form-control']) ?>

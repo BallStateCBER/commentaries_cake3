@@ -64,7 +64,7 @@ class UsersControllerTest extends ApplicationTest
         $this->get('/users/my-account');
         $this->assertResponseOk();
 
-        $data = [
+        $user = [
             'name' => 'Admin Person',
             'password' => 'spaceholder',
             'confirm-password' => 'spaceholder',
@@ -73,26 +73,26 @@ class UsersControllerTest extends ApplicationTest
             'bio' => 'Blah blah blah stuff stuff stuff things things things'
         ];
 
-        $this->post('/users/my-account', $data);
+        $this->post('/users/my-account', $user);
         $this->assertResponseContains('been updated');
 
         $this->get('logout');
 
         $login = [
-            $data['email'],
-            $data['password']
+            $user['email'],
+            $user['password']
         ];
 
         $this->post('/login', $login);
         $this->assertResponseSuccess();
 
         $this->get('/users/admin');
-        $this->assertResponseContains($data['name']);
-        $this->assertResponseContains($data['email']);
+        $this->assertResponseContains($user['name']);
+        $this->assertResponseContains($user['email']);
 
         $this->get('/users/my-account');
-        $this->assertResponseContains($data['gender']);
-        $this->assertResponseContains($data['bio']);
+        $this->assertResponseContains($user['gender']);
+        $this->assertResponseContains($user['bio']);
     }
     /**
      * Test logout
