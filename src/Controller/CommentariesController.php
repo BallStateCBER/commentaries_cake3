@@ -27,7 +27,7 @@ class CommentariesController extends AppController
     public function initialize()
     {
         parent::initialize();
-        $this->Auth->deny(['add', 'delete', 'drafts', 'edit', 'newsmediaIndex']);
+        $this->Auth->deny(['add', 'delete', 'drafts', 'edit', 'newsmediaIndex', 'sendTimedAlert']);
     }
 
     /**
