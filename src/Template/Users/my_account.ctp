@@ -29,7 +29,8 @@
         'value' => ''
     ]) ?>
     <?= $this->Form->control('confirm_password', [
-        'class' => 'form-control'
+        'class' => 'form-control',
+        'type' => 'password'
     ]) ?>
 </div>
 

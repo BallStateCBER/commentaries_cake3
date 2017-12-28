@@ -2,6 +2,9 @@
 namespace App\Controller;
 
 use App\Model\Entity\User;
+use Cake\Core\Configure;
+use Cake\Mailer\Email;
+use DebugKit\DebugTimer;
 
 /**
  * Commentaries Controller
@@ -427,5 +430,105 @@ class CommentariesController extends AppController
 
         $this->set('commentary', $commentary);
         $this->set('_serialize', ['commentary']);
+    }
+
+    /**
+     *
+     * alertNewsmedia private method
+     *
+     * @return null
+     */
+    private function __alertNewsmedia() {
+        $commentary = $this->Commentaries->getNextForNewsmedia();
+
+        if (empty($commentary)) {
+            $this->Flash->error('No commentary available to alert newsmedia to.');
+
+            return null;
+        }
+
+        $newsmedia = $this->Users->find()
+            ->where(['group_id' => 3])
+            ->andWhere([
+                'nm_email_alerts' => 1,
+                'OR' => [
+                    'last_alert_article_id' => null,
+                    'last_alert_article_id <>' => $commentary['id']
+                ]
+            ])
+            ->toArray();
+
+        $count = count($newsmedia);
+        if ($count == 0) {
+            $this->Flash->error('Newsmedia not alerted. No applicable members (opted in to alerts and not yet alerted) found in database.');
+
+            return null;
+        }
+
+        // Impose limit on how many emails are sent out in one batch
+        $limit = 5;
+        if ($count > $limit) {
+            $newsmedia = array_slice($newsmedia, 0, $limit);
+        }
+
+        // Send emails
+        $errorRecipients = array();
+        $successRecipients = array();
+        foreach ($newsmedia as $user) {
+            if ($this->Users->sendNewsmediaAlertEmail($user, $commentary)) {
+                $successRecipients[] = $user['email'];
+            } else {
+                $errorRecipients[] = $user['email'];
+            }
+        }
+
+        // Output results
+        if (empty($successRecipients)) {
+            $this->Flash->success('No newsmedia alerts were sent');
+        } else {
+            $emailList = implode(', ', $successRecipients);
+            $this->Flash->success("Newsmedia alerted: $emailList");
+            if ($count > $limit) {
+                $difference = $count - $limit;
+                $this->Flash->success($difference.' more '.__n('user', 'users', $difference).' left to alert');
+            } else {
+                $this->Flash->success('All newsmedia members have now been alerted');
+            }
+        }
+        if (! empty($errorRecipients)) {
+            $this->Flash->error('Error sending newsmedia alerts to the following: '.implode(', ', $errorRecipients));
+        }
+        $this->Flash->success('Total time spent: ' . DebugTimer::requestTime());
+        $this->__sendNewsmediaAlertReport();
+    }
+
+    /**
+     * sendNewsmediaAlertReport to be Slacked
+     *
+     * @return null
+     */
+    private function __sendNewsmediaAlertReport() {
+        # THIS NEEDS CHANGED TO SLACK US THE INFO!!!!!!!!!!!!!
+
+        return null;
+    }
+
+    /**
+     * sendTimedAlert
+     *
+     * @param $cronJobPassword
+     */
+    public function sendTimedAlert($cronJobPassword) {
+        $alertDay = 'Thursday';
+        if (date('l') != $alertDay) {
+            $this->Flash->error('Alerts are only sent out on ' . $alertDay . 's');
+        } elseif (date('Hi') < '1400') {
+            $this->Flash->error('Alerts are only sent out after 2pm on ' . $alertDay);
+        } elseif ($cronJobPassword == Configure::read('cron_job_password')) {
+            $this->__alertNewsmedia();
+        } else {
+            $this->Flash->error('Password incorrect');
+        }
+        $this->render('DataCenter.Common/blank');
     }
 }

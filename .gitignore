@@ -33,5 +33,8 @@ composer.lock
 /config/.env.production
 /config/.env.dev
 
+# web URL for slack
+/config/slack_webhook_url.php
+
 # Code coverage report
 /build/logs/clover.xml
