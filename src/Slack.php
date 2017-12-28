@@ -1,5 +1,6 @@
 <?php
 namespace App;
+
 class Slack
 {
     public $content;
@@ -52,6 +53,7 @@ class Slack
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         $this->curlResult = curl_exec($ch);
         curl_close($ch);
+
         return $this->curlResult == 'ok';
     }
     /**
@@ -73,6 +75,7 @@ class Slack
             foreach ($keyStrings as $keyString) {
                 $this->addLinesWithString($results, $keyString, '*Git:* ');
             }
+
             return;
         }
         if (strpos($command, 'composer.phar install') !== false) {
@@ -141,6 +144,7 @@ class Slack
             $msg = str_replace($removeString, '', $msg);
         }
         $msg = trim($msg);
+
         return $msg;
     }
     /**

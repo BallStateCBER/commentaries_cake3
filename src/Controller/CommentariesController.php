@@ -438,7 +438,8 @@ class CommentariesController extends AppController
      *
      * @return null
      */
-    private function __alertNewsmedia() {
+    private function __alertNewsmedia()
+    {
         $commentary = $this->Commentaries->getNextForNewsmedia();
 
         if (empty($commentary)) {
@@ -472,8 +473,8 @@ class CommentariesController extends AppController
         }
 
         // Send emails
-        $errorRecipients = array();
-        $successRecipients = array();
+        $errorRecipients = [];
+        $successRecipients = [];
         foreach ($newsmedia as $user) {
             if ($this->Users->sendNewsmediaAlertEmail($user, $commentary)) {
                 $successRecipients[] = $user['email'];
@@ -490,7 +491,7 @@ class CommentariesController extends AppController
             $this->Flash->success("Newsmedia alerted: $emailList");
             if ($count > $limit) {
                 $difference = $count - $limit;
-                $this->Flash->success($difference.' more '.__n('user', 'users', $difference).' left to alert');
+                $this->Flash->success($difference . ' more ' . __n('user', 'users', $difference) . ' left to alert');
             } else {
                 $this->Flash->success('All newsmedia members have now been alerted');
             }
@@ -500,6 +501,8 @@ class CommentariesController extends AppController
         }
         $this->Flash->success('Total time spent: ' . DebugTimer::requestTime());
         $this->__sendNewsmediaAlertReport();
+
+        return null;
     }
 
     /**
@@ -507,7 +510,8 @@ class CommentariesController extends AppController
      *
      * @return null
      */
-    private function __sendNewsmediaAlertReport() {
+    private function __sendNewsmediaAlertReport()
+    {
         # THIS NEEDS CHANGED TO SLACK US THE INFO!!!!!!!!!!!!!
 
         return null;
@@ -517,9 +521,11 @@ class CommentariesController extends AppController
      * sendTimedAlert
      *
      * @param $cronJobPassword
+     * @return null;
      */
-    public function sendTimedAlert($cronJobPassword) {
-        $alertDay = 'Thursday';
+    public function sendTimedAlert($cronJobPassword)
+    {
+        $alertDay = 'Wednesday';
         if (date('l') != $alertDay) {
             $this->Flash->error('Alerts are only sent out on ' . $alertDay . 's');
         } elseif (date('Hi') < '1400') {
@@ -530,5 +536,7 @@ class CommentariesController extends AppController
             $this->Flash->error('Password incorrect');
         }
         $this->render('DataCenter.Common/blank');
+
+        return null;
     }
 }
