@@ -2,7 +2,7 @@
     <?= $titleForLayout ?>
 </h1>
 <?= $this->CKEditor->loadJs(); ?>
-<?= $this->Form->create('User', ['url' => ['controller' => 'Users', 'action' => 'myAccount']]); ?>
+<?= $this->Form->create($user, ['url' => ['controller' => 'Users', 'action' => 'myAccount']]); ?>
 <div class="col-lg-6">
     <?= $this->Form->control('name', [
         'class' => 'form-control',
@@ -25,7 +25,8 @@
 
 <div class="col-lg-6">
     <?= $this->Form->control('password', [
-        'class' => 'form-control'
+        'class' => 'form-control',
+        'value' => ''
     ]) ?>
     <?= $this->Form->control('confirm_password', [
         'class' => 'form-control'
