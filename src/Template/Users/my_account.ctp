@@ -1,3 +1,6 @@
+<h1 class="page_title">
+    <?= $titleForLayout ?>
+</h1>
 <?= $this->CKEditor->loadJs(); ?>
 <?= $this->Form->create('User', ['url' => ['controller' => 'Users', 'action' => 'myAccount']]); ?>
 <div class="col-lg-6">

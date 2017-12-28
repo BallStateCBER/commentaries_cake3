@@ -225,6 +225,7 @@ class UsersController extends AppController
         ]);
         $this->set(compact('user'));
         $this->set('_serialize', ['user']);
+        $this->set(['titleForLayout' => "Edit user: $user->name"]);
 
         if ($this->request->is(['patch', 'post', 'put'])) {
             $user = $this->Users->patchEntity($user, $this->request->getData());

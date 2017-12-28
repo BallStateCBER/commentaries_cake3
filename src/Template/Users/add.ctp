@@ -10,7 +10,7 @@
     <?= $this->Form->control('gender', ['class' => 'form-control']) ?>
 </div>
 
-<div class="col-lg-12">
+<div class="col-lg-8">
     <?= $this->Form->input('bio') ?>
     <?= $this->CKEditor->replace('bio') ?>
 </div>
