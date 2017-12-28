@@ -359,6 +359,7 @@ class UsersController extends AppController
 
         $id = $this->Auth->user('id');
         $user = $this->Users->get($id);
+        $this->set(compact('user'));
 
         if ($this->request->is(['patch', 'post', 'put'])) {
             $user = $this->Users->patchEntity($user, $this->request->getData());
@@ -380,7 +381,6 @@ class UsersController extends AppController
 
             return null;
         }
-        $this->set(compact('user'));
 
         return null;
     }
