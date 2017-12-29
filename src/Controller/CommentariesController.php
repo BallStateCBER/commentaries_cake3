@@ -2,6 +2,7 @@
 namespace App\Controller;
 
 use App\Model\Entity\User;
+use App\Slack;
 use Cake\Core\Configure;
 use Cake\Mailer\Email;
 use DebugKit\DebugTimer;
@@ -441,9 +442,14 @@ class CommentariesController extends AppController
     private function __alertNewsmedia()
     {
         $commentary = $this->Commentaries->getNextForNewsmedia();
+        $msg = '';
+        $msgB = '';
+        $msgC = '';
+        $msgD = '';
 
         if (empty($commentary)) {
-            $this->Flash->error('No commentary available to alert newsmedia to.');
+            $msg = 'No commentary available to alert newsmedia to.';
+            $this->Flash->error($msg);
 
             return null;
         }
@@ -461,7 +467,8 @@ class CommentariesController extends AppController
 
         $count = count($newsmedia);
         if ($count == 0) {
-            $this->Flash->error('Newsmedia not alerted. No applicable members (opted in to alerts and not yet alerted) found in database.');
+            $msg = 'Newsmedia not alerted. No applicable members (opted in to alerts and not yet alerted) found in database.';
+            $this->Flash->error($msg);
 
             return null;
         }
@@ -485,22 +492,28 @@ class CommentariesController extends AppController
 
         // Output results
         if (empty($successRecipients)) {
-            $this->Flash->success('No newsmedia alerts were sent');
+            $msg = 'No newsmedia alerts were sent';
+            $this->Flash->success($msg);
         } else {
             $emailList = implode(', ', $successRecipients);
-            $this->Flash->success("Newsmedia alerted: $emailList");
+            $msg = "Newsmedia alerted: $emailList";
+            $this->Flash->success($msg);
             if ($count > $limit) {
                 $difference = $count - $limit;
-                $this->Flash->success($difference . ' more ' . __n('user', 'users', $difference) . ' left to alert');
+                $msgB = $difference . ' more ' . __n('user', 'users', $difference) . ' left to alert';
+                $this->Flash->success($msgB);
             } else {
-                $this->Flash->success('All newsmedia members have now been alerted');
+                $msgB = 'All newsmedia members have now been alerted';
+                $this->Flash->success($msgB);
             }
         }
         if (! empty($errorRecipients)) {
-            $this->Flash->error('Error sending newsmedia alerts to the following: ' . implode(', ', $errorRecipients));
+            $msgC = 'Error sending newsmedia alerts to the following: ' . implode(', ', $errorRecipients);
+            $this->Flash->error($msgC);
         }
-        $this->Flash->success('Total time spent: ' . DebugTimer::requestTime());
-        $this->__sendNewsmediaAlertReport();
+        $msgD = 'Total time spent: ' . DebugTimer::requestTime();
+        $this->Flash->success($msgD);
+        $this->__sendNewsmediaAlertReport($msg, $msgB, $msgC, $msgD);
 
         return null;
     }
@@ -508,11 +521,24 @@ class CommentariesController extends AppController
     /**
      * sendNewsmediaAlertReport to be Slacked
      *
+     * @param string|null $msg of alert
+     * @param string|null $msgB of alert
+     * @param string|null $msgC of alert
+     * @param string|null $msgD of alert
      * @return null
      */
-    private function __sendNewsmediaAlertReport()
+    private function __sendNewsmediaAlertReport($msg = '', $msgB = '', $msgC = '', $msgD = '')
     {
-        # THIS NEEDS CHANGED TO SLACK US THE INFO!!!!!!!!!!!!!
+        $this->Slack = new Slack();
+        $msgs = [$msg, $msgB, $msgC, $msgD];
+        foreach ($msgs as $msg) {
+            $this->Slack->addLine($msg);
+        }
+        if ($this->Slack->send()) {
+            $this->Flash->success('Confirmed on Slack');
+        } else {
+            $this->Flash->error('Messages could not be sent on Slack');
+        }
 
         return null;
     }
@@ -525,7 +551,7 @@ class CommentariesController extends AppController
      */
     public function sendTimedAlert($cronJobPassword)
     {
-        $alertDay = 'Thursday';
+        $alertDay = 'Friday';
         if (date('l') != $alertDay) {
             $this->Flash->error('Alerts are only sent out on ' . $alertDay . 's');
         } elseif (date('Hi') < '1400') {
