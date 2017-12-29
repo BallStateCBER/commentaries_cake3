@@ -171,6 +171,7 @@ Email::setConfigTransport(Configure::consume('EmailTransport'));
 Email::setConfig(Configure::consume('Email'));
 Log::setConfig(Configure::consume('Log'));
 Configure::write('security_salt', env('SECURITY_SALT'));
+Security::setSalt(env('SECURITY_SALT'));
 Configure::write('cron_job_password', env('CRON_JOB_PASSWORD'));
 
 /**
