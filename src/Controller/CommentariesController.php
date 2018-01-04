@@ -28,6 +28,7 @@ class CommentariesController extends AppController
     public function initialize()
     {
         parent::initialize();
+        $this->Slack = new Slack();
         $this->Auth->deny(['add', 'delete', 'drafts', 'edit', 'newsmediaIndex', 'sendTimedAlert']);
     }
 
@@ -450,6 +451,7 @@ class CommentariesController extends AppController
         if (empty($commentary)) {
             $msg = 'No commentary available to alert newsmedia to.';
             $this->Flash->error($msg);
+            $this->__sendNewsmediaAlertReport($msg);
 
             return null;
         }
@@ -467,7 +469,7 @@ class CommentariesController extends AppController
 
         $count = count($newsmedia);
         if ($count == 0) {
-            $msg = 'Newsmedia not alerted. No applicable members (opted in to alerts and not yet alerted) found in database.';
+            $msg = 'Newsmedia not alerted. No applicable newsmedia members (opted in to alerts and not yet alerted) found in database.';
             $this->Flash->error($msg);
 
             return null;
@@ -529,7 +531,6 @@ class CommentariesController extends AppController
      */
     private function __sendNewsmediaAlertReport($msg = '', $msgB = '', $msgC = '', $msgD = '')
     {
-        $this->Slack = new Slack();
         $msgs = [$msg, $msgB, $msgC, $msgD];
         foreach ($msgs as $msg) {
             $this->Slack->addLine($msg);
@@ -551,12 +552,13 @@ class CommentariesController extends AppController
      */
     public function sendTimedAlert($cronJobPassword)
     {
-        $alertDay = 'Friday';
+        $password = php_sapi_name() == 'cli' ? 'fakepassword' : Configure::read('cron_job_password');
+        $alertDay = 'Wednesday';
         if (date('l') != $alertDay) {
             $this->Flash->error('Alerts are only sent out on ' . $alertDay . 's');
         } elseif (date('Hi') < '1400') {
             $this->Flash->error('Alerts are only sent out after 2pm on ' . $alertDay);
-        } elseif ($cronJobPassword == Configure::read('cron_job_password')) {
+        } elseif ($cronJobPassword == $password) {
             $this->__alertNewsmedia();
         } else {
             $this->Flash->error('Password incorrect');

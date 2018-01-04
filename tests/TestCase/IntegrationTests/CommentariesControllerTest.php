@@ -214,6 +214,25 @@ class CommentariesControllerTest extends ApplicationTest
     }
 
     /**
+     * testSendTimedAlert method
+     *
+     * @return void
+     */
+    public function testSendTimedAlert()
+    {
+        $this->session($this->admin);
+        $this->get('/commentaries/send-timed-alert/fakepassword');
+        $this->assertResponseOk();
+        if (date('l') != 'Wednesday') {
+            $this->assertResponseContains('Alerts are only sent out on');
+        } elseif (date('Hi') < 1400) {
+            $this->assertResponseContains('Alerts are only sent out after');
+        } else {
+            $this->assertResponseContains('newsmedia');
+        }
+    }
+
+    /**
      * testTagged method
      *
      * @return void
