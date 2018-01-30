@@ -19,7 +19,7 @@
     <?= $this->Form->input('remember_me', [
             'type' => 'checkbox',
             'label' => [
-                'text' => ' Remember me',
+                'text' => ' Log me in automatically',
                 'style' => 'display: inline;'
             ],
             'checked' => true
