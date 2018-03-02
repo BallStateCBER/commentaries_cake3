@@ -35,21 +35,13 @@ class CommentariesController extends AppController
     /**
      * Determines whether or not the user is authorized to make the current request
      *
-     * @param User|null $user User entity
+     * @param array|\ArrayAccess $user User entity
      * @return bool
      */
     public function isAuthorized($user)
     {
-        if ($this->request->getParam('action') == 'newsmediaIndex') {
-            if (!isset($user)) {
-                return false;
-            }
-        }
         $adminActions = ['add', 'delete', 'drafts', 'edit'];
         if (in_array($this->request->getParam('action'), $adminActions)) {
-            if (!isset($user)) {
-                return false;
-            }
             if ($user['group_id'] == 3) {
                 return false;
             }
