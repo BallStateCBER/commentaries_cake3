@@ -263,7 +263,7 @@ return [
             'password' => env('DB_PASSWORD') ?: null,
             'database' => env('DB_DATABASE') ?: 'okbvtfr_commenttesting',
             'encoding' => 'utf8mb4',
-            'timezone' => 'America/Indiana/Indianapolis',
+            'timezone' => 'UTC',
             'flags' => [],
             'cacheMetadata' => true,
             'log' => false,
