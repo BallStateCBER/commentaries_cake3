@@ -141,8 +141,8 @@ class UsersTable extends Table
     /**
      * getIdFromEmail method
      *
-     * @param string $email of user
-     * @return bool|mixed
+     * @param string $email Email address
+     * @return bool|int
      */
     public function getIdFromEmail($email)
     {
