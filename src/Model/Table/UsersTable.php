@@ -225,7 +225,7 @@ class UsersTable extends Table
                 ]);
 
         $user = $this->get($user['id']);
-        $user->last_alert_article_id = $commentary->id;
+        $user->last_alert_article_id = $commentary['id'];
         $this->save($user);
 
         return $email->send();
