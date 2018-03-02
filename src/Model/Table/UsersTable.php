@@ -197,32 +197,32 @@ class UsersTable extends Table
         $email = new Email('default');
         $timestamp = strtotime($commentary['published_date']);
         $email
-                ->setTo($user['email'])
-                ->setSubject('CBER Commentaries: Alert')
-                ->setTemplate('newsmedia_alert')
-                ->setEmailFormat('both')
-                ->setHelpers(['Html', 'Text'])
-                ->setViewVars([
-                    'commentary' => $commentary,
-                    'recipientName' => $user['name'],
-                    'url' => Router::url(
-                        [
-                            'controller' => 'commentaries',
-                            'action' => 'view',
-                            'id' => $commentary['id'],
-                            'slug' => $commentary['slug']
-                        ],
-                        true
-                    ),
-                    'newsmediaIndexUrl' => Router::url(
-                        [
-                            'controller' => 'commentaries',
-                            'action' => 'newsmediaIndex',
-                        ],
-                        true
-                    ),
-                    'date' => date('l, F jS', $timestamp)
-                ]);
+            ->setTo($user['email'])
+            ->setSubject('CBER Commentaries: Alert')
+            ->setTemplate('newsmedia_alert')
+            ->setEmailFormat('both')
+            ->setHelpers(['Html', 'Text'])
+            ->setViewVars([
+                'commentary' => $commentary,
+                'recipientName' => $user['name'],
+                'url' => Router::url(
+                    [
+                        'controller' => 'commentaries',
+                        'action' => 'view',
+                        'id' => $commentary['id'],
+                        'slug' => $commentary['slug']
+                    ],
+                    true
+                ),
+                'newsmediaIndexUrl' => Router::url(
+                    [
+                        'controller' => 'commentaries',
+                        'action' => 'newsmediaIndex',
+                    ],
+                    true
+                ),
+                'date' => date('l, F jS', $timestamp)
+            ]);
 
         $user = $this->get($user['id']);
         $user->last_alert_article_id = $commentary['id'];
