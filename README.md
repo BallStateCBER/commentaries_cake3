@@ -1,9 +1,8 @@
 # CBER Data Center: Weekly Commentaries
 
 [![Build Status](https://travis-ci.org/BallStateCBER/commentaries_cake3.svg?branch=master)](https://travis-ci.org/BallStateCBER/commentaries_cake3)
-[![Code Climate](https://codeclimate.com/repos/596fbc240bdce77d0f002418/badges/d1a4bae6641e40d73718/gpa.svg)](https://codeclimate.com/repos/596fbc240bdce77d0f002418/feed)
-[![Test Coverage](https://codeclimate.com/repos/596fbc240bdce77d0f002418/badges/d1a4bae6641e40d73718/coverage.svg)](https://codeclimate.com/repos/596fbc240bdce77d0f002418/coverage)
-[![Issue Count](https://codeclimate.com/repos/596fbc240bdce77d0f002418/badges/d1a4bae6641e40d73718/issue_count.svg)](https://codeclimate.com/repos/596fbc240bdce77d0f002418/feed)
+[![Maintainability](https://api.codeclimate.com/v1/badges/79f8db3eb551956f70b0/maintainability)](https://codeclimate.com/github/BallStateCBER/commentaries_cake3/maintainability)
+[![Test Coverage](https://api.codeclimate.com/v1/badges/79f8db3eb551956f70b0/test_coverage)](https://codeclimate.com/github/BallStateCBER/commentaries_cake3/test_coverage)
 
 This is the repository for the
 [Ball State University Center for Business and Economic Research](http://bsu.edu/cber)'s
