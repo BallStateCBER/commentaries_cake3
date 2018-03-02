@@ -41,3 +41,4 @@ after_script:
 
 notifications:
   email: false
+  slack: cber:ZeUxtjnpHNEYCkMtUBhskwXl
