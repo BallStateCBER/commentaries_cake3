@@ -1,6 +1,5 @@
 <?php
 use Cake\Core\Configure;
-
 ?>
 <h1 class="page_title">
 	<?= $titleForLayout; ?>
@@ -14,7 +13,7 @@ use Cake\Core\Configure;
 </p>
 
 <?= $this->Form->create('User', ['url' => ['controller' => 'Users', 'action' => 'forgotPassword']]); ?>
-<div class="col-lg-12" align="center">
+<div class="col-lg-12">
     <?php
         echo $this->Form->input('email', ['class' => 'form-control', 'label' => false]);
         echo $this->Form->button('Send password-resetting email', ['class' => 'btn btn-default']);
