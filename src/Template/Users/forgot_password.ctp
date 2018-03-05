@@ -17,6 +17,6 @@ use Cake\Core\Configure;
     <?php
         echo $this->Form->input('email', ['class' => 'form-control']);
         echo $this->Form->button('Send password-resetting email', ['class' => 'btn btn-default']);
-        echo $this->Form->end();
     ?>
 </div>
+<?= $this->Form->end() ?>
