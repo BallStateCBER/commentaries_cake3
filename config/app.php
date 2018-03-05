@@ -380,6 +380,7 @@ $config = [
 
 if ($config['debug']) {
     $config['Email']['default']['transport'] = 'Debug';
+    $config['Email']['default']['log'] = true;
 }
 
 return $config;
