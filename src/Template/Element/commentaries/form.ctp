@@ -1,7 +1,3 @@
-<?php
-use Cake\Core\Configure;
-
-?>
 <?= $this->CKEditor->loadJs(); ?>
 <h1 class="page_title">
     <?= $titleForLayout; ?>
