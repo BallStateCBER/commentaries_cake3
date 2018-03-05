@@ -22,7 +22,7 @@ try {
     ]);
 }
 
-return [
+$config = [
     /**
      * Debug Level:
      *
@@ -231,7 +231,7 @@ return [
      */
      'Email' => [
          'default' => [
-             'transport' => 'Debug',
+             'transport' => 'Smtp',
              'from' => ['commentaries@cberdata.org' => 'Ball State CBER'],
              'sender' => ['commentaries@cberdata.org' => 'Ball State CBER'],
              'returnPath' => 'commentaries@cberdata.org',
@@ -377,3 +377,9 @@ return [
     'data_center_subsite_title' => 'Weekly Commentary with Michael Hicks',
     'google_analytics_id' => 'UA-32998887-2'
 ];
+
+if ($config['debug']) {
+    $config['Email']['default']['transport'] = 'Debug';
+}
+
+return $config;
