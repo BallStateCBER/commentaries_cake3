@@ -123,10 +123,10 @@ use Cake\Core\Configure;
                 'class' => 'form-control',
                 'style' => 'margin:25px auto'
             ]); ?>
-            <?= $this->Form->end(); ?>
         </div>
     </div>
 </div>
+<?= $this->Form->end() ?>
 <script>
     toggleDelayPublishing();
     var input_ids = [
