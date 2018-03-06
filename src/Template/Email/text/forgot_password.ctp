@@ -5,8 +5,12 @@
 <?= $email ?>,
 
 We have received a request for your password to be reset so you can log in to your <?= Configure::read('data_center_subsite_title') ?> website account (<?= Router::url(
-    ['controller' => 'Commentaries', 'action' => 'index'],
-    true
+    [
+        'controller' => 'Commentaries',
+        'action' => 'index',
+        '_ssl' => true,
+        '_full' => true
+    ]
 ) ?>). When you visit the following URL, you'll be prompted to enter a new password to overwrite your old one:
 
 <?= $resetUrl ?>

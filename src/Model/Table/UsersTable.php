@@ -281,11 +281,12 @@ class UsersTable extends Table
         $resetPasswordHash = $this->getResetPasswordHash($userId, $email);
         $resetEmail = new Email('default');
         $resetUrl = Router::url([
-                'controller' => 'users',
-                'action' => 'resetPassword',
-                $userId,
-                $resetPasswordHash
-            ], true);
+            '_ssl' => true,
+            'controller' => 'users',
+            'action' => 'resetPassword',
+            $userId,
+            $resetPasswordHash
+        ], true);
         $resetEmail
                 ->setTo($email)
                 ->setSubject('CBER Commentaries: Reset Password')

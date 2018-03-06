@@ -12,7 +12,8 @@
         [
             'controller' => 'Commentaries',
             'action' => 'index',
-            '_full' => true
+            '_full' => true,
+            '_ssl' => true
         ]
     ) ?>
     website account. When you visit the following URL, you'll be prompted to enter a new password to overwrite your old
