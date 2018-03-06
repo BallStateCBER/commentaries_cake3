@@ -2,7 +2,7 @@
     use Cake\Core\Configure;
     use Cake\Routing\Router;
 ?>
-<?= $email; ?>,
+<?= $email ?>,
 
 We have received a request for your password to be reset so you can log in to your
 <?= Configure::read('data_center_subsite_title') ?> website account
@@ -12,11 +12,11 @@ We have received a request for your password to be reset so you can log in to yo
 ) ?>). When you visit the following URL, you'll be prompted to enter a new password to overwrite your old
 one:
 
-<?= $resetUrl; ?>
+<?= $resetUrl ?>
 
 
-NOTE: That link will only work for the rest of <?= date('F Y'); ?>.
-If you need to reset your password in <?= date('F', strtotime('+1 month')); ?> or later, you'll need
+NOTE: That link will only work for the rest of <?= date('F Y') ?>.
+If you need to reset your password in <?= date('F', strtotime('+1 month')) ?> or later, you'll need
 to request another password reset link. This precaution prevents anyone from finding this email at a later date and
 using it to gain unauthorized access to your account. Nonetheless, you are advised to delete this email
 after you have reset your password.

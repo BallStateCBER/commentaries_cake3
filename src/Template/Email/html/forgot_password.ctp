@@ -2,7 +2,7 @@
     use Cake\Core\Configure;
 ?>
 <p>
-	<?= $email; ?>,
+	<?= $email ?>,
 </p>
 
 <p>
@@ -20,14 +20,14 @@
 </p>
 
 <p>
-	<a href="<?= $resetUrl; ?>">
-		<?= $resetUrl; ?>
+	<a href="<?= $resetUrl ?>">
+		<?= $resetUrl ?>
 	</a>
 </p>
 
 <p>
-	<strong>NOTE: That link will only work for the rest of <?= date('F Y'); ?>.</strong>
-	If you need to reset your password in <?= date('F', strtotime('+1 month')); ?> or later, you'll need
+	<strong>NOTE: That link will only work for the rest of <?= date('F Y') ?>.</strong>
+	If you need to reset your password in <?= date('F', strtotime('+1 month')) ?> or later, you'll need
 	to request another password reset link. This precaution prevents anyone from finding this email at a later date and
 	using it to gain unauthorized access to your account. Nonetheless, you are advised to delete this email
 	after you have reset your password.
