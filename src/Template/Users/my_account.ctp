@@ -2,7 +2,15 @@
     <?= $titleForLayout ?>
 </h1>
 <?= $this->CKEditor->loadJs(); ?>
-<?= $this->Form->create($user, ['url' => ['controller' => 'Users', 'action' => 'myAccount']]); ?>
+<?= $this->Form->create(
+    $user,
+    [
+        'url' => \Cake\Routing\Router::url([
+            'controller' => 'Users',
+            'action' => 'myAccount'
+        ])
+    ]
+) ?>
 <div class="col-lg-6">
     <?= $this->Form->control('name', [
         'class' => 'form-control',
