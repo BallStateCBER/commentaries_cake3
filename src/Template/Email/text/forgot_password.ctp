@@ -21,5 +21,8 @@ to request another password reset link. This precaution prevents anyone from fin
 using it to gain unauthorized access to your account. Nonetheless, you are advised to delete this email
 after you have reset your password.
 
+
 Ball State Center for Business and Economic Research
-https://www.bsu.edu/cber
+cber@bsu.edu
+http://www.bsu.edu/cber
+765-285-5926
