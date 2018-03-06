@@ -1,11 +1,22 @@
+<?php
+    use Cake\Core\Configure;
+?>
 <p>
 	<?= $email; ?>,
 </p>
 
 <p>
-	We have received a request (hopefully from you) for your password to be reset so you can log in
-	to your account at <a href="https://commentaries.cberdata.org">CBERData's Weekly Commentary</a>. When you visit the following webpage, you'll be prompted to
-	enter a new password to overwrite your old one:
+	We have received a request for your password to be reset so you can log in to your
+    <?= $this->Html->link(
+        Configure::read('data_center_subsite_title'),
+        [
+            'controller' => 'Commentaries',
+            'action' => 'index',
+            '_full' => true
+        ]
+    ) ?>
+    website account. When you visit the following URL, you'll be prompted to enter a new password to overwrite your old
+    one:
 </p>
 
 <p>

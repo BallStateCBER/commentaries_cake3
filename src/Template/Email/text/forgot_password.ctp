@@ -1,8 +1,16 @@
+<?php
+    use Cake\Core\Configure;
+    use Cake\Routing\Router;
+?>
 <?= $email; ?>,
 
-We have received a request (hopefully from you) for your password to be reset so you can log in
-to your account at https://commentaries.cberdata.org. When you visit the following webpage, you'll be prompted to
-enter a new password to overwrite your old one:
+We have received a request for your password to be reset so you can log in to your
+<?= Configure::read('data_center_subsite_title') ?> website account
+(<?= Router::url(
+    ['controller' => 'Commentaries', 'action' => 'index'],
+    true
+) ?>). When you visit the following URL, you'll be prompted to enter a new password to overwrite your old
+one:
 
 <?= $resetUrl; ?>
 
