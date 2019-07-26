@@ -15,10 +15,12 @@
 namespace App;
 
 use Cake\Core\Configure;
+use Cake\Core\Exception\MissingPluginException;
 use Cake\Error\Middleware\ErrorHandlerMiddleware;
 use Cake\Http\BaseApplication;
 use Cake\Routing\Middleware\AssetMiddleware;
 use Cake\Routing\Middleware\RoutingMiddleware;
+use DebugKit\Plugin;
 
 /**
  * Application setup class.
@@ -28,6 +30,32 @@ use Cake\Routing\Middleware\RoutingMiddleware;
  */
 class Application extends BaseApplication
 {
+    /**
+     * {@inheritDoc}
+     */
+    public function bootstrap()
+    {
+        parent::bootstrap();
+
+        if (PHP_SAPI === 'cli') {
+            try {
+                $this->addPlugin('Bake');
+            } catch (MissingPluginException $e) {
+                // Do not halt if the plugin is missing
+            }
+
+            $this->addPlugin('Migrations');
+        }
+
+        /*
+         * Only try to load DebugKit in development mode
+         * Debug Kit should not be installed on a production system
+         */
+        if (Configure::read('debug')) {
+            $this->addPlugin(Plugin::class);
+        }
+    }
+
     /**
      * Setup the middleware your application will use.
      *
