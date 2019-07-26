@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "4e3e481d3329ca656a38b9d713b65264",
+    "content-hash": "b815508f5753de9c9f4cc34de93203dd",
     "packages": [
         {
             "name": "akkaweb/cakephp-ckeditor",
@@ -1037,38 +1037,6 @@
                 "slug"
             ],
             "time": "2018-05-17T13:42:03+00:00"
-        },
-        {
-            "name": "oldskool/cakephp-js",
-            "version": "dev-master",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/oldskool/cakephp-js.git",
-                "reference": "05964d5b20bf72f7c07f651c4755d66435aedb0f"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/oldskool/cakephp-js/zipball/05964d5b20bf72f7c07f651c4755d66435aedb0f",
-                "reference": "05964d5b20bf72f7c07f651c4755d66435aedb0f",
-                "shasum": ""
-            },
-            "require": {
-                "cakephp/cakephp": ">=3.0",
-                "php": ">=5.4.16"
-            },
-            "type": "cakephp-plugin",
-            "autoload": {
-                "psr-4": {
-                    "CakeJs\\": "src"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "description": "JsHelper for CakePHP 3.x",
-            "homepage": "http://github.com/oldskool/cakephp-js",
-            "time": "2016-08-02T08:57:13+00:00"
         },
         {
             "name": "psr/http-message",
@@ -4412,7 +4380,6 @@
         "josegonzalez/dotenv": 20,
         "ballstatecber/datacenter-plugin-cakephp3": 20,
         "akkaweb/cakephp-ckeditor": 20,
-        "oldskool/cakephp-js": 20,
         "psy/psysh": 0
     },
     "prefer-stable": true,
