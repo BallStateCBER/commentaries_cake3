@@ -29,11 +29,11 @@ use Cake\TestSuite\IntegrationTestCase;
 class ApplicationTest extends IntegrationTestCase
 {
     public $fixtures = [
-        'app.commentaries',
-        'app.commentaries_tags',
-        'app.groups',
-        'app.tags',
-        'app.users'
+        'app.Commentaries',
+        'app.CommentariesTags',
+        'app.Groups',
+        'app.Tags',
+        'app.Users'
     ];
 
     public $commentaries;
