@@ -201,7 +201,6 @@ class UsersTable extends Table
             ->setSubject('CBER Commentaries: Alert')
             ->setTemplate('newsmedia_alert')
             ->setEmailFormat('both')
-            ->setHelpers(['Html', 'Text'])
             ->setViewVars([
                 'commentary' => $commentary,
                 'recipientName' => $user['name'],
@@ -223,6 +222,7 @@ class UsersTable extends Table
                 ),
                 'date' => date('l, F jS', $timestamp)
             ]);
+        $email->viewBuilder()->setHelpers(['Html', 'Text']);
 
         $user = $this->get($user['id']);
         $user->last_alert_article_id = $commentary['id'];
@@ -255,16 +255,16 @@ class UsersTable extends Table
             true
         );
         $email
-                ->setTo($user['email'])
-                ->setSubject('CBER Commentaries: Intro')
-                ->setTemplate('newsmedia_intro')
-                ->setEmailFormat('both')
-                ->setHelpers(['Html', 'Text'])
-                ->setViewVars(compact(
-                    'user',
-                    'newsmediaIndexUrl',
-                    'loginUrl'
-                ));
+            ->setTo($user['email'])
+            ->setSubject('CBER Commentaries: Intro')
+            ->setTemplate('newsmedia_intro')
+            ->setEmailFormat('both')
+            ->setViewVars(compact(
+                'user',
+                'newsmediaIndexUrl',
+                'loginUrl'
+            ));
+        $email->viewBuilder()->setHelpers(['Html', 'Text']);
 
         return $email->send();
     }
@@ -288,15 +288,15 @@ class UsersTable extends Table
             $resetPasswordHash
         ], true);
         $resetEmail
-                ->setTo($email)
-                ->setSubject('CBER Commentaries: Reset Password')
-                ->setTemplate('forgot_password')
-                ->setEmailFormat('both')
-                ->setHelpers(['Html', 'Text'])
-                ->setViewVars(compact(
-                    'email',
-                    'resetUrl'
-                ));
+            ->setTo($email)
+            ->setSubject('CBER Commentaries: Reset Password')
+            ->setTemplate('forgot_password')
+            ->setEmailFormat('both')
+            ->setViewVars(compact(
+                'email',
+                'resetUrl'
+            ));
+        $resetEmail->viewBuilder()->setHelpers(['Html', 'Text']);
 
         return $resetEmail->send();
     }
