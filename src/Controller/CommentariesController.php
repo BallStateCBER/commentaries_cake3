@@ -190,7 +190,7 @@ class CommentariesController extends AppController
             ->toArray();
 
         // If an array is being requested by an element
-        if (isset($this->params['requested'])) {
+        if ($this->request->getParam('requested')) {
             return $commentaries;
         }
 
@@ -238,7 +238,7 @@ class CommentariesController extends AppController
             ->toArray();
 
         // Either return them as an array or set them as view variables
-        if (isset($this->params['requested'])) {
+        if ($this->request->getParam('requested')) {
             return $commentaries;
         }
         $this->set([
