@@ -1,1 +1,1 @@
-<?= $this->Js->object($tags);
+<?php echo json_encode($tags);

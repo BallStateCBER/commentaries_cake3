@@ -34,12 +34,10 @@ use Cake\Event\Event;
 class AppController extends Controller
 {
     public $helpers = [
-        'AkkaCKEditor.CKEditor' =>
-            [
-                'distribution' => 'basic',
-                'version' => '4.4.7'
-            ],
-        'CakeJs.Js',
+        'AkkaCKEditor.CKEditor' => [
+            'distribution' => 'basic',
+            'version' => '4.4.7'
+        ],
         'DataCenter.Tag',
         'Html'
     ];
