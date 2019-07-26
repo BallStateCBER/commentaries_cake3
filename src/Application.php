@@ -70,10 +70,15 @@ class Application extends BaseApplication
             ->add(ErrorHandlerMiddleware::class)
 
             // Handle plugin/theme assets like CakePHP normally does.
-            ->add(AssetMiddleware::class)
+            ->add(new AssetMiddleware([
+                'cacheTime' => Configure::read('Asset.cacheTime')
+            ]))
 
-            // Apply routing
-            ->add(RoutingMiddleware::class);
+            // Add routing middleware.
+            // Routes collection cache enabled by default, to disable route caching
+            // pass null as cacheConfig, example: `new RoutingMiddleware($this)`
+            // you might want to disable this cache in case your routing is extremely simple
+            ->add(new RoutingMiddleware($this));
 
         return $middleware;
     }
