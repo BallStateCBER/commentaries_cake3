@@ -58,7 +58,6 @@ use Cake\Cache\Cache;
 use Cake\Console\ConsoleErrorHandler;
 use Cake\Core\Configure;
 use Cake\Core\Configure\Engine\PhpConfig;
-use Cake\Core\Plugin;
 use Cake\Database\Type;
 use Cake\Datasource\ConnectionManager;
 use Cake\Error\ErrorHandler;
@@ -66,7 +65,6 @@ use Cake\Log\Log;
 use Cake\Mailer\Email;
 use Cake\Mailer\TransportFactory;
 use Cake\Network\Request;
-use Cake\Routing\DispatcherFactory;
 use Cake\Utility\Security;
 
 /**
@@ -243,13 +241,6 @@ Type::build('timestamp')
  * Inflector::rules('uninflected', ['dontinflectme']);
  * Inflector::rules('transliteration', ['/å/' => 'aa']);
  */
-
-/**
- * Connect middleware/dispatcher filters.
- */
-DispatcherFactory::add('Asset');
-DispatcherFactory::add('Routing');
-DispatcherFactory::add('ControllerFactory');
 
 /**
  * Enable default locale format parsing.
