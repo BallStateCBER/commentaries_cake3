@@ -21,13 +21,16 @@ use Cake\Http\MiddlewareQueue;
 use Cake\ORM\TableRegistry;
 use Cake\Routing\Middleware\AssetMiddleware;
 use Cake\Routing\Middleware\RoutingMiddleware;
-use Cake\TestSuite\IntegrationTestCase;
+use Cake\TestSuite\IntegrationTestTrait;
+use Cake\TestSuite\TestCase;
 
 /**
  * ApplicationTest class
  */
-class ApplicationTest extends IntegrationTestCase
+class ApplicationTest extends TestCase
 {
+    use IntegrationTestTrait;
+
     public $fixtures = [
         'app.Commentaries',
         'app.CommentariesTags',
@@ -56,6 +59,7 @@ class ApplicationTest extends IntegrationTestCase
     public function setUp()
     {
         parent::setUp();
+
         foreach ($this->objects as $object) {
             $this->$object = TableRegistry::get($object);
         }
