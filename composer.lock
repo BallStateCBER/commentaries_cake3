@@ -88,19 +88,19 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/BallStateCBER/datacenter-plugin-cakephp3.git",
-                "reference": "1069126868bbd8a380dc5cf95ad2735aa662c506"
+                "reference": "83d46513426ebb993ad2c26938cddf8ff5c40187"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/BallStateCBER/datacenter-plugin-cakephp3/zipball/1069126868bbd8a380dc5cf95ad2735aa662c506",
-                "reference": "1069126868bbd8a380dc5cf95ad2735aa662c506",
+                "url": "https://api.github.com/repos/BallStateCBER/datacenter-plugin-cakephp3/zipball/83d46513426ebb993ad2c26938cddf8ff5c40187",
+                "reference": "83d46513426ebb993ad2c26938cddf8ff5c40187",
                 "shasum": ""
             },
             "require": {
                 "cakephp/cakephp": "^3.5",
                 "cakephp/cakephp-codesniffer": "*",
                 "composer/composer": "^1.5.2",
-                "php": ">=7.1",
+                "php": ">=7.2",
                 "twbs/bootstrap": "~3.0"
             },
             "require-dev": {
@@ -114,7 +114,7 @@
             },
             "notification-url": "https://packagist.org/downloads/",
             "description": "Ball State CBER DataCenter plugin for CakePHP 3",
-            "time": "2019-07-25T21:09:58+00:00"
+            "time": "2020-11-10T22:06:00+00:00"
         },
         {
             "name": "cakephp/cakephp",
@@ -2025,6 +2025,7 @@
                 "psr",
                 "psr-7"
             ],
+            "abandoned": "laminas/laminas-diactoros",
             "time": "2018-09-05T19:29:37+00:00"
         }
     ],
@@ -4438,5 +4439,6 @@
     "platform": {
         "php": ">=5.6"
     },
-    "platform-dev": []
+    "platform-dev": [],
+    "plugin-api-version": "1.1.0"
 }
