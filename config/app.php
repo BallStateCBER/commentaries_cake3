@@ -375,7 +375,7 @@ $config = [
 
     'data_center_subsite_url' => 'http://commentaries.cberdata.org',
     'data_center_subsite_title' => 'Weekly Commentary with Michael Hicks',
-    'google_analytics_id' => 'UA-32998887-2'
+    'google_analytics_id' => 'G-KDEKZ40Q7C'
 ];
 
 if ($config['debug']) {
